@@ -1,4 +1,7 @@
-DROP TABLE `Users`;
+/************************************
+ * ユーザ管理テーブル
+ ************************************/
+DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users`
 (
     `UserId` BIGINT(12) UNSIGNED AUTO_INCREMENT COMMENT '管理ID',

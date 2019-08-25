@@ -1,4 +1,7 @@
-DROP TABLE `GameInfos`;
+/************************************
+ * ゲーム管理テーブル
+ ************************************/
+DROP TABLE IF EXISTS `GameInfos`;
 CREATE TABLE `GameInfos`
 (
     `GameId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT 'ゲーム管理ID',

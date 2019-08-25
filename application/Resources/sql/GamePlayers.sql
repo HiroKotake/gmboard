@@ -1,4 +1,7 @@
-DROP TABLE `GamePlayers`;
+/************************************
+ * ゲームプレイヤー管理テーブル
+ ************************************/
+DROP TABLE IF EXISTS `GamePlayers`;
 CREATE TABLE `GamePlayers`
 (
     `GamePlayerId` BIGINT(12) UNSIGNED AUTO_INCREMENT COMMENT '管理ID',
@@ -7,6 +10,7 @@ CREATE TABLE `GamePlayers`
     `PlayerId` VARCHAR(30) NOT NULL COMMENT 'ゲーム側ユーザID',
     `GameNickname` VARCHAR(30) NOT NULL COMMENT 'ゲーム側ニックネーム',
     `GroupId` BIGINT(12) UNSIGNED COMMENT 'グループ管理ID',
+    `Authority` INT(3) UNSIGNED DEFAULT 0 COMMENT 'グループ内権限',
     `CerateDate` DATETIME COMMENT 'レコード登録日',
     `UpdateDate` DATETIME COMMENT 'レコード更新日',
     `DeleteDate` DATETIME COMMENT 'レコード無効日',
