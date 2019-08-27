@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * ユーザ登録画面
  */
-class regist extends MY_Controller
+class Top extends MY_Controller
 {
     /******************************************************/
     /* valiables                                          */
