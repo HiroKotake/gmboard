@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * ログイン画面
  */
-class Top extends MY_Controller
+class Login extends MY_Controller
 {
     /******************************************************/
     /* valiables                                          */
@@ -20,5 +20,6 @@ class Top extends MY_Controller
 
     public function index()
     {
+        $this->smarty->viewWithoutHeaderAndFooter("login");
     }
 }

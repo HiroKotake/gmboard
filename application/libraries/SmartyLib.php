@@ -30,7 +30,6 @@ class SmartyLib extends Smarty
         $data = array(),
         $return = false
     ) {
-
         // テンプレート用引数セット
         foreach ($data as $key => $value) {
             $this->assign($key, $value);
@@ -60,6 +59,51 @@ class SmartyLib extends Smarty
                 if (file_exists($footerTemplate)) {
                     $CI->output->append_output($this->fetch($footerTemplate));
                 }
+                return;
+            }
+            $CI->output->final_output($browserType . DIRECTORY_SEPARATOR . $template);
+            return;
+        }
+
+        // デバッグ用
+        return $this->fetch($browserType . DIRECTORY_SEPARATOR . $template);
+    }
+
+
+    /**
+     * ユーザ用ビュー表示 （ヘッダ及びフッダーを除外）
+     * UserAgnetにより PC用フルブラウザとSmartPhone用サブセットに応じたテンプレートに振り分けて表示する
+     *
+     * @param  string $template 表示対象のテンプレート名
+     * @param  array  $data     テンプレートに適用するデータ配列
+     * @return boolean $return  trueを指定することで、画面表示するのではなくテンプレートのスクリプトを返す
+     */
+    public function viewWithoutHeaderAndFooter (
+        $template,
+        $data = array(),
+        $return = false
+    ) {
+        // テンプレート用引数セット
+        foreach ($data as $key => $value) {
+            $this->assign($key, $value);
+        }
+        // インスタンス取得
+        $CI =& get_instance();
+        // テンプレートファイル名補完
+        $filePeace = explode('.', $template);
+        $lastPeace = $filePeace[count($filePeace) - 1];
+        if ($lastPeace != 'tpl') {
+            $template .= '.tpl';
+        }
+        // インスタンス取得し、リクエスト元のブラウザのリファラからPCかスマフォを判定
+        $browserType = 'full';
+        if ($CI->agent->is_mobile()) {
+            $browserType = 'sp';
+        }
+        // $returnの値により振り分けし、テンプレートに反映
+        if (!$return) {
+            if (method_exists($CI->output, 'append_output')) {
+                $CI->output->append_output($this->fetch($browserType . DIRECTORY_SEPARATOR . $template));
                 return;
             }
             $CI->output->final_output($browserType . DIRECTORY_SEPARATOR . $template);
@@ -112,6 +156,6 @@ class SmartyLib extends Smarty
         }
 
         // デバッグ用
-        return $this->fetch($browserType . DIRECTORY_SEPARATOR . $template);
+        return $this->fetch('administration'. DIRECTORY_SEPARATOR . $template);
     }
 }
