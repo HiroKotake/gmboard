@@ -22,4 +22,10 @@ class Login extends MY_Controller
     {
         $this->smarty->viewWithoutHeaderAndFooter("login");
     }
+
+    public function login()
+    {
+        $loginId = $this->input->post('gid');
+        $pwd = $this->input->post('pwd');
+    }
 }
