@@ -1,4 +1,6 @@
 <?php
+namespace gmboard\application\models\dao;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
@@ -71,6 +73,11 @@ class Users extends CI_Model
         return false;
     }
 
+    /**
+     * メール認証終了
+     * @param  int    $userId [description]
+     * @return [type]         [description]
+     */
     public function mailAuthed(int $userId)
     {
         $data = array(
@@ -80,6 +87,24 @@ class Users extends CI_Model
         return $this->updateWithCondition($userId, $data);
     }
 
+    /**
+     * パスワード更新
+     * @param  int    $userId    [description]
+     * @param  string $hashedPwd [description]
+     * @return [type]            [description]
+     */
+    public function updatePassward(int $userId, string $hashedPwd)
+    {
+        $data = array(
+            'Password' => $hashedPwd
+        );
+        return $this->updateWithCondition($userId, $data);
+    }
+
+    /**
+     * 垢バン対応
+     * @param int $userId [description]
+     */
     public function setLoginExclude(int $userId)
     {
         $data = array(
@@ -88,6 +113,10 @@ class Users extends CI_Model
         return $this->updateWithCondition($userId, $data);
     }
 
+    /**
+     * 垢バン解除
+     * @param int $userId [description]
+     */
     public function resetLoginExclude(int $userId)
     {
         $data = array(

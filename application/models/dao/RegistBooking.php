@@ -1,4 +1,6 @@
 <?php
+namespace gmboard\application\models\dao;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
@@ -54,13 +56,15 @@ class RegistBooking extends CI_Model
     public function addNewBooking(
         int $groupId,
         string $playerId,
-        string $nickname
+        string $nickname,
+        string $authCode
     ) {
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'GroupId'       => $groupId,
             'PlayerId'      => $playerId,
             'Nickname'      => $nickname,
+            'AuthCode'      => $authCode,
             'CreateDate'    => $datetime
         );
         $this->db->insert(self::$tableName, $data);

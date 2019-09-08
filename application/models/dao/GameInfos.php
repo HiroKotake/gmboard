@@ -1,4 +1,6 @@
 <?php
+namespace gmboard\application\models\dao;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**

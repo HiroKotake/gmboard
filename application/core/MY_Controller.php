@@ -11,5 +11,7 @@ class MY_Controller extends CI_Controller
         parent::__construct();
         // ユーザ情報
         $this->load->library('user_agent');
+        // セッション情報
+        $this->load->library('session');
     }
 }

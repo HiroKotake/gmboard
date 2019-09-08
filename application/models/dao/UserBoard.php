@@ -14,6 +14,17 @@ class UserBoard extends CI_Model
     }
 
     /**
+     * ユーザ用メッセージボードを作成する
+     * @param  int    $userId ユーザID
+     * @return [type]         [description]
+     */
+    public function createBoard(int $userId)
+    {
+        $query = 'CALL CreateUserBoard(' . $userId . ')';
+        return $this->db->query($query);
+    }
+
+    /**
      * メッセージ取得
      * @param  array   $condition  [description]
      * @param  integer $lineNumber [description]
