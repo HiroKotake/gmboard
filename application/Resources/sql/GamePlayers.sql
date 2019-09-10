@@ -11,7 +11,7 @@ CREATE TABLE `GamePlayers`
     `GameNickname` VARCHAR(30) NOT NULL COMMENT 'ゲーム側ニックネーム',
     `GroupId` BIGINT(12) UNSIGNED COMMENT 'グループ管理ID',
     `Authority` INT(3) UNSIGNED DEFAULT 0 COMMENT 'グループ内権限',
-    `CerateDate` DATETIME COMMENT 'レコード登録日',
+    `CreateDate` DATETIME COMMENT 'レコード登録日',
     `UpdateDate` DATETIME COMMENT 'レコード更新日',
     `DeleteDate` DATETIME COMMENT 'レコード無効日',
     `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT 'レコード無効フラグ(0:有効, 1:無効)',

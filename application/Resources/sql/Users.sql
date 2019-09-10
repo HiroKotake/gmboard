@@ -12,7 +12,7 @@ CREATE TABLE `Users`
     `LastLogin` DATETIME COMMENT '最終ログイン日時',
     `MailAuthed` TINYINT(1) DEFAULT 0 COMMENT 'メイル確認フラグ(0:未確認、1:確認済み)',
     `LoginExclude` TINYINT(1) DEFAULT 0 COMMENT 'ログイン除外フラグ(0:未除外、1:除外)',
-    `CerateDate` DATETIME COMMENT 'レコード登録日',
+    `CreateDate` DATETIME COMMENT 'レコード登録日',
     `UpdateDate` DATETIME COMMENT 'レコード更新日',
     `DeleteDate` DATETIME COMMENT 'レコード無効日',
     `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT 'レコード無効フラグ(0:有効, 1:無効)',

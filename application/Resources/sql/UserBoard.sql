@@ -14,7 +14,7 @@ BEGIN
         `FromGroupId` BIGINT(12) COMMENT \'送信者グループID\',
         `message` TEXT COMMENT \'メッセージテキスト\',
         `AlreadyRead` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'メッセージ既読フラグ(0:無効, 1:有効)\',
-        `CerateDate` DATETIME COMMENT \'レコード登録日\',
+        `CreateDate` DATETIME COMMENT \'レコード登録日\',
         `UpdateDate` DATETIME COMMENT \'レコード更新日\',
         `DeleteDate` DATETIME COMMENT \'レコード無効日\',
         `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコード無効フラグ(0:有効, 1:無効)\',
