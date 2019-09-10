@@ -1,14 +1,12 @@
 <?php
-namespace gmboard\application\models\dao;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * ゲーム情報テーブル管理テーブル
  */
-class GameInfos extends CI_Model
+class GameInfos extends \CI_Model
 {
-    private $tableName = 'GameInfos';
+    const TABLE_NAME = 'GameInfos';
 
     public function __construct()
     {
@@ -21,8 +19,9 @@ class GameInfos extends CI_Model
      */
     public function getAll()
     {
-        $resultSet = $this->db->get(self::$tableName);
-        return $resultSet->result();
+        $this->db->where('DeleteFlag', 0);
+        $resultSet = $this->db->get(self::TABLE_NAME);
+        return $resultSet->result_array();
     }
 
     /**
@@ -33,8 +32,16 @@ class GameInfos extends CI_Model
     public function getLikeName(string $name)
     {
         $this->db->like('Name', $name);
-        $resultSet = $this->db->get(self::$tableName);
-        return $resultSet->result();
+        $this->db->where('DeleteFlag', 0);
+        $resultSet = $this->db->get(self::TABLE_NAME);
+        return $resultSet->result_array();
+    }
+
+    public function getByGameId(int $gameId) : array
+    {
+        $this->db->where('GameId', $gameId);
+        $resultSet = $this->db->get(self::TABLE_NAME);
+        return $resultSet->result_array();
     }
 
     /**
@@ -50,7 +57,7 @@ class GameInfos extends CI_Model
             'Description'   => $description,
             'CreateDate'    => $datetime
         );
-        $this->db->insert(self::$tableName, $data);
+        $this->db->insert(self::TABLE_NAME, $data);
         return $this->db->insert_id();
     }
 
@@ -70,7 +77,7 @@ class GameInfos extends CI_Model
                 }
             }
             $updateData['UpdateDate'] = $datetime;
-            return $this->db->update(self::$tableName, $updateData);
+            return $this->db->update(self::TABLE_NAME, $updateData);
         }
         return false;
     }
@@ -88,6 +95,6 @@ class GameInfos extends CI_Model
             'DeleteFlag'    => 1
         );
         $this->db->where('GameId', $gameId);
-        return $this->db->update(self::$tableName, $data);
+        return $this->db->update(self::TABLE_NAME, $data);
     }
 }

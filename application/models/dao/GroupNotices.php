@@ -64,7 +64,7 @@ class GroupNotices extends CI_Model
         $this->db->where('ShowStartDateTime >=', $now);
         $this->db->where('ShowEndDateTime <', $now);
         $resultSet = $this->db->get($tableName, $number, $offset);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**

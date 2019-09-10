@@ -158,4 +158,36 @@ class SmartyLib extends Smarty
         // デバッグ用
         return $this->fetch('administration'. DIRECTORY_SEPARATOR . $template);
     }
+
+    public function testView(
+        $template,
+        $data = array()
+    ) {
+        // テンプレート用引数セット
+        foreach ($data as $key => $value) {
+            $this->assign($key, $value);
+        }
+        // インスタンス取得
+        $CI =& get_instance();
+        // テンプレートファイル名補完
+        $filePeace = explode('.', $template);
+        $lastPeace = $filePeace[count($filePeace) - 1];
+        if ($lastPeace != 'tpl') {
+            $template .= '.tpl';
+        }
+        if (method_exists($CI->output, 'append_output')) {
+            $headerTemplate = 'test' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'header.tpl';
+            $footerTemplate = 'test' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'footer.tpl';
+            if (file_exists($headerTemplate)) {
+                $CI->output->append_output($this->fetch($headerTemplate));
+            }
+            $CI->output->append_output($this->fetch('test' . DIRECTORY_SEPARATOR . $template));
+            if (file_exists($footerTemplate)) {
+                $CI->output->append_output($this->fetch($footerTemplate));
+            }
+            return;
+        }
+        $CI->output->final_output('test' . DIRECTORY_SEPARATOR . $template);
+        return;
+    }
 }

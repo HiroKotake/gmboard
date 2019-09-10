@@ -1,16 +1,20 @@
 <?php
-namespace gmboard\application\models\dao;
-
 defined('BASEPATH') or exit('No direct script access allowed');
+
+use teleios\utils\StringUtility;
 
 /**
  * グループメッセージ管理テーブル操作クラス
  */
 class GameBoard extends CI_Model
 {
+    const TableName = 'GBoard_';
+    private $stringUtil = null;
+
     public function __construct()
     {
         parent::__construct();
+        $this->stringUtil = new StringUtility();
     }
 
     /**
@@ -32,12 +36,12 @@ class GameBoard extends CI_Model
      */
     public function getMessages(int $groupId, int $lineNumber = 20)
     {
-        $table = 'GBoard_' . $groupId;
+        $table = self::TableName . $this->stringUtil->lpad($groupId, "0", 12);
         $this->db->select('UserId, Message, Showable, CreateDate');
         $this->db->where('DeleteFlag', 0);
         $this->db->order_by('id', 'DESC');
         $resultSet = $lineNumber > 0 ? $this->db->get($table, $lineNumber, 0) : $this->db->get($table);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**
@@ -48,7 +52,7 @@ class GameBoard extends CI_Model
      */
     public function addNewMessage(int $groupId, int $userId, $message)
     {
-        $table = 'GBoard_' . $groupId;
+        $table = self::TableName . $this->stringUtil->lpad($groupId, "0", 12);
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'GroupId'       => $groupId,
@@ -68,7 +72,7 @@ class GameBoard extends CI_Model
      */
     public function hideMessage(int $groupId, int $lineId)
     {
-        $table = 'GBoard_' . $groupId;
+        $table = self::TableName . $this->stringUtil->lpad($groupId, "0", 12);
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'Showable'      => 0,
@@ -86,7 +90,7 @@ class GameBoard extends CI_Model
      */
     public function showMessage(int $groupId, int $messageId)
     {
-        $table = 'GBoard_' . $groupId;
+        $table = self::TableName . $this->stringUtil->lpad($groupId, "0", 12);
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'Showable'      => 1,
@@ -104,7 +108,7 @@ class GameBoard extends CI_Model
      */
     public function deleteLine(int $groupId, int $messageId)
     {
-        $table = 'GBoard_' . $groupId;
+        $table = self::TableName . $this->stringUtil->lpad($groupId, "0", 12);
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'DeleteFlag'    => 1,

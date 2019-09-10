@@ -25,7 +25,7 @@ class GamePlayers extends CI_Model
         $this->db->where('UserId', $userId);
         $this->db->where('DeleteFlag', 0);
         $resultSet = $this->db->get(self::$tableName);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**
@@ -38,7 +38,7 @@ class GamePlayers extends CI_Model
         $this->db->where('GroupId', $groupId);
         $this->db->where('DeleteFlag', 0);
         $resultSet = $this->db->get(self::$tableName);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**
@@ -51,7 +51,7 @@ class GamePlayers extends CI_Model
         $this->db->where('PlayerId', $playerId);
         $this->db->where('DeleteFlag', 0);
         $resultSet = $this->db->get(self::$tableName);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**
@@ -64,7 +64,7 @@ class GamePlayers extends CI_Model
         $this->db->like('Nickname', $nickname);
         $this->db->where('DeleteFlag', 0);
         $resultSet = $this->db->get(self::$tableName);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**

@@ -24,7 +24,7 @@ class RegistBooking extends CI_Model
             }
             $this->db->where('DeleteFlag', 0);
             $resultSet = $this->db->get(self::$tableName);
-            return $resultSet->result();
+            return $resultSet->result_array();
         }
         return array();
     }

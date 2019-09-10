@@ -33,7 +33,7 @@ class Groups extends CI_Model
     public function getAll() : arrey
     {
         $resultSet = $this->db->get($this->tableName);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**
@@ -47,7 +47,7 @@ class Groups extends CI_Model
         $this->db->where('GameId', $gameId);
         $this->db->where('DeleteFlag', ($deleted == true ? 1 : 0));
         $resultSet = $this->db->get($this->tableName);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     // グループ名検索
@@ -56,7 +56,7 @@ class Groups extends CI_Model
         $this->db->like('GroupName', $groupName);
         $this->db->where('DeleteFlag', ($deleted == true ? 1 : 0));
         $resultSet = $this->db->get($this->tableName);
-        return $resultSet->result();
+        return $resultSet->result_array();
     }
 
     /**

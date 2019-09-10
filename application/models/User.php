@@ -74,10 +74,11 @@ class User
      */
     public function auth(string $loginId, string $passwd) : bool
     {
+        $stringUtil = new StringUtility();
         $cIns->load->model('dao/Users', 'daoUsers');
         $records = $cIns->daoUsers->getByLoginId($loginId);
         if (count($records) > 0) {
-            $pwdHash = $this->getHashedPassword($passwd);
+            $pwdHash = $stringUtil->getHashedPassword($passwd);
             $userRecord = $records[0];
             if ($pwdHash === $userRecord['Password']) {
                 return true;
