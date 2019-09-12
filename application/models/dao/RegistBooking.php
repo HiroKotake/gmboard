@@ -1,14 +1,12 @@
 <?php
-namespace gmboard\application\models\dao;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * ユーザ登録予約管理テーブル操作クラス
  */
-class RegistBooking extends CI_Model
+class RegistBooking extends MY_Model
 {
-    private $tableName = 'RegistBooking';
+    const TABLE_NAME = 'RegistBooking';
 
     public function __construct()
     {
@@ -23,7 +21,8 @@ class RegistBooking extends CI_Model
                 $this->db->where($key, $value);
             }
             $this->db->where('DeleteFlag', 0);
-            $resultSet = $this->db->get(self::$tableName);
+            $query = $this->getQuerySelect(self::TABLE_NAME);
+            $resultSet = $this->db->query($query);
             return $resultSet->result_array();
         }
         return array();
@@ -67,33 +66,38 @@ class RegistBooking extends CI_Model
             'AuthCode'      => $authCode,
             'CreateDate'    => $datetime
         );
-        $this->db->insert(self::$tableName, $data);
+        $query = $this->getQueryInsert(self::TABLE_NAME, $data);
+        $this->db->query($query);
         return $this->db->insert_id();
     }
 
+    public function updateRegistBooking(int $registBookingId, array $data)
+    {
+        $this->db->where('RegistBookingId', $registBookingId);
+        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
+        return $this->db->query($query);
+
+    }
     // 登録済みフラグ更新
     public function registed(int $registBookingId, int $userId)
     {
         $datetime = date("Y-m-d H:i:s");
-        $this->db->where('RegistBookingId', $registBookingId);
         $data = array(
             'UserId'        => $userId,
             'Registed'      => 1,
             'UpdateDate'    => $datetime
         );
-        return $this->db->update(self::$tableName, $data);
+        return $this->updateRegistBooking($registBookingId, $data);
     }
 
     // レコード論理削除
     public function deleteByRegistBookingId(int $registBookingId)
     {
         $datetime = date("Y-m-d H:i:s");
-        $this->db->where('RegistBookingId', $registBookingId);
         $data = array(
             'DeleteDate'    => $datetime,
             'DeleteFlag'    => 1
         );
-        return $this->db->update(self::$tableName, $data);
+        return $this->updateRegistBooking($registBookingId, $data);
     }
-
 }

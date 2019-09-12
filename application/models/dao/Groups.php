@@ -1,14 +1,12 @@
 <?php
-namespace gmboard\application\models\dao;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * グループ情報管理テーブル操作クラス
  */
-class Groups extends CI_Model
+class Groups extends MY_Model
 {
-    private $tableName = 'Groups';
+    const TABLE_NAME = 'Groups';
 
     public function __construct()
     {
@@ -20,7 +18,8 @@ class Groups extends CI_Model
     {
         if (count($data) > 0) {
             $data['CreateDate'] = date("Y-m-d H:i:s");
-            $this->db->insert($this->tableName, $data);
+            $query = $this->getQueryInsert(self::TABLE_NAME, $data);
+            $this->db->query($query);
             return $this->db->insert_id();
         }
         return false;
@@ -32,7 +31,8 @@ class Groups extends CI_Model
      */
     public function getAll() : arrey
     {
-        $resultSet = $this->db->get($this->tableName);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -46,7 +46,8 @@ class Groups extends CI_Model
     {
         $this->db->where('GameId', $gameId);
         $this->db->where('DeleteFlag', ($deleted == true ? 1 : 0));
-        $resultSet = $this->db->get($this->tableName);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -55,7 +56,8 @@ class Groups extends CI_Model
     {
         $this->db->like('GroupName', $groupName);
         $this->db->where('DeleteFlag', ($deleted == true ? 1 : 0));
-        $resultSet = $this->db->get($this->tableName);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -70,7 +72,8 @@ class Groups extends CI_Model
         if (count($data) > 0) {
             $data['UpdateDate'] = date("Y-m-d H:i:s");
             $this->db->where('GroupId', $groupId);
-            return $this->db->update($this->tableName, $data);
+            $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
+            return $this->db->query($query);
         }
         return false;
     }

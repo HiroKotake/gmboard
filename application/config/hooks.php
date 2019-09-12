@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
-$hook['post_system'] = array(
+$hook['pre_controller'] = array(
     'class'    => 'AutoLoader',
     'function' => 'autoLoad',
     'filename' => 'AutoLoader.php',

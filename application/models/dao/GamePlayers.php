@@ -1,14 +1,12 @@
 <?php
-namespace gmboard\application\models\dao;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * ゲームプレイヤー管理テーブル操作クラス
  */
-class GamePlayers extends CI_Model
+class GamePlayers extends MY_Model
 {
-    private $tableName = 'GamePlayers';
+    const TABLE_NAME = 'GamePlayers';
 
     public function __construct()
     {
@@ -24,7 +22,8 @@ class GamePlayers extends CI_Model
     {
         $this->db->where('UserId', $userId);
         $this->db->where('DeleteFlag', 0);
-        $resultSet = $this->db->get(self::$tableName);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -37,7 +36,8 @@ class GamePlayers extends CI_Model
     {
         $this->db->where('GroupId', $groupId);
         $this->db->where('DeleteFlag', 0);
-        $resultSet = $this->db->get(self::$tableName);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -50,7 +50,8 @@ class GamePlayers extends CI_Model
     {
         $this->db->where('PlayerId', $playerId);
         $this->db->where('DeleteFlag', 0);
-        $resultSet = $this->db->get(self::$tableName);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -63,7 +64,8 @@ class GamePlayers extends CI_Model
     {
         $this->db->like('Nickname', $nickname);
         $this->db->where('DeleteFlag', 0);
-        $resultSet = $this->db->get(self::$tableName);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -75,7 +77,8 @@ class GamePlayers extends CI_Model
     {
         $datetime = date("Y-m-d H:i:s");
         $data['CreateDate'] = $datetime;
-        $this->db->insert(self::$tableName, $data);
+        $query = $this->getQueryInsert(self::TABLE_NAME, $data);
+        $this->db->query($query);
         return $this->db->insert_id();
     }
 
@@ -88,14 +91,15 @@ class GamePlayers extends CI_Model
     public function updateByGamePlayerId(int $gamePlayerId, array $data)
     {
         $datetime = date("Y-m-d H:i:s");
-        $updateDate = array(
+        $updateData = array(
             'UpdateDate'    => $datetime
         );
         foreach ($data as $key => $value) {
-            $updateDate[$key] = $value;
+            $updateData[$key] = $value;
         }
         $this->db->where('GamePlayerId', $gamePlayerId);
-        return $this->db->update(self::$tableName, $data);
+        $query = $this->getQueryUpdate(self::TABLE_NAME, $updateData);
+        return $this->db->query($query);
     }
 
     /**
@@ -111,7 +115,8 @@ class GamePlayers extends CI_Model
             'DeleteFlag' => 1
         );
         $this->db->where('UserId', $userId);
-        return $this->db->update(self::$tableName, $data);
+        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
+        return $this->db->query($query);
     }
 
     /**
@@ -127,6 +132,7 @@ class GamePlayers extends CI_Model
             'DeleteFlag' => 1
         );
         $this->db->where('PlayerId', $playerId);
-        return $this->db->update(self::$tableName, $data);
+        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
+        return $this->db->query($query);
     }
 }

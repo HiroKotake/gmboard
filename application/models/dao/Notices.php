@@ -1,14 +1,12 @@
 <?php
-namespace gmboard\application\models\dao;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * 全体告知管理テーブル操作クラス
  */
-class Notices extends CI_Model
+class Notices extends MY_Model
 {
-    private $tableName = 'Notices';
+    const TABLE_NAME = 'Notices';
 
     public function __construct()
     {
@@ -28,7 +26,8 @@ class Notices extends CI_Model
     {
         if (count($data) > 0) {
             $data['CreateDate'] = date("Y-m-d H:i:s");
-            $this->db->insert($this->tableName, $data);
+            $query = $this->getQueryInsert(self::TABLE_NAME, $data);
+            $this->db->query($query);
             return $this->db->insert_id();
         }
         return false;
@@ -47,7 +46,9 @@ class Notices extends CI_Model
         $this->db->where('DeleteFlag', 0);
         $this->db->where('ShowStartDateTime >=', $now);
         $this->db->where('ShowEndDateTime <', $now);
-        $resultSet = $this->db->get($this->tableName, $number, $offset);
+        $this->db->limit($number, $offset);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -63,7 +64,8 @@ class Notices extends CI_Model
         if (count($data) > 0) {
             $data['UpdateDate'] = date("Y-m-d H:i:s");
             $this->db->where('NoticeId', $noticeId);
-            return $this->db->update($this->tableName, $data);
+            $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
+            return $this->db->query($query);
         }
         return false;
     }
@@ -117,6 +119,6 @@ class Notices extends CI_Model
             'DeleteDate' => date("Y-m-d H:i:s"),
             'DeleteFlag' => 1
         );
-        return $this->db->update($noticeId, $data);
+        return $this->db->updateNotice($noticeId, $data);
     }
 }

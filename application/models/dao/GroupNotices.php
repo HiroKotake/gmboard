@@ -1,14 +1,12 @@
 <?php
-namespace gmboard\application\models\dao;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * グループ内告知管理テーブル操作クラス
  */
-class GroupNotices extends CI_Model
+class GroupNotices extends MY_Model
 {
-    CONST cTablePrefix = 'GNotice_';
+    CONST TABLE_PREFIX = 'GNotice_';
 
     public function __construct()
     {
@@ -23,6 +21,7 @@ class GroupNotices extends CI_Model
     public function createGroupNotice(int $groupId)
     {
         $query = 'CALL CreateGroupNotice(' . $groupId . ')';
+        $this->writeLog($query);
         return $this->db->query($query);
     }
 
@@ -40,9 +39,10 @@ class GroupNotices extends CI_Model
     public function addNotice(int $groupId, array $data) : int
     {
         if (count($data) > 0) {
-            $tableName = cTablePrefix . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+            $tableName = TABLE_PREFIX . str_pad($groupId, 12, "0", STR_PAD_LEFT);
             $data['CreateDate'] = date("Y-m-d H:i:s");
-            $this->db->insert($tableName, $data);
+            $query = $this->getQueryInsert($tableName, $data);
+            $this->db->query($query);
             return $this->db->insert_id();
         }
         return false;
@@ -57,13 +57,15 @@ class GroupNotices extends CI_Model
      */
     public function getNotices(int $groupId, int $number = 10, int $offset = 0) : array
     {
-        $tableName = cTablePrefix . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+        $tableName = TABLE_PREFIX . str_pad($groupId, 12, "0", STR_PAD_LEFT);
         $now = date("Y-m-d H:i:s");
         $this->db->where('Showable', 1);
         $this->db->where('DeleteFlag', 0);
         $this->db->where('ShowStartDateTime >=', $now);
         $this->db->where('ShowEndDateTime <', $now);
-        $resultSet = $this->db->get($tableName, $number, $offset);
+        $this->db->limit($number, $offset);
+        $query = $this->getQuerySelect($tableName);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -77,10 +79,11 @@ class GroupNotices extends CI_Model
     public function updateNotice(int $groupId, int $noticeId, int $data) : bool
     {
         if (count($data) > 0) {
-            $tableName = cTablePrefix . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+            $tableName = TABLE_PREFIX . str_pad($groupId, 12, "0", STR_PAD_LEFT);
             $data['UpdateDate'] = date("Y-m-d H:i:s");
             $this->db->where('NoticeId', $noticeId);
-            return $this->db->update($tableName, $data);
+            $query = $this->getQueryUpdate($tableName, $data);
+            return $this->db->query($query);
         }
         return false;
     }
@@ -138,6 +141,6 @@ class GroupNotices extends CI_Model
             'DeleteDate' => date("Y-m-d H:i:s"),
             'DeleteFlag' => 1
         );
-        return $this->db->update($groupId, $noticeId, $data);
+        return $this->db->updateNotice($groupId, $noticeId, $data);
     }
 }

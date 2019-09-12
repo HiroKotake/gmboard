@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /**
  * ゲーム情報テーブル管理テーブル
  */
-class GameInfos extends \CI_Model
+class GameInfos extends MY_Model
 {
     const TABLE_NAME = 'GameInfos';
 
@@ -20,7 +20,8 @@ class GameInfos extends \CI_Model
     public function getAll()
     {
         $this->db->where('DeleteFlag', 0);
-        $resultSet = $this->db->get(self::TABLE_NAME);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->qeury($query);
         return $resultSet->result_array();
     }
 
@@ -33,14 +34,16 @@ class GameInfos extends \CI_Model
     {
         $this->db->like('Name', $name);
         $this->db->where('DeleteFlag', 0);
-        $resultSet = $this->db->get(self::TABLE_NAME);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->qeury($query);
         return $resultSet->result_array();
     }
 
     public function getByGameId(int $gameId) : array
     {
         $this->db->where('GameId', $gameId);
-        $resultSet = $this->db->get(self::TABLE_NAME);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->qeury($query);
         return $resultSet->result_array();
     }
 
@@ -57,7 +60,8 @@ class GameInfos extends \CI_Model
             'Description'   => $description,
             'CreateDate'    => $datetime
         );
-        $this->db->insert(self::TABLE_NAME, $data);
+        $query = $this->getQueryInsert(self::TABLE_NAME, $data);
+        $this->db->qeury($query);
         return $this->db->insert_id();
     }
 
@@ -77,7 +81,8 @@ class GameInfos extends \CI_Model
                 }
             }
             $updateData['UpdateDate'] = $datetime;
-            return $this->db->update(self::TABLE_NAME, $updateData);
+            $query = $this->getQueryUpdate(self::TABLE_NAME, $updateData);
+            return $this->db->qeury($query);
         }
         return false;
     }
@@ -95,6 +100,7 @@ class GameInfos extends \CI_Model
             'DeleteFlag'    => 1
         );
         $this->db->where('GameId', $gameId);
-        return $this->db->update(self::TABLE_NAME, $data);
+        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
+        return $this->db->qeury($query);
     }
 }

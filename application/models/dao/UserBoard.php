@@ -6,10 +6,11 @@ use teleios\utils\StringUtility;
 /**
  * ユーザメッセージ管理テーブル操作クラス
  */
-class UserBoard extends CI_Model
+class UserBoard extends MY_Model
 {
-    const TableName = 'UserBoard_';
+    const TABLE_NAME = 'UBoard_';
     private $stringUtil = null;
+    private $logWriter = null;
 
     public function __construct()
     {
@@ -25,6 +26,7 @@ class UserBoard extends CI_Model
     public function createBoard(int $userId)
     {
         $query = 'CALL CreateUserBoard(' . $userId . ')';
+        $this->writeLog($query);
         return $this->db->query($query);
     }
 
@@ -47,8 +49,10 @@ class UserBoard extends CI_Model
                 $this->db->where($key, $value);
             }
             $this->db->where('DeleteFlag', 0);
-            $groupBoardName = self::TableName . $this->stringUtil->lpad($userId, "0", 12);
-            $resultSet = $this->db->get($groupBoardName, $lineNumber, $offset);
+            $this->db->limit($lineNumber, $offset);
+            $groupBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+            $query = $this->getQuerySelect($groupBoardName);
+            $resultSet = $this->db->query($query);
             return $resultSet->result_array();
         }
         return array();
@@ -69,10 +73,11 @@ class UserBoard extends CI_Model
      */
     public function addNewMessage(int $userId, array $data)
     {
-        $groupBoardName = self::TableName . $this->stringUtil->lpad($userId, "0", 12);
+        $groupBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
         $datetime = date("Y-m-d H:i:s");
         $data['CreateDate'] = $datetime;
-        $this->db->insert($groupBoardName, $data);
+        $query = $this->getQueryInsert($groupBoardName, $data);
+        $this->db->query($query);
         return $this->db->insert_id();
     }
 
@@ -82,14 +87,15 @@ class UserBoard extends CI_Model
      */
     public function setAlreadyRead(int $userId, int $messageId)
     {
-        $groupBoardName = self::TableName . $this->stringUtil->lpad($userId, "0", 12);
+        $groupBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'AlreadyRead'   => 1,
             'UpdateDate'    => $datetime
         );
         $this->db->where('MessageId', $messageId);
-        return $this->db->update($groupBoardName, $data);
+        $query = $this->getQueryUpdate($groupBoardName, $data);
+        return $this->db->query($query);
     }
 
     /**
@@ -101,13 +107,14 @@ class UserBoard extends CI_Model
     {
         if (count($messageIds) > 0) {
             $datetime = date("Y-m-d H:i:s");
-            $groupBoardName = self::TableName . $this->stringUtil->lpad($userId, "0", 12);
+            $groupBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
             $data = array(
                 'DeleteFlag'   => 1,
                 'DeleteDate'    => $datetime
             );
             $this->db->where_in('MessageId', $messageIds);
-            return $this->db->update($groupBoardName, $data);
+            $query = $this->getQueryUpdate($groupBoardName, $data);
+            return $this->db->query($query);
         }
         return false;
     }

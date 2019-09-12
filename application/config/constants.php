@@ -92,3 +92,6 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 */
 defined('BROWSER_TYPE_FULL')   OR define('BROWSER_TYPE_FULL', 'full');  // User's Browser Type is PC browser
 defined('BROWSER_TYPE_SP')     OR define('BROWSER_TYPE_SP', 'sp');      // User's Browser type is Smart Phone
+
+defined('SYSTEM_USER_ID')      or define('SYSTEM_USER_ID', '999999999999'); // System UserId
+defined('SYSTEM_GROUP_ID')     or define('SYSTEM_GROUP_ID', '999999999999'); // System GroupId
