@@ -70,4 +70,18 @@ class StringUtility
     {
         return str_pad($base, $count, $padString, STR_PAD_BOTH);
     }
+
+    /**
+     * 入力された値がemailアドレスか確認する
+     * @param  [type] $mailAddr 入力された文字列
+     * @return bool             emailアドレスであれば true を、そうでない場合は false を返す
+     */
+    public function isMailAddr($mailAddr) : bool
+    {
+        $checked = filter_var($mailAddr, FILTER_VALIDATE_EMAIL);
+        if ($checked) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -21,7 +21,7 @@ class GameInfos extends MY_Model
     {
         $this->db->where('DeleteFlag', 0);
         $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->qeury($query);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -35,7 +35,7 @@ class GameInfos extends MY_Model
         $this->db->like('Name', $name);
         $this->db->where('DeleteFlag', 0);
         $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->qeury($query);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -43,7 +43,7 @@ class GameInfos extends MY_Model
     {
         $this->db->where('GameId', $gameId);
         $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->qeury($query);
+        $resultSet = $this->db->query($query);
         return $resultSet->result_array();
     }
 
@@ -61,7 +61,7 @@ class GameInfos extends MY_Model
             'CreateDate'    => $datetime
         );
         $query = $this->getQueryInsert(self::TABLE_NAME, $data);
-        $this->db->qeury($query);
+        $this->db->query($query);
         return $this->db->insert_id();
     }
 
@@ -82,7 +82,7 @@ class GameInfos extends MY_Model
             }
             $updateData['UpdateDate'] = $datetime;
             $query = $this->getQueryUpdate(self::TABLE_NAME, $updateData);
-            return $this->db->qeury($query);
+            return $this->db->query($query);
         }
         return false;
     }
@@ -101,6 +101,6 @@ class GameInfos extends MY_Model
         );
         $this->db->where('GameId', $gameId);
         $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-        return $this->db->qeury($query);
+        return $this->db->query($query);
     }
 }

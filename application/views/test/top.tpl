@@ -4,13 +4,13 @@
 <ul>
     <li><a href="formGameInfo">ゲーム情報追加</a></li>
     <li><a href="listGameInfo">ゲーム情報一覧表示</a></li>
-    <li><a href="showGameInfo">ゲーム情報確認</a></li>
+    <li><a href="showGameInfo?GameID=2">ゲーム情報確認</a></li>
 </ul>
 <h3>ユーザ関連</h3>
 <ul>
     <li><a href="formUser">ユーザ追加</a></li>
     <li><a href="listUser">ユーザ一覧表示</a></li>
-    <li><a href="showUser">ユーザ情報表示</a></li>
+    <li><a href="showUser?UserId=1">ユーザ情報表示</a></li>
     <li><a href="checkLogin">ログイン認証・確認</a></li>
 </ul>
 <h3>グループ関連</h3>
