@@ -1,4 +1,4 @@
-{if empty($WithData)}
+{if mb_strlen($Message) > 0}
 {$Message}
 {else}
 <h2>ゲーム情報</h3>

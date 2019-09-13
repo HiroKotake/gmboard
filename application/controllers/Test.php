@@ -41,11 +41,15 @@ class Test extends MY_Controller
             return;
         }
         $this->load->model('test/GameInfo', 'testGameInfo');
-        $newId = $this->testGameInfo->addGameInfo($gameName, $description);
+        $result = $this->testGameInfo->addGameInfo($gameName, $description);
         $data = array(
-            'GameId' => $newId,
-            'GameInfo' => $this->testGameInfo->getByGameId($newId)
+            'Message'  => '',
+            'GameId'   => $result[0]['GameId'],
+            'GameInfo' => $result[0]
         );
+        if (count($result) == 0) {
+            $data['Message'] = 'ゲーム情報の追加に失敗しました。<br />';
+        }
         $this->smarty->testView('showGameInfo', $data);
     }
     // ゲーム情報一覧表示
@@ -64,12 +68,10 @@ class Test extends MY_Controller
         $this->load->model('test/GameInfo', 'testGameInfo');
         $gameInfo = $this->testGameInfo->showGameInfo((int)$gameId);
         $data = array(
-            'WithData' => 1,
             'Message' => '',
             'GameInfo' => $gameInfo
         );
         if (count($gameInfo) == 0) {
-            $data['WithData'] = 0;
             $data['Message'] = 'No DATA';
         }
         $this->smarty->testView('showGameInfo', $data);

@@ -1,5 +1,15 @@
+<table>
+    <tr>
+        <th>GameId</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
 {foreach from=$list item=gameInfo}
-<h3>{$gameInfo.GameId}:{$gameInfo.Name}</h3>
-<p>{$gameInfo.Description}</p>
-<a href="showGameInfo?GameID={$gameInfo.GameId}">詳細を見る</a>
+    <tr>
+        <td><a href="showGameInfo?GameID={$gameInfo.GameId}">{$gameInfo.GameId}</a></td>
+        <td>{$gameInfo.Name}</td>
+        <td>{$gameInfo.Description}</td>
+    </tr>
 {/foreach}
+</table>
+<a href="./">戻る</a>
