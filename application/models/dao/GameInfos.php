@@ -39,12 +39,21 @@ class GameInfos extends MY_Model
         return $resultSet->result_array();
     }
 
+    /**
+     * ゲームIDを元にゲーム情報を取得する
+     * @param  int   $gameId ゲームID
+     * @return array         対象が存在した場合にはゲーム情報を含む連想を配列を返し、ない場合には空の配列を返す
+     */
     public function getByGameId(int $gameId) : array
     {
         $this->db->where('GameId', $gameId);
         $query = $this->getQuerySelect(self::TABLE_NAME);
         $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $gameInfos = $resultSet->result_array();
+        if (count($gameInfos) == 0) {
+            return array();
+        }
+        return $gameInfos[0];
     }
 
     /**

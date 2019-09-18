@@ -29,18 +29,23 @@ class Groups extends MY_Model
      * 全レコード取得
      * @return arrey [description]
      */
-    public function getAll() : arrey
+    public function getAll(bool $deleted = false) : array
     {
+        $this->db->where('DeleteFlag', ($deleted == true ? 1 : 0));
         $query = $this->getQuerySelect(self::TABLE_NAME);
         $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $groups = $resultSet->result_array();
+        if (count($groups) == 0) {
+            return array();
+        }
+        return $groups;
     }
 
     /**
      * ゲーム管理IDによる検索
      * @param  int     $gameId      ゲーム管理ID
      * @param  boolean $deleted     削除したレコードも対象に含む場合に true をセット(default: false)
-     * @return array                [description]
+     * @return array                対象が存在する場合にはゲーム情報を含む連想配列を返し、存在しない場合は空の配列を返す
      */
     public function getByGameId(int $gameId, bool $deleted = false) : array
     {
@@ -55,6 +60,16 @@ class Groups extends MY_Model
     public function getByGroupName(string $groupName, bool $deleted = false) : array
     {
         $this->db->like('GroupName', $groupName);
+        $this->db->where('DeleteFlag', ($deleted == true ? 1 : 0));
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
+        return $resultSet->result_array();
+    }
+
+    // グループID検索
+    public function getByGroupId(int $grouId, bool $deleted = false) : array
+    {
+        $this->db->where('GroupId', $grouId);
         $this->db->where('DeleteFlag', ($deleted == true ? 1 : 0));
         $query = $this->getQuerySelect(self::TABLE_NAME);
         $resultSet = $this->db->query($query);

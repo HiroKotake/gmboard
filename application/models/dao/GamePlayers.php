@@ -13,6 +13,30 @@ class GamePlayers extends MY_Model
         parent::__construct();
     }
 
+    public function getAll() : array
+    {
+        $this->db->where('DeleteFlag', 0);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
+        return $resultSet->result_array();
+    }
+    /**
+     * 特定のユーザに関わるレコードを取得
+     * @param  int   $gamePlayerId [description]
+     * @return array               [description]
+     */
+    public function getByGamePlayerId(int $gamePlayerId) : array
+    {
+        $this->db->where('GamePlayerId', $gamePlayerId);
+        $this->db->where('DeleteFlag', 0);
+        $query = $this->getQuerySelect(self::TABLE_NAME);
+        $resultSet = $this->db->query($query);
+        $result = $resultSet->result_array();
+        if (count($result) > 0) {
+            return $result[0];
+        }
+        return array();
+    }
     /**
      * 特定のユーザに関わるレコードを取得
      * @param  int    $userId [description]

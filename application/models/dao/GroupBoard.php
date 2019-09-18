@@ -6,7 +6,7 @@ use teleios\utils\StringUtility;
 /**
  * グループメッセージ管理テーブル操作クラス
  */
-class GameBoard extends MY_Model
+class GroupBoard extends MY_Model
 {
     const TABLE_NAME = 'GBoard_';
     private $stringUtil = null;
@@ -22,7 +22,7 @@ class GameBoard extends MY_Model
      * @param  int    $groupId グループ管理ID
      * @return [type]          [description]
      */
-    public function makeGameBoard(int $groupId)
+    public function createGroupBoard(int $groupId)
     {
         $query = 'CALL CreateGroupBoard(' . $groupId . ')';
         $this->writeLog($query);

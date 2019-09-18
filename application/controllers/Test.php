@@ -77,7 +77,7 @@ class Test extends MY_Controller
         $this->smarty->testView('showGameInfo', $data);
     }
     /********************************************************
-     * ユーザ関連    lib: User
+     * ユーザ関連１   lib: User
      ********************************************************/
     // ユーザ追加
     public function formUser()
@@ -134,7 +134,7 @@ class Test extends MY_Controller
 
         // エラーがある場合は入力画面を再表示
         if (mb_strlen($notice) > 0) {
-            $data = array('message' => $notice);
+            $data = array('Message' => $notice);
             $this->smarty->testView('formUser', $data);
             return;
         }
@@ -146,7 +146,7 @@ class Test extends MY_Controller
         $userInfo = $this->testUser->showUser($newUserId);
         $data = array(
             'Message' => '',
-            'UserInfo' => $userInfo
+            'UserInfo' => $userInfo[0]
         );
 
         $this->smarty->testView('showUser', $data);
@@ -208,41 +208,175 @@ class Test extends MY_Controller
         echo '<a href="./">戻る</a>';
     }
     /********************************************************
+     * ユーザ関連２   lib: User
+     ********************************************************/
+    public function formGamePlayer()
+    {
+        $data = array(
+            'Message' => ''
+        );
+        $this->load->model('test/GamePlayer', 'testGamePlayer');
+        $data['GameInfos'] = $this->testGamePlayer->formGamePlayer();
+        $this->smarty->testView('formGamePlayer', $data);
+    }
+    public function addGamePlayer()
+    {
+        $gameId = $this->input->post('GID');
+        $playerId = $this->input->post('GPID');
+        $nickname = $this->input->post('NNAME');
+
+        echo 'DEBUG:<br />';
+        echo 'GameID:&nbsp;' . $gameId . '<br />';
+        echo 'GamePlayerId:&nbsp;' . $playerId . '<br />';
+        echo 'GameNickname:&nbsp;' . $nickname . '<br />';
+        echo '<hr />';
+        $data = array(
+            'Message' => ''
+        );
+
+        $this->load->model('test/GamePlayer', 'testGamePlayer');
+        $result = $this->testGamePlayer->addGamePlayer($gameId, $playerId, $nickname);
+        if (count($result['PlayerInfo']) == 0) {
+            $data['Message'] = '登録に失敗しました';
+        }
+        $data['PlayerInfo'] = $result['PlayerInfo'];
+        $data['GameInfo'] = $result['GameInfo'];
+        $this->smarty->testView('addGamePlayer', $data);
+    }
+    public function listGamePlayer()
+    {
+        $this->load->model('test/GamePlayer', 'testGamePlayer');
+        $data = $this->testGamePlayer->listGamePlayer();
+        $this->smarty->testView('listGamePlayer', $data);
+    }
+    public function showGamePlayer()
+    {
+        $data = array(
+            'Message' => '対象のゲームプレイヤーは登録されていません',
+            'GamePlayer' => null
+        );
+        $gamePlayerId = $this->input->get('GPID');
+        $this->load->model('test/GamePlayer', 'testGamePlayer');
+        $data['GamePlayer'] = $this->testGamePlayer->showGamePlayer((int) $gamePlayerId);
+        $this->smarty->testView('showGamePlayer', $data);
+    }
+    /********************************************************
      * グループ関連   lib: Group
      ********************************************************/
     // グループ追加
     public function formGroup()
     {
+        // ゲーム一覧取得
+        $this->load->model('test/Group', 'testGroup');
+        $games = $this->testGroup->formGroup();
+        // データ作成
+        $data = array(
+            'Message' => '',
+            'Games' => $games
+        );
         $this->smarty->testView('formGroup', $data);
     }
     public function addGroup()
     {
         $data = array(
-            'message' => ''
+            'Message' => ''
         );
+        // 入力値チェック
+        $targetGame  = $this->input->post('TRGT');
+        $groupName   = $this->input->post('GNAME');
+        $description = $this->input->post('DESCRIP');
+        if (mb_strlen($groupName) == 0) {
+            $data['Message'] .= 'グループ名が入力されていません。<br />';
+        }
+        if (mb_strlen($description) == 0) {
+            $data['Message'] .= '説明が入力されていません。<br />';
+        }
+        if (mb_strlen($data['Message']) > 0) {
+            $this->load->model('test/Group', 'testGroup');
+            $games = $this->testGroup->formGroup();
+            $data['Games'] = $games;
+            $this->smarty->testView('formGroup', $data);
+            return;
+        }
+        // グループ登録
+        $this->load->model('test/Group', 'testGroup');
+        $groupInfo = $this->testGroup->addGroup($targetGame, $groupName, $description);
+        if (count($groupInfo) == 0) {
+            echo '登録に失敗しました<br /><a href="./">戻る</a>';
+            return;
+        }
+        // グループ内容表示
+        $this->load->model('dao/GameInfos', 'daoGameInfos');
+        $gameInfo = $this->daoGameInfos->getByGameId($groupInfo['GameId']);
+        $data['GroupInfo'] = $groupInfo;
+        $data['GameName'] = $gameInfo['Name'];
         $this->smarty->testView('showGroup', $data);
     }
     // グループ一覧表示
     public function listGroup()
     {
+        $this->load->model('test/Group', 'testGroup');
+        $groupList = $this->testGroup->listGroup();
+        $games = $this->testGroup->formGroup();
         $data = array(
-            'message' => ''
+            'Message' => '',
+            'Games' => $games,
+            'GroupList' => $groupList
         );
+        if (count($groupList) == 0) {
+            $data['Message'] = 'グループは登録されていません。';
+        }
         $this->smarty->testView('listGroup', $data);
     }
     // グループ情報表示
     public function showGroup()
     {
+        $gpid = $this->input->get('GPID');
+        $this->load->model('test/Group', 'testGroup');
+        $groupInfo = $this->testGroup->showGroup($gpid);
         $data = array(
-            'message' => ''
+            'Message' => '',
+            'GroupInfo' => $groupInfo
         );
+        if (count($groupInfo) == 0) {
+            $data['Message'] = '該当するグループはありません！';
+        }
+        $data['GameName'] = $groupInfo['GameName'];
         $this->smarty->testView('showGroup', $data);
     }
+    /********************************************************
+     * グループメンバー関連   lib: GroupMember
+     ********************************************************/
     // グループメンバー追加
+    public function formAddGroupMember()
+    {
+        $groupId = $this->input->get('GPID');
+        $data = array(
+            'Message' => '',
+            'GroupId' => $groupId,
+            'RegistedMembers' => null,
+            'BookingMembers' => null
+        );
+        $this->load->model('test/GroupMember', 'testGroupMember');
+        $members = $this->testGroupMember->formAddGroupMember((int)$groupId);
+        $data['RegistedMembers'] = $members['RegistedMembers'];
+        $data['BookingMembers'] = $members['BookingMembers'];
+        $this->smarty->testView('formAddGroupMember', $data);
+    }
     public function addGroupMember()
     {
+        $playerId       = $this->input->post('GPID');
+        $authCode       = $this->input->post('ACD');
+        $gameNickName   = $this->input->post('GNIN');
+        $groupId        = $this->input->post('GID');
+        // データ登録
+        $this->load->model('test/GroupMember', 'testGroupMember');
+        $result = $this->testGroupMember->addGroupMember((int)$groupId, $playerId, $authCode, $gameNickName);
         $data = array(
-            'message' => ''
+            'Message' => '',
+            'RegistedMembers' => $result['RegistedMembers'],
+            'BookingMembers' => $result['BookingMembers'],
+            'BookingMember' => $result['BookingMember']
         );
         $this->smarty->testView('addGroupMember', $data);
     }
@@ -250,9 +384,24 @@ class Test extends MY_Controller
     public function listGroupMember()
     {
         $data = array(
-            'message' => ''
+            'Message' => ''
         );
         $this->smarty->testView('listGroupMember', $data);
+    }
+    // グループメンバー除名
+    public function formDelGroupMember()
+    {
+        $data = array(
+            'Message' => ''
+        );
+        $this->smarty->testView('formDelGroupMember', $data);
+    }
+    public function delGroupMember()
+    {
+        $data = array(
+            'Message' => ''
+        );
+        $this->smarty->testView('delGroupMember', $data);
     }
     /********************************************************
      * 掲示板関連    lib: GroupMessage / UserMessage
@@ -261,34 +410,46 @@ class Test extends MY_Controller
     public function formGroupMessage()
     {
         $data = array(
-            'message' => ''
+            'Message' => ''
         );
         $this->smarty->testView('formGroupMessage', $data);
     }
     public function addGroupMessage()
     {
-        $this->smarty->testView('addGroupMessage');
+        $data = array(
+            'Message' => ''
+        );
+        $this->smarty->testView('addGroupMessage', $data);
     }
     // グループ掲示板表示
     public function showGroupMessage()
     {
-        $this->smarty->testView('showGroupMessage');
+        $data = array(
+            'Message' => ''
+        );
+        $this->smarty->testView('showGroupMessage', $data);
     }
     // ユーザ掲示板へメッセージ追加
     public function formUserMessage()
     {
         $data = array(
-            'message' => ''
+            'Message' => ''
         );
         $this->smarty->testView('formUserMessage', $data);
     }
     public function addUserMessage()
     {
-        $this->smarty->testView('showUserMessage');
+        $data = array(
+            'Message' => ''
+        );
+        $this->smarty->testView('showUserMessage', $data);
     }
     // ユーザ掲示板表示
     public function showUserMessage()
     {
-        $this->smarty->testView('showUserMessage');
+        $data = array(
+            'Message' => ''
+        );
+        $this->smarty->testView('showUserMessage', $data);
     }
 }

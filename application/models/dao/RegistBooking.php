@@ -27,26 +27,31 @@ class RegistBooking extends MY_Model
         }
         return array();
     }
+    // RegistBookingIdで検索
+    public function getByRegistBookingId(int $registBookingId) : array
+    {
+        return $this->getWithCondition(array('RegistBookingId' => $registBookingId));
+    }
     // ゲーム側IDで検索
-    public function getByPlayerId(string $playerId)
+    public function getByPlayerId(string $playerId) : array
     {
         return $this->getWithCondition(array('PlayerId' => $playerId));
     }
 
     // ゲーム側ニックネームで検索
-    public function getByNickname(string $gameNickname)
+    public function getByNickname(string $gameNickname) : array
     {
         return $this->getWithCondition(array('GameNickname' => $gameNickname));
     }
 
     // グループIDで検索
-    public function getByGroupId(int $groupId)
+    public function getByGroupId(int $groupId) : array
     {
         return $this->getWithCondition(array('GroupId' => $groupId));
     }
 
     // ユーザIDで検索
-    public function getByUserId(int $userId)
+    public function getByUserId(int $userId) : array
     {
         return $this->getWithCondition(array('UserId' => $userId));
     }
@@ -57,12 +62,12 @@ class RegistBooking extends MY_Model
         string $playerId,
         string $nickname,
         string $authCode
-    ) {
+    ) : int {
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'GroupId'       => $groupId,
             'PlayerId'      => $playerId,
-            'Nickname'      => $nickname,
+            'GameNickName'  => $nickname,
             'AuthCode'      => $authCode,
             'CreateDate'    => $datetime
         );
@@ -76,7 +81,6 @@ class RegistBooking extends MY_Model
         $this->db->where('RegistBookingId', $registBookingId);
         $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
         return $this->db->query($query);
-
     }
     // 登録済みフラグ更新
     public function registed(int $registBookingId, int $userId)
