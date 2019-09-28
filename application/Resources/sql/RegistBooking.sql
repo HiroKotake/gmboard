@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `RegistBooking`;
 CREATE TABLE `RegistBooking`
 (
     `RegistBookingId` BIGINT(12) UNSIGNED AUTO_INCREMENT COMMENT '管理ID',
+    `GameId` INT(8) UNSIGNED COMMENT 'ゲーム管理ID',
     `GroupId` BIGINT(12) UNSIGNED COMMENT 'グループ管理ID',
     `PlayerId` VARCHAR(30) NOT NULL COMMENT 'ゲーム側ユーザID',
     `AuthCode` VARCHAR(30) NOT NULL COMMENT '認証確認用コード',
@@ -15,5 +16,7 @@ CREATE TABLE `RegistBooking`
     `UpdateDate` DATETIME COMMENT 'レコード更新日',
     `DeleteDate` DATETIME COMMENT 'レコード無効日',
     `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT 'レコード無効フラグ(0:有効, 1:無効)',
-    PRIMARY KEY (`RegistBookingId`)
+    PRIMARY KEY (`RegistBookingId`),
+    INDEX `IdxPlayer` (`GameId`, `PlayerId`),
+    INDEX `IdxGroupId` (`GroupId`)
 ) ENGINE=InnoDB COMMENT '登録予約情報';

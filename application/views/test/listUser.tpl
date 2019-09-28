@@ -14,6 +14,7 @@
         <th>MailAuthed</th>
         <th>LoginExclude</th>
         <th>CreateDate</th>
+        <th>ゲームプレイヤー登録</th>
     <tr>
 {foreach from=$Users item=User}
     <tr>
@@ -26,6 +27,7 @@
         <td>{$User.MailAuthed}</td>
         <td>{$User.LoginExclude}</td>
         <td>{$User.CreateDate}</td>
+        <td><a href="formAttachGame?UID={$User.UserId}">登録</a></td>
     </tr>
 {/foreach}
 </table>

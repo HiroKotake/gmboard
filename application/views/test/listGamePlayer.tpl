@@ -9,7 +9,7 @@
     {foreach from=$GamePlayers item=Player}
     <tr>
         <td>{foreach from=$GameInfos item=Game}{if $Player.GameId == $Game.GameId}{$Game.Name}{/if}{/foreach}</td>
-        <td><a href="showGamePlayer?GPID={$Player.PlayerId}">{$Player.PlayerId}</a></td>
+        <td><a href="showGamePlayer?GPID={$Player.GamePlayerId}">{$Player.PlayerId}</a></td>
         <td>{$Player.GameNickname}</td>
     </tr>
     {/foreach}

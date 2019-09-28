@@ -208,7 +208,7 @@ class Test extends MY_Controller
         echo '<a href="./">戻る</a>';
     }
     /********************************************************
-     * ユーザ関連２   lib: User
+     * ユーザ関連２   lib: GamePlayer
      ********************************************************/
     public function formGamePlayer()
     {
@@ -260,6 +260,59 @@ class Test extends MY_Controller
         $data['GamePlayer'] = $this->testGamePlayer->showGamePlayer((int) $gamePlayerId);
         $this->smarty->testView('showGamePlayer', $data);
     }
+    /********************************************************
+     * ユーザ関連３   lib: AttachGame
+     ********************************************************/
+    public function formAttachGame()
+    {
+        $userId = $this->input->get('UID');
+        // データ作成
+        $data = array(
+            'Message' => '',
+            'UserId' => $userId
+        );
+        $this->load->model('test/AttachGame', 'testAttachGame');
+        $data['GameInfos'] = $this->testAttachGame->formAttachGame();
+        $this->smarty->testView('formAttachGame', $data);
+    }
+
+    public function addAttachGame()
+    {
+        $userId = $this->input->post('UID');
+        $gameId = $this->input->post('GID');
+        $playerId = $this->input->post('GPID');
+        $nickname = $this->input->post('NNAME');
+        echo 'デバッグ<br />';
+        echo '$useId&nbsp;=&nbsp;' . $userId . '<br />';
+        echo '$gameId&nbsp;=&nbsp;' . $gameId . '<br />';
+        echo '$playerId&nbsp;=&nbsp;' . $playerId . '<br />';
+        echo '$nickname&nbsp;=&nbsp;' . $nickname . '<br />';
+        echo '<hr />';
+        // データ作成
+        $data = array(
+            'SubTitle' => 'ゲームプレイヤー登録完了',
+            'Message' => '',
+            'GamePlayer' => null
+        );
+        $this->load->model('test/AttachGame', 'testAttachGame');
+        $data['GamePlayer'] = $this->testAttachGame->addAttachGame((int)$userId, (int)$gameId, (int)$playerId, $nickname);
+        $this->smarty->testView('showAttachGame', $data);
+    }
+
+    public function showAttachGame()
+    {
+        $gamePlayerId = $this->input->get('GPID');
+        // データ作成
+        $data = array(
+            'SubTitle' => 'ゲームプレイヤー詳細',
+            'Message' => '',
+            'GamePlayer' => null
+        );
+        $this->load->model('test/AttachGame', 'testAttachGame');
+        $data['GamePlayer'] = $this->testAttachGame->showAttachGame($gamePlayerId);
+        $this->smarty->testView('showAttachGame', $data);
+    }
+
     /********************************************************
      * グループ関連   lib: Group
      ********************************************************/
@@ -347,7 +400,7 @@ class Test extends MY_Controller
     /********************************************************
      * グループメンバー関連   lib: GroupMember
      ********************************************************/
-    // グループメンバー追加
+    // グループメンバー追加１
     public function formAddGroupMember()
     {
         $groupId = $this->input->get('GPID');
@@ -379,6 +432,59 @@ class Test extends MY_Controller
             'BookingMember' => $result['BookingMember']
         );
         $this->smarty->testView('addGroupMember', $data);
+    }
+    // グループメンバー追加２
+    public function formSearchGroupMember()
+    {
+        $groupId = $this->input->get('GPID');
+        $data = array(
+            'Message' => '',
+            'GroupId' => $groupId,
+            'GroupInfo' => null,
+            'RegistedMembers' => null,
+            'BookingMembers' => null
+        );
+        $this->load->model('test/GroupMember', 'testGroupMember');
+        $members = $this->testGroupMember->formSearchGroupMember((int)$groupId);
+        $data['GroupInfo'] = $members['GroupInfo'];
+        $data['RegistedMembers'] = $members['RegistedMembers'];
+        $data['BookingMembers'] = $members['BookingMembers'];
+        $this->smarty->testView('formSearchGroupMember', $data);
+    }
+    public function resultSearchGroupMember()
+    {
+        $playerId = $this->input->post('GPID');
+        $groupId = $this->input->post('GID');
+        $data = array(
+            'Message' => '',
+            'GroupId' => $groupId,
+            'PlayerInfo' => null,
+            'RegistedMembers' => null,
+            'BookingMembers' => null,
+        );
+        $this->load->model('test/GroupMember', 'testGroupMember');
+        $result = $this->testGroupMember->resultSearchGroupMember((int)$groupId, $playerId);
+        $data['RegistedMembers'] = $members['RegistedMembers'];
+        $data['BookingMembers'] = $members['BookingMembers'];
+        $this->smarty->testView('formResultSearchGroupMember', $data);
+    }
+    public function addSearchGroupMember()
+    {
+        $playerId = $this->input->post('PID');
+        $groupId = $this->input->post('GID');
+        $gameId = $this->input->post('GMID');
+        $data = array(
+            'Message' => '',
+            'GroupId' => $groupId,
+            'RegistedMembers' => null,
+            'BookingMembers' => null,
+        );
+        $this->load->model('test/GroupMember', 'testGroupMember');
+        // メンバーを追加し、追加後のグループの状態情報を取得
+        $members = $this->testGroupMember->addSearchGroupMember((int)$groupId, (int)$gameId, $playerId);
+        $data['RegistedMembers'] = $members['RegistedMembers'];
+        $data['BookingMembers'] = $members['BookingMembers'];
+        $this->smarty->testView('formSearchGroupMember', $data);
     }
     // グループメンバー一覧表示
     public function listGroupMember()

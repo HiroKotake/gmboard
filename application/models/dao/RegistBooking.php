@@ -59,6 +59,7 @@ class RegistBooking extends MY_Model
     // レコード追加
     public function addNewBooking(
         int $groupId,
+        int $gameId,
         string $playerId,
         string $nickname,
         string $authCode
@@ -66,6 +67,7 @@ class RegistBooking extends MY_Model
         $datetime = date("Y-m-d H:i:s");
         $data = array(
             'GroupId'       => $groupId,
+            'GameId'        => $gameId,
             'PlayerId'      => $playerId,
             'GameNickName'  => $nickname,
             'AuthCode'      => $authCode,

@@ -53,6 +53,46 @@ class GroupMember
         }
         return $data;
     }
+
+    private function searchRegistBookingPlayer(int $gameId, string $playerId) : array
+    {
+        $result = $this->cIns->daoGamePlayers->getWithCondition(array('GameId' => $gameId, 'PlayerId' => $playerId));
+        if (count($result) > 0) {
+            return $result[0];
+        }
+        return null;
+    }
+
+    public function formSearchGroupMember(int $groupId) : array
+    {
+        $data = $this->getRagistedBookingMember($groupId);
+        $data['GroupInfo'] = null;
+        $groupInfo = $this->cIns->daoGroups->getByGroupId($groupId);
+        if (count($groupInfo) > 0) {
+            $data['GroupInfo'] = $groupInfo[0];
+        }
+        return $data;
+    }
+
+    public function resultSearchGroupMember(int $groupId, string $playerId) : array
+    {
+        $data = $this->getRagistedBookingMember($groupId);
+        $data['GroupInfo'] = null;
+        $groupInfo = $this->cIns->daoGroups->getByGroupId($groupId);
+        if (count($groupInfo) > 0) {
+            $data['GroupInfo'] = $groupInfo[0];
+        }
+        $data['PlayerInfo'] = $this->searchRegistBookingPlayer($data['GroupInfo']['GameId'], $playerId);
+        return $data;
+    }
+    public function addSearchGroupMember(int $groupId, int $gameId, string $playerId) : array
+    {
+        // グループへ編入
+        $this->cIns->daoRegistBooking->addNewBooking($groupId, $gameId, $playerId);
+        // 新データ取得
+        return $this->formAddGroupMember($groupId);
+    }
+
 /*
     public function listGroupMember()
     {
