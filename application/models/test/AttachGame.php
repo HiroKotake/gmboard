@@ -10,6 +10,7 @@ class AttachGame
         $this->cIns->load->model('dao/Users', 'daoUsers');
         $this->cIns->load->model('dao/GameInfos', 'daoGameInfos');
         $this->cIns->load->model('dao/GamePlayers', 'daoGamePlayers');
+        $this->cIns->load->model('dao/Groups', 'daoGroups');
     }
 
     public function formAttachGame() : array
@@ -30,15 +31,16 @@ class AttachGame
         return $this->showAttachGame($gameId, $newId);
     }
 
-    public function showAttachGame(int $gameId, int $gamePlayerId) : array
+    public function showAttachGame(int $gameId, int $groupId) : array
     {
         // 表示用データ取得
-        $gamePlayer = $this->cIns->daoGamePlayers->getByGamePlayerId($gameId, $gamePlayerId);
-        if (count($gamePlayer) == 0) {
-            return false;
+        $data = array();
+        $data['GameInfo'] = $this->cIns->daoGameInfos->getByGameId($gameId);
+        $data['GroupInfo'] = $this->cIns->daoGroups->getByGroupId($gameId, $groupId);
+        $data['GamePlayers'] = $this->cIns->daoGamePlayers->getByGroupId($gameId, $groupId);
+        if (count($data['GamePlayers']) == 0) {
+            $data['GamePlayers'] = array();
         }
-        $gameInfo = $this->cIns->daoGameInfos->getByGameId($gamePlayer['GameId']);
-        $gamePlayer['GameName'] = $gameInfo['Name'];
-        return $gamePlayer;
+        return $data;
     }
 }

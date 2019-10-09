@@ -88,14 +88,18 @@ class GamePlayers extends MY_Model
 
     /**
      * 特定のグループに属するレコードを取得
-     * @param  int    $groupId [description]
-     * @return [type]          [description]
+     * @param  int     $gameId  ゲーム管理ID
+     * @param  int     $groupId グループ管理ID
+     * @param  integer $limit   取得レコード数
+     * @param  integer $offset  取得開始位置
+     * @return array            取得に成功した場合は内容を含む配列を返す。失敗した場合は空の配列を返す
      */
-    public function getByGroupId(int $gameId, int $groupId) : array
+    public function getByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
     {
         $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
-            'WHERE' => array('GroupId' => $groupId)
+            'WHERE' => array('GroupId' => $groupId),
+            'NUMBER' => array($limit, $offset)
         );
         return $this->get($tableName, $cond);
     }

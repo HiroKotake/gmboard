@@ -22,7 +22,7 @@
 <h3>ユーザ関連３:GamePlayers - ユーザ用登録方式</h3>
 <ul>
     <li><a href="TestAttachGame/formAttachGame?UID=1">ゲームプレイヤー登録</a></li>
-    <li><a href="TestAttachGame/showAttachGame?GPID=1">ゲームプレイヤー表示</a></li>
+    <li><a href="TestAttachGame/showAttachGame?GMID=1&GID=1">ゲームプレイヤー表示</a></li>
 </ul>
 <h3>グループ関連</h3>
 <ul>

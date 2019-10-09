@@ -45,15 +45,21 @@ class TestAttachGame extends MY_Controller
 
     public function showAttachGame()
     {
-        $gamePlayerId = $this->input->get('GPID');
+        $gameId = $this->input->get('GMID');
+        $groupId = $this->input->get('GID');
         // データ作成
         $data = array(
-            'SubTitle' => 'ゲームプレイヤー詳細',
+            'SubTitle' => 'グループ員一覧',
             'Message' => '',
-            'GamePlayer' => null
+            'Infos' => null
         );
         $this->load->model('test/AttachGame', 'testAttachGame');
-        $data['GamePlayer'] = $this->testAttachGame->showAttachGame($gamePlayerId);
+        $data['Infos'] = $this->testAttachGame->showAttachGame((int)$gameId, (int)$groupId);
+        /*
+        var_dump($data);
+        echo '<br /><hr />';
+        echo '<a href="/Test/top">戻る</a>';
+        */
         $this->smarty->testView('AttachGame/showAttachGame', $data);
     }
 }
