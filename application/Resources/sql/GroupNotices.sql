@@ -3,11 +3,12 @@
  ************************************************/
 DROP PROCEDURE IF EXISTS CreateGroupNotice;
 DELIMITER //
-CREATE PROCEDURE CreateGroupNotice(IN GroupId BIGINT(12))
+CREATE PROCEDURE CreateGroupNotice(IN GameId INT(8), IN GroupId BIGINT(12))
 BEGIN
+    SET @GameIndex = LPAD(GameId, 8, '0');
     SET @BoardNumber = LPAD(GroupId, 12, '0');
     SET @query = CONCAT(
-    'CREATE TABLE GNotice_', @BoardNumber,
+    'CREATE TABLE GNotice_', @GameIndex, '_', @BoardNumber,
     '(
         `NoticeId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'管理ID\',
         `GamePlayerId` BIGINT(12) UNSIGNED NOT NULL COMMENT \'ユーザ管理ID\',

@@ -9,4 +9,5 @@
     説明：<textarea name="DESCRIP" /></textarea><br />
     <input type="submit" value="登録" />
 </form>
-<a href="./">戻る</a>
+<hr />
+<a href="../top">戻る</a>

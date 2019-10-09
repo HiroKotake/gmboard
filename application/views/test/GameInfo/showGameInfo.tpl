@@ -6,4 +6,5 @@
 説明：{$GameInfo.Description}<br />
 登録日：{$GameInfo.CreateDate}<br />
 {/if}
-<a href="./">戻る</a>
+<hr />
+<a href="../top">戻る</a>

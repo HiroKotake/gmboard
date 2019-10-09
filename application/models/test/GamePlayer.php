@@ -8,42 +8,63 @@ class GamePlayer
     {
         $this->cIns =& get_instance();
         $this->cIns->load->model('dao/GameInfos', 'daoGameInfos');
-        $this->cIns->load->model('dao/GamePlayers', 'daoGamePlayers');
+        $this->cIns->load->model('dao/Groups', 'daoGroups');
+        $this->cIns->load->model('dao/RegistBooking', 'daoRegistBooking');
     }
 
-    public function formGamePlayer() : array
-    {
-        return $this->cIns->daoGameInfos->getAll();
-    }
-    public function addGamePlayer(int $gameId, string $playerId, string $gameNickname) : array
+    public function formGameList() : array
     {
         $data = array();
-        // GamePlayerにレコード登録
-        $newId = $this->cIns->daoGamePlayers->addNewGamePlayer(array(
-            'GameId' => (int)$gameId,
-            'PlayerId' => $playerId,
-            'GameNickname' => $gameNickname
-        ));
-        // 表示用データ取得
-        $data['PlayerInfo'] = $this->cIns->daoGamePlayers->getByGamePlayerId($newId);
+        $data['GameInfos'] = $this->cIns->daoGameInfos->getAllGameInfos();
+        return $data;
+    }
+
+    public function formGamePlayer(int $gameId) : array
+    {
+        $data = array();
+        $data['GameInfo'] = $this->cIns->daoGameInfos->getByGameId($gameId);
+        $data['Groups'] = $this->cIns->daoGroups->getAllGroups($gameId);
+        return $data;
+    }
+
+
+    public function addGamePlayer(
+        int $gameId,
+        int $groupId,
+        string $playerId,
+        string $gameNickname,
+        string $authCode
+    ) : array {
+        $data = array();
+        $newId = $this->cIns->daoRegistBooking->addNewBooking($gameId, $groupId, $playerId, $gameNickname, $authCode);
+        $data['PlayerInfo'] = $this->cIns->daoRegistBooking->getByRegistBookingId($gameId, $newId);
         $data['GameInfo'] = $this->cIns->daoGameInfos->getByGameId($gameId);
         return $data;
     }
-    public function listGamePlayer() : array
+
+    public function listGames() : array
     {
         $data = array();
-        $data['GamePlayers'] = $this->cIns->daoGamePlayers->getAll();
-        $data['GameInfos'] = $this->cIns->daoGameInfos->getAll();
+        $data['GameInfos'] = $this->cIns->daoGameInfos->getAllGameInfos();
         return $data;
     }
-    public function showGamePlayer(int $gamePlayerId) : array
+    public function listGamePlayers(int $gameId) : array
     {
-        $playerInfo = $this->cIns->daoGamePlayers->getByGamePlayerId($gamePlayerId);
-        if (count($playerInfo) == 0) {
-            return false;
+        $data = array();
+        $data['GamePlayers'] = $this->cIns->daoRegistBooking->getByGameId($gameId);
+        $data['GameInfo'] = $this->cIns->daoGameInfos->getByGameId($gameId);
+        return $data;
+    }
+    public function showGamePlayer(int $gameId, int $registBookingId) : array
+    {
+        $playerInfo = $this->cIns->daoRegistBooking->getByRegistBookingId($gameId, $registBookingId);
+        if (count($playerInfo) != 0) {
+            $groupInfo = $this->cIns->daoGroups->getByGroupId($gameId, $playerInfo['GroupId']);
+            $gameInfo = $this->cIns->daoGameInfos->getByGameId($gameId);
+            $playerInfo['GameName'] = $gameInfo['Name'];
+            $playerInfo['GroupName'] = $groupInfo['GroupName'];
+            return $playerInfo;
         }
-        $gameInfo = $this->cIns->daoGameInfos->getByGameId($playerInfo['GameId']);
-        $playerInfo['GameName'] = $gameInfo['Name'];
-        return $playerInfo;
+        return array();
     }
 }

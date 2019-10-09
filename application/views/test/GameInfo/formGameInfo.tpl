@@ -1,7 +1,8 @@
-{$message}
+{$Message}
 <form action="addGameInfo" method="post">
     ゲーム名：<input type="text" name="GameName"><br/>
     説明:<textarea name="Description"></textarea>
     <input type="submit">
 </form>
-<a href="./">戻る</a>
+<hr />
+<a href="../top">戻る</a>

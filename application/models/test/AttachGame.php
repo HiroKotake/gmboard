@@ -14,24 +14,26 @@ class AttachGame
 
     public function formAttachGame() : array
     {
-        return $this->cIns->daoGameInfos->getAll();
+        return $this->cIns->daoGameInfos->getAllGameInfos();
     }
     public function addAttachGame(int $userId, int $gameId, int $playerId, string $nickname) : array
     {
         // GamePlayerにレコード登録
-        $newId = $this->cIns->daoGamePlayers->addNewGamePlayer(array(
-            'UserId' => $userId,
-            'GameId' => $gameId,
-            'PlayerId' => $playerId,
-            'GameNickname' => $nickname
-        ));
-        return $this->showAttachGame($newId);
+        $newId = $this->cIns->daoGamePlayers->addNewGamePlayer(
+            $gameId,
+            array(
+                'UserId' => $userId,
+                'PlayerId' => $playerId,
+                'GameNickname' => $nickname
+            )
+        );
+        return $this->showAttachGame($gameId, $newId);
     }
 
-    public function showAttachGame(int $gamePlayerId) : array
+    public function showAttachGame(int $gameId, int $gamePlayerId) : array
     {
         // 表示用データ取得
-        $gamePlayer = $this->cIns->daoGamePlayers->getByGamePlayerId($gamePlayerId);
+        $gamePlayer = $this->cIns->daoGamePlayers->getByGamePlayerId($gameId, $gamePlayerId);
         if (count($gamePlayer) == 0) {
             return false;
         }

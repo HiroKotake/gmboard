@@ -1,109 +1,218 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+
+use teleios\utils\StringUtility;
 
 /**
  * ユーザ登録予約管理テーブル操作クラス
  */
 class RegistBooking extends MY_Model
 {
-    const TABLE_NAME = 'RegistBooking';
+    const TABLE_PREFIX = 'RegistBooking_';
+    private $stringUtil = null;
 
     public function __construct()
     {
         parent::__construct();
+        $this->stringUtil = new StringUtility();
     }
 
-    // 様々な条件で検索
-    public function getWithCondition(array $condition)
+    /**
+     * ユーザ登録予約管理テーブル作成
+     * @param  int  $gameId ゲーム管理ID
+     * @return bool         [description]
+     */
+    public function createTable(int $gameId) : bool
     {
-        if (count($condition) > 0) {
-            foreach ($condition as $key => $value) {
-                $this->db->where($key, $value);
-            }
-            $this->db->where('DeleteFlag', 0);
-            $query = $this->getQuerySelect(self::TABLE_NAME);
-            $resultSet = $this->db->query($query);
-            return $resultSet->result_array();
-        }
-        return array();
-    }
-    // RegistBookingIdで検索
-    public function getByRegistBookingId(int $registBookingId) : array
-    {
-        return $this->getWithCondition(array('RegistBookingId' => $registBookingId));
-    }
-    // ゲーム側IDで検索
-    public function getByPlayerId(string $playerId) : array
-    {
-        return $this->getWithCondition(array('PlayerId' => $playerId));
+        $query = 'CALL CreateRBooking(' . $gameId . ')';
+        $this->writeLog($query);
+        return $this->db->simple_query($query);
     }
 
-    // ゲーム側ニックネームで検索
-    public function getByNickname(string $gameNickname) : array
-    {
-        return $this->getWithCondition(array('GameNickname' => $gameNickname));
-    }
-
-    // グループIDで検索
-    public function getByGroupId(int $groupId) : array
-    {
-        return $this->getWithCondition(array('GroupId' => $groupId));
-    }
-
-    // ユーザIDで検索
-    public function getByUserId(int $userId) : array
-    {
-        return $this->getWithCondition(array('UserId' => $userId));
-    }
-
-    // レコード追加
+    /**
+     * レコード追加
+     * @param  int    $gameId   ゲーム管理ID
+     * @param  int    $groupId  [description]
+     * @param  string $playerId [description]
+     * @param  string $nickname [description]
+     * @param  string $authCode [description]
+     * @return int              [description]
+     */
     public function addNewBooking(
-        int $groupId,
         int $gameId,
+        int $groupId,
         string $playerId,
         string $nickname,
         string $authCode
     ) : int {
-        $datetime = date("Y-m-d H:i:s");
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $data = array(
             'GroupId'       => $groupId,
-            'GameId'        => $gameId,
             'PlayerId'      => $playerId,
             'GameNickName'  => $nickname,
             'AuthCode'      => $authCode,
-            'CreateDate'    => $datetime
         );
-        $query = $this->getQueryInsert(self::TABLE_NAME, $data);
-        $this->db->query($query);
-        return $this->db->insert_id();
+        return $this->add($tableName, $data);
     }
 
-    public function updateRegistBooking(int $registBookingId, array $data)
+    /**
+     * 様々な条件で検索
+     * @param  int   $gameId    ゲーム管理ID
+     * @param  array $condition 検索条件を含む連想配列
+     * @return array            検索結果を含む配列。該当するレコードがない場合は空の配列を返す
+     */
+    public function getWithCondition(int $gameId, array $condition) : array
     {
-        $this->db->where('RegistBookingId', $registBookingId);
-        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-        return $this->db->query($query);
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->get($tableName, $condition);
     }
-    // 登録済みフラグ更新
-    public function registed(int $registBookingId, int $userId)
+
+    /**
+     * RegistBookingIdで検索
+     * @param  int   $gameId          ゲーム管理ID
+     * @param  int   $registBookingId [description]
+     * @return array                  [description]
+     */
+    public function getByRegistBookingId(int $gameId, int $registBookingId) : array
     {
-        $datetime = date("Y-m-d H:i:s");
+        $cond = array(
+            'WHERE' => array('RegistBookingId' => $registBookingId)
+        );
+        $result = $this->getWithCondition($gameId, $cond);
+        if (count($result) == 0) {
+            return array();
+        }
+        return $result[0];
+    }
+
+    /**
+     * ゲーム別の予約情報を取得する
+     * @param  int     $gameId ゲーム管理ID
+     * @param  integer $limit  最大取得レコード数
+     * @param  integer $offset レコード取得開始位置
+     * @return array           [description]
+     */
+    public function getByGameId(int $gameId, int $limit = 20, int $offset = 0) : array
+    {
+        $cond = array(
+            'NUMBER' => array($limit, $offset)
+        );
+        return $this->getWithCondition($gameId, $cond);
+    }
+
+    /**
+     * ゲーム側IDで検索
+     * @param  int    $gameId   ゲーム管理ID
+     * @param  string $playerId [description]
+     * @return array            [description]
+     */
+    public function getByPlayerId(int $gameId, string $playerId) : array
+    {
+        $cond = array(
+            'WHERE' => array('PlayerId' => $playerId)
+        );
+        return $this->getWithCondition($gameId, $cond);
+    }
+
+    /**
+     * ゲーム側ニックネームで検索
+     * @param  int    $gameId       ゲーム管理ID
+     * @param  string $gameNickname [description]
+     * @return array                [description]
+     */
+    public function getByNickname(int $gameId, string $gameNickname) : array
+    {
+        $cond = array(
+            'WHERE' => array('GameNickname' => $gameNickname)
+        );
+        return $this->getWithCondition($gameId, $cond);
+    }
+
+    // グループIDで検索
+    /**
+     * グループIDで検索
+     * @param  int   $gameId  ゲーム管理ID
+     * @param  int   $groupId [description]
+     * @param  int   $limit   [description]
+     * @param  int   $offset  [description]
+     * @return array          [description]
+     */
+    public function getByGroupId(int $gameId, int $groupId, int $limit, int $offset) : array
+    {
+        $cond = array(
+            'WHERE' => array('GroupId' => $groupId),
+            'LIMIT' => array($limit, $offset)
+        );
+        return $this->getWithCondition($gameId, $cond);
+    }
+
+    /**
+     * ユーザIDで検索
+     * @param  int   $gameId ゲーム管理ID
+     * @param  int   $userId [description]
+     * @param  int   $limit  [description]
+     * @param  int   $offset [description]
+     * @return array         [description]
+     */
+    public function getByUserId(int $gameId, int $userId, int $limit, int $offset) : array
+    {
+        $cond = array(
+            'WHERE' => array('UserId' => $userId),
+            'LIMIT' => array($limit, $offset)
+        );
+        return $this->getWithCondition($gameId, $cond);
+    }
+
+    /**
+     * レコード内容を更新する
+     * @param  int   $gameId           ゲーム管理ID
+     * @param  int   $registBookingId [description]
+     * @param  array $data            [description]
+     * @return bool                   [description]
+     */
+    public function updateRegistBooking(int $gameId, int $registBookingId, array $data) : bool
+    {
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->update($tableName, $data, array('RegistBookingId' => $registBookingId));
+    }
+
+    /**
+     * グループ参加予約者が認証コードを打ち、予約を成立させたことを示す登録済みフラグ更新
+     * @param  int  $gameId          ゲーム管理ID
+     * @param  int  $registBookingId [description]
+     * @return bool                  [description]
+     */
+    public function registed(int $gameId, int $registBookingId) : bool
+    {
         $data = array(
-            'UserId'        => $userId,
             'Registed'      => 1,
-            'UpdateDate'    => $datetime
         );
-        return $this->updateRegistBooking($registBookingId, $data);
+        return $this->updateRegistBooking($gameId, $registBookingId, $data);
     }
 
-    // レコード論理削除
-    public function deleteByRegistBookingId(int $registBookingId)
+    /**
+     * グループ管理者がグループ参加希望者を承認状態にする
+     * (この直後の対応としてGemePlayersテーブルへプレイヤー情報を書き込む)
+     * @param  int  $gameId          ゲーム管理ID
+     * @param  int  $registBookingId [description]
+     * @return bool                  [description]
+     */
+    public function approve(int $gameId, int $registBookingId) : bool
     {
-        $datetime = date("Y-m-d H:i:s");
         $data = array(
-            'DeleteDate'    => $datetime,
-            'DeleteFlag'    => 1
+            'Approved'      => 1,
         );
-        return $this->updateRegistBooking($registBookingId, $data);
+        return $this->updateRegistBooking($gameId, $registBookingId, $data);
+    }
+
+    /**
+     * レコード論理削除
+     * @param  int  $gameId          ゲーム管理ID
+     * @param  int  $registBookingId [description]
+     * @return bool                  [description]
+     */
+    public function deleteByRegistBookingId(int $gameId, int $registBookingId) : bool
+    {
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->delete($tableName, array('RegistBookingId' => $registBookingId));
     }
 }

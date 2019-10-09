@@ -23,4 +23,5 @@
     ゲーム側ニックネーム：{$BookingMember.GameNickName}<br />
     登録日：{$BookingMember.CreateDate}<br />
 {/if}
-<a href="./">戻る</a>
+<hr />
+<a href="../top">戻る</a>

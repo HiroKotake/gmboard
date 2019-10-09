@@ -22,13 +22,10 @@ class Notices extends MY_Model
      *                      'ShowEndDateTime' => [表示終了日時]
      * @return int         正常にレコード追加ができた場合は'NoticeId'である整数値を返し、失敗した場合は'0'を返す
      */
-    public function setNotice(array $data) : int
+    public function addNotice(array $data) : int
     {
         if (count($data) > 0) {
-            $data['CreateDate'] = date("Y-m-d H:i:s");
-            $query = $this->getQueryInsert(self::TABLE_NAME, $data);
-            $this->db->query($query);
-            return $this->db->insert_id();
+            return $this->add(self::TABLE_NAME, $data);
         }
         return false;
     }
@@ -42,14 +39,15 @@ class Notices extends MY_Model
     public function getNotices(int $number = 10, int $offset = 0) : array
     {
         $now = date("Y-m-d H:i:s");
-        $this->db->where('Showable', 1);
-        $this->db->where('DeleteFlag', 0);
-        $this->db->where('ShowStartDateTime >=', $now);
-        $this->db->where('ShowEndDateTime <', $now);
-        $this->db->limit($number, $offset);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $cond = array(
+            'WHERE' => array(
+                'Showable' => 1,
+                'ShowStartDateTime >=' => $now,
+                'ShowEndDateTime <' => $now
+            ),
+            'LIMIT' => array($number, $offset)
+        );
+        return $this->get(self::TABLE_NAME, $cond);
     }
 
     // 更新
@@ -62,10 +60,7 @@ class Notices extends MY_Model
     public function updateNotice(int $noticeId, int $data) : bool
     {
         if (count($data) > 0) {
-            $data['UpdateDate'] = date("Y-m-d H:i:s");
-            $this->db->where('NoticeId', $noticeId);
-            $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-            return $this->db->query($query);
+            return $this->update(self::TABLE_NAME, $data, array('NoticeId' => $noticeId));
         }
         return false;
     }
@@ -113,12 +108,8 @@ class Notices extends MY_Model
      * @param  int  $noticeId 告知管理ID
      * @return bool           [description]
      */
-    public function delete(int $noticeId) : bool
+    public function deleteNotice(int $noticeId) : bool
     {
-        $data = array(
-            'DeleteDate' => date("Y-m-d H:i:s"),
-            'DeleteFlag' => 1
-        );
-        return $this->db->updateNotice($noticeId, $data);
+        return $this->delete(self::TABLE_NAME, array('NoticeId' => $noticeId));
     }
 }

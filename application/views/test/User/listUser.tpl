@@ -31,4 +31,5 @@
     </tr>
 {/foreach}
 </table>
-<a href="./">戻る</a>
+<hr />
+<a href="../top">戻る</a>

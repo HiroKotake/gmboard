@@ -11,4 +11,4 @@
     <input type="submit" value="登録" />
 </form>
 <hr />
-<a href="./">戻る</a>
+<a href="../top">戻る</a>

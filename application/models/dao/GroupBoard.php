@@ -1,5 +1,4 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
 
 use teleios\utils\StringUtility;
 
@@ -8,7 +7,7 @@ use teleios\utils\StringUtility;
  */
 class GroupBoard extends MY_Model
 {
-    const TABLE_NAME = 'GBoard_';
+    const TABLE_PREFIX = 'GBoard_';
     private $stringUtil = null;
 
     public function __construct()
@@ -19,111 +18,102 @@ class GroupBoard extends MY_Model
 
     /**
      * グループ用メッセージボードテーブル作成
+     * @param  int    $gameId  ゲーム管理ID
      * @param  int    $groupId グループ管理ID
      * @return [type]          [description]
      */
-    public function createGroupBoard(int $groupId)
+    public function createTable(int $gameId, int $groupId)
     {
-        $query = 'CALL CreateGroupBoard(' . $groupId . ')';
+        $query = 'CALL CreateGroupBoard(' . $gameId . ', ' . $groupId . ')';
         $this->writeLog($query);
-        return $this->db->query($query);
+        return $this->db->simple_query($query);
     }
 
     /**
      * メッセージ取得
      * @param  int     $groupId    グループ管理ID
+     * @param  string  $order      メッセージIDを対象とした表示順序の指定
      * @param  integer $lineNumber 取得するメッセージ数　0 を指定した場合は全メッセージ、無指定の場合は２０メッセージを取得する
-     * @return [type]              [description]
+     * @param  integer $offset     取得するメッセージの開始位置
+     * @return array               [description]
      */
-    public function getMessages(int $groupId, int $lineNumber = 20, int $offset = 0)
+    public function getMessages(int $gameId, int $groupId, string $order = 'DESC', int $lineNumber = 20, int $offset = 0) : array
     {
-        $table = self::TABLE_NAME . $this->stringUtil->lpad($groupId, "0", 12);
-        $this->db->select('UserId, Message, Showable, CreateDate');
-        $this->db->where('DeleteFlag', 0);
-        $this->db->order_by('id', 'DESC');
-        if ($lineNumber !== 0) {
-            $this->db->limit($lineNumber, $offset);
-        }
-        $query = $this->getQuerySelect($table);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
+        $cond = array(
+            'SELECT' => array('UserId, Message, Showable, CreateDate'),
+            'ORDER_BY' => array('MessageId' => $order),
+            'LIMIT' => array($lineNumber, $offset)
+        );
+        return $this->get($table, $cond);
     }
 
     /**
      * メッセージを追加する
-     * @param int    $groupId グループ管理ID
-     * @param int    $userId  ユーザ管理ID
-     * @param [type] $message メッセージ文
+     * @param  int    $gameId  ゲーム管理ID
+     * @param  int    $groupId グループ管理ID
+     * @param  int    $userId  ユーザID
+     * @param  string $message メッセージ
+     * @return int             [description]
      */
-    public function addNewMessage(int $groupId, int $userId, $message)
+    public function addNewMessage(int $gameId, int $groupId, int $userId, string $message) : int
     {
-        $table = self::TABLE_NAME . $this->stringUtil->lpad($groupId, "0", 12);
-        $datetime = date("Y-m-d H:i:s");
+        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
             'GroupId'       => $groupId,
             'UserId'        => $userId,
-            'Message'       => $message,
-            'CreateDate'    => $datetime
+            'Message'       => $message
         );
-        $query = $this->getQueryInsert($table, $data);
-        $this->db->query($query);
-        return $this->db->insert_id();
+        return $this->add($table, $data);
     }
 
     /**
      * メッセージの内容を非表示にする
-     * @param  int    $groupId グループ管理ID
-     * @param  int    $id      メッセージ管理ID
-     * @return [type]          [description]
+     * @param  int  $gameId    ゲーム管理ID
+     * @param  int  $groupId   グループ管理ID
+     * @param  int  $messageId メッセージ管理ID
+     * @return bool            [description]
      */
-    public function hideMessage(int $groupId, int $lineId)
+    public function hideMessage(int $gameId, int $groupId, int $messageId) : bool
     {
-        $table = self::TABLE_NAME . $this->stringUtil->lpad($groupId, "0", 12);
-        $datetime = date("Y-m-d H:i:s");
+        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
-            'Showable'      => 0,
-            'UpdateDate'    => $datetime
+            'Showable'      => 0
         );
-        $this->db->where('id', $lineId);
-        $query = $this->getQueryUpdate($table, $data);
-        return $this->db->query($query);
+        return $this->update($table, $data, array('MessageId' => $messageId));
     }
 
     /**
      * 非表示にしたメッセージを再度表示させる
-     * @param  int    $groupId グループ管理ID
-     * @param  int    $id      メッセージ管理ID
-     * @return [type]          [description]
+     * @param  int  $gameId     ゲーム管理ID
+     * @param  int  $groupId   グループ管理ID
+     * @param  int  $messageId メッセージ管理ID
+     * @return bool            [description]
      */
-    public function showMessage(int $groupId, int $messageId)
+    public function showMessage(int $gameId, int $groupId, int $messageId) : bool
     {
-        $table = self::TABLE_NAME . $this->stringUtil->lpad($groupId, "0", 12);
-        $datetime = date("Y-m-d H:i:s");
+        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
             'Showable'      => 1,
-            'UpdateDate'    => $datetime
         );
-        $this->db->where('messageId', $messageId);
-        $query = $this->getQueryUpdate($table, $data);
-        return $this->db->query($query);
+        return $this->update($table, $data, array('MessageId' => $messageId));
     }
 
     /**
      * メッセージを論理削除する
-     * @param  int    $groupId グループ管理ID
-     * @param  int    $id      メッセージ管理ID
-     * @return [type]          [description]
+     * @param  int  $gameId    ゲーム管理ID
+     * @param  int  $groupId   グループ管理ID
+     * @param  int  $messageId メッセージ管理ID
+     * @return bool            [description]
      */
-    public function deleteLine(int $groupId, int $messageId)
+    public function deleteLine(int $gameId, int $groupId, int $messageId) : bool
     {
-        $table = self::TABLE_NAME . $this->stringUtil->lpad($groupId, "0", 12);
-        $datetime = date("Y-m-d H:i:s");
-        $data = array(
-            'DeleteFlag'    => 1,
-            'DeleteDate'    => $datetime
-        );
-        $this->db->where('messageId', $messageId);
-        $query = $this->getQueryUpdate($table, $data);
-        return $this->db->query($query);
+        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
+        return $this->delete($table, array('MessageId' => $messageId));
     }
 }

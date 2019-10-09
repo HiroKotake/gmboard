@@ -14,16 +14,16 @@
     </tr>
     {foreach from=$GroupList item=group}
     <tr>
-        <td><a href="showGroup?GPID={$group.GroupId}">{$group.GroupId}</a></td>
-        <td>{foreach from=$Games item=game}{if $group.GameId == $game.GameId}{$game.Name}{/if}{/foreach}</td>
+        <td><a href="showGroup?GID={$GameId}&GPID={$group.GroupId}">{$group.GroupId}</a></td>
+        <td>{foreach from=$Games item=game}{if $GameId == $game.GameId}{$game.Name}{/if}{/foreach}</td>
         <td>{$group.GroupName}</td>
         <td>{$group.Leader}</td>
         <td>{$group.Description}</td>
-        <td><a href="listGroupMember?GPID={$group.GroupId}">メンバー一覧</a></td>
-        <td><a href="formAddGroupMember?GPID={$group.GroupId}">メンバー追加予約</a></td>
+        <td><a href="listGroupMember?GID={$GameId}&GPID={$group.GroupId}">メンバー一覧</a></td>
+        <td><a href="../TestGamePlayer/formGamePlayer?GID={$GameId}&GPID={$group.GroupId}">メンバー追加予約</a></td>
     </tr>
     {/foreach}
 </table>
 {/if}
 <hr />
-<a href="./">戻る</a>
+<a href="../top">戻る</a>

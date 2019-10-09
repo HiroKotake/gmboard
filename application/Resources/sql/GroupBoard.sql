@@ -3,11 +3,12 @@
  ************************************************/
 DROP PROCEDURE IF EXISTS CreateGroupBoard;
 DELIMITER //
-CREATE PROCEDURE CreateGroupBoard(IN GroupId BIGINT(12))
+CREATE PROCEDURE CreateGroupBoard(IN GameId INT(8), IN GroupId BIGINT(12))
 BEGIN
+    SET @GameIndex = LPAD(GameId, 8, '0');
     SET @BoardNumber = LPAD(GroupId, 12, '0');
     SET @query = CONCAT(
-    'CREATE TABLE GBoard_', @BoardNumber,
+    'CREATE TABLE GBoard_', @GameIndex, '_', @BoardNumber,
     '(
         `MessageId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'管理ID\',
         `GamePlayerId` BIGINT(12) UNSIGNED NOT NULL COMMENT \'ユーザ管理ID\',

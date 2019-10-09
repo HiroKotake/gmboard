@@ -8,4 +8,5 @@
     <li>メールアドレス：{$UserInfo.Mail}</li>
 </ul>
 {/if}
-<a href="./">戻る</a>
+<hr />
+<a href="../top">戻る</a>

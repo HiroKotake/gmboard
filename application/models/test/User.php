@@ -39,8 +39,7 @@ class User
         $userId = $this->cIns->daoUsers->addNewUser($data);
         // ユーザ用掲示板作成
         $this->cIns->load->model('dao/UserBoard', 'daoUserBoard');
-        $this->cIns->daoUserBoard->createBoard($userId);
-
+        $this->cIns->daoUserBoard->createTable($userId);
         // ウェルカムメッセージ追加
         $welcomeMessage = array(
             'FromUserId'    => SYSTEM_USER_ID,                // 送信者ユーザID
@@ -55,7 +54,7 @@ class User
     public function listUser() : array
     {
         $this->cIns->load->model('dao/Users', 'daoUsers');
-        return $this->cIns->daoUsers->getAll();
+        return $this->cIns->daoUsers->getAllUsers();
     }
 
     public function showUser(int $userId) : array

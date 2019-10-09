@@ -14,15 +14,29 @@ class GameInfos extends MY_Model
     }
 
     /**
-     * レコードを全て取得する
-     * @return [type] [description]
+     * ゲーム情報を追加する
+     * @param string $name        ゲーム名
+     * @param string $description ゲーム説明
      */
-    public function getAll()
+    public function addGameInfo(string $name, string $description)
     {
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $data = array(
+            'Name'          => $name,
+            'Description'   => $description
+        );
+        // ゲームレコード追加
+        return $this->add(self::TABLE_NAME, $data);
+    }
+
+    /**
+     * 条件を指定せず、ゲーム情報を取得する
+     * @param  integer $limit  取得するレコード数
+     * @param  integer $offset 開始位置
+     * @return array           対象のレコード情報を含む連想配列
+     */
+    public function getAllGameInfos(int $limit = 20 , int $offset = 0) : array
+    {
+        return $this->getAll(self::TABLE_NAME, $limit, $offset);
     }
 
     /**
@@ -30,13 +44,13 @@ class GameInfos extends MY_Model
      * @param  string $name ゲーム名
      * @return [type]       [description]
      */
-    public function getLikeName(string $name)
+    public function getLikeName(string $name, $limit = 10, $offset = 0) : array
     {
-        $this->db->like('Name', $name);
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $cond = array(
+            'LIKE' => array('Name' => $name),
+            'NUMBER' => array($limit, $offset)
+        );
+        return $this->get(self::TABLE_NAME, $cond);
     }
 
     /**
@@ -46,32 +60,14 @@ class GameInfos extends MY_Model
      */
     public function getByGameId(int $gameId) : array
     {
-        $this->db->where('GameId', $gameId);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        $gameInfos = $resultSet->result_array();
-        if (count($gameInfos) == 0) {
-            return array();
-        }
-        return $gameInfos[0];
-    }
-
-    /**
-     * ゲーム情報を追加する
-     * @param string $name        ゲーム名
-     * @param string $description ゲーム説明
-     */
-    public function addGameInfo(string $name, string $description)
-    {
-        $datetime = date("Y-m-d H:i:s");
-        $data = array(
-            'Name'          => $name,
-            'Description'   => $description,
-            'CreateDate'    => $datetime
+        $cond = array(
+            'WHERE' => array('GameId' => $gameId),
         );
-        $query = $this->getQueryInsert(self::TABLE_NAME, $data);
-        $this->db->query($query);
-        return $this->db->insert_id();
+        $result = $this->get(self::TABLE_NAME, $cond);
+        if (count($result) > 0) {
+            return $result[0];
+        }
+        return array();
     }
 
     /**
@@ -79,21 +75,9 @@ class GameInfos extends MY_Model
      * @param  array  $data [description]
      * @return [type]       [description]
      */
-    public function updateGameInfo(array $data)
+    public function updateGameInfo(int $gameId, array $data)
     {
-        $datetime = date("Y-m-d H:i:s");
-        $updateData = array();
-        if (count($data) > 0) {
-            foreach ($data as $key => $value) {
-                if (!empty($value)) {
-                    $updateData[$key] = $value;
-                }
-            }
-            $updateData['UpdateDate'] = $datetime;
-            $query = $this->getQueryUpdate(self::TABLE_NAME, $updateData);
-            return $this->db->query($query);
-        }
-        return false;
+        return $this->update(self::TABLE_NAME, $data, array('GamdId' => $gameId));
     }
 
     /**
@@ -101,15 +85,8 @@ class GameInfos extends MY_Model
      * @param  int    $gameId ゲーム情報管理ID
      * @return [type]         [description]
      */
-    public function deleteGameInfo(int $gameId)
+    public function deleteGame(int $gameId)
     {
-        $datetime = date("Y-m-d H:i:s");
-        $data = array(
-            'DeleteDate'    => $datetime,
-            'DeleteFlag'    => 1
-        );
-        $this->db->where('GameId', $gameId);
-        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-        return $this->db->query($query);
+        return $this->delete(self::TABLE_NAME, array('GamdId' => $gameId));
     }
 }

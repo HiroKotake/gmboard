@@ -14,146 +14,110 @@ class Users extends MY_Model
     }
 
     /**
-     * 全レコード取得
-     * @param  boolean $withDeleted 削除したレコードも含む
-     * @return array                レコードを配列として取得
-     */
-    public function getAll(bool $withDeleted = false) : array
-    {
-        if (!$withDeleted) {
-            $this->db->where('DeleteFlag', '0');
-        }
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
-    }
-
-    /**
-     * レコード取得
-     * @param  array  $data [description]
-     * @return [type]       [description]
-     */
-    public function getWithCondition(array $data) : array
-    {
-        if (count($data) > 0) {
-            foreach ($data as $key => $value) {
-                $this->db->where($key, $value);
-            }
-            $this->db->where('DeleteFlag', 0);
-            $query = $this->getQuerySelect(self::TABLE_NAME);
-            $resultSet = $this->db->query($query);
-            return $resultSet->result_array();
-        }
-        return array();
-    }
-
-    public function getByUserId(int $userId) : array
-    {
-        $data = array('UserId' => $userId);
-        return $this->getWithCondition($data);
-    }
-
-    public function getByLoginId(string $loginId) : array
-    {
-        $data = array('LoginId' => $loginId);
-        return $this->getWithCondition($data);
-    }
-
-    /**
      * レコード追加
      * @param array $data [description]
      */
     public function addNewUser(array $data) : int
     {
-        $data['CreateDate'] = date("Y-m-d H:i:s");
-        $query = $this->getQueryInsert(self::TABLE_NAME, $data);
-        $this->db->query($query);
-        return $this->db->insert_id();
+        return $this->add(self::TABLE_NAME, $data);
+    }
+
+    public function getAllUsers(int $limit = 20, int $offset = 0) : array
+    {
+        return $this->getAll(self::TABLE_NAME, $limit, $offset);
+    }
+
+    public function getByUserId(int $userId) : array
+    {
+        $cond = array(
+            'WHERE' => array('UserId' => $userId)
+        );
+        return $this->get(self::TABLE_NAME, $cond);
+    }
+
+    public function getByLoginId(string $loginId) : array
+    {
+        $cond = array(
+            'WHERE' => array('LoginId' => $loginId)
+        );
+        return $this->get(self::TABLE_NAME, $cond);
     }
 
     /**
      * レコード更新
-     * @param  int    $userId [description]
-     * @param  array  $data   [description]
-     * @return [type]         [description]
+     * @param  int   $userId [description]
+     * @param  array $data   [description]
+     * @return bool          [description]
      */
-    public function updateWithCondition(int $userId, array $data)
+    public function updateWithData(int $userId, array $data) : bool
     {
         if (count($data) > 0) {
-            $datetime = date("Y-m-d H:i:s");
-            $data['UpdateDate'] = $datetime;
-            $this->db->where('UserId', $userId);
-            $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-            return $this->db->query($query);
+            return $this->update(self::TABLE_NAME, $data, array('UserId' => $userId));
         }
         return false;
     }
 
     /**
      * メール認証終了
-     * @param  int    $userId [description]
-     * @return [type]         [description]
+     * @param  int  $userId [description]
+     * @return bool         [description]
      */
-    public function mailAuthed(int $userId)
+    public function mailAuthed(int $userId) : bool
     {
         $data = array(
             'MailAuthed'    => 1,
             'LastLogin'     => date("Y-m-d H:i:s")
         );
-        return $this->updateWithCondition($userId, $data);
+        return $this->updateWithData($userId, $data);
     }
 
     /**
      * パスワード更新
      * @param  int    $userId    [description]
      * @param  string $hashedPwd [description]
-     * @return [type]            [description]
+     * @return bool              [description]
      */
-    public function updatePassward(int $userId, string $hashedPwd)
+    public function updatePassward(int $userId, string $hashedPwd) : bool
     {
         $data = array(
             'Password' => $hashedPwd
         );
-        return $this->updateWithCondition($userId, $data);
+        return $this->updateWithData($userId, $data);
     }
 
     /**
      * 垢バン対応
-     * @param int $userId [description]
+     * @param  int  $userId [description]
+     * @return bool         [description]
      */
-    public function setLoginExclude(int $userId)
+    public function setLoginExclude(int $userId) : bool
     {
         $data = array(
             'LoginExclude' => 1,
         );
-        return $this->updateWithCondition($userId, $data);
+        return $this->updateWithData($userId, $data);
     }
 
     /**
      * 垢バン解除
-     * @param int $userId [description]
+     * @param  int  $userId [description]
+     * @return bool         [description]
      */
-    public function resetLoginExclude(int $userId)
+    public function resetLoginExclude(int $userId) : bool
     {
         $data = array(
             'LoginExclude' => 0,
         );
-        return $this->updateWithCondition($userId, $data);
+        return $this->updateWithData($userId, $data);
     }
 
     /**
      * レコード論理削除
-     * @param  int    $userId [description]
-     * @return [type]         [description]
+     * @param  int  $userId [description]
+     * @return bool         [description]
      */
-    public function delete(int $userId)
+    public function deleteUser(int $userId) : bool
     {
-        $data = array(
-            'DeleteDate'    => date("Y-m-d H:i:s"),
-            'DeeteFlag'     => 1
-        );
-        $this->db->where($userId);
-        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-        return $this->db->query($query);
+        return $this->delete(self::TABLE_NAME, array('UserId' => $userId));
     }
 }

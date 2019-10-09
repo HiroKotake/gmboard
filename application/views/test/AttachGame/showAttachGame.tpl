@@ -8,4 +8,4 @@
 ゲーム側ニックネーム：{$GamePlayer.GameNickname}<br />
 {/if}
 <hr />
-<a href="./">戻る</a>
+<a href="../top">戻る</a>

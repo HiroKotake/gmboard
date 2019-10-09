@@ -6,4 +6,5 @@
 リーダーID：{$GroupInfo.Leader}<br />
 説明：{$GroupInfo.Description}<br />
 {/if}
-<a href="./">戻る</a>
+<hr />
+<a href="../top">戻る</a>

@@ -1,54 +1,89 @@
 <?php
-defined('BASEPATH') or exit('No direct script access allowed');
+
+use teleios\utils\StringUtility;
 
 /**
  * ゲームプレイヤー管理テーブル操作クラス
  */
 class GamePlayers extends MY_Model
 {
-    const TABLE_NAME = 'GamePlayers';
+    const TABLE_PREFIX = 'GamePlayers_';
+    private $stringUtil = null;
 
     public function __construct()
     {
         parent::__construct();
+        $this->stringUtil = new StringUtility();
     }
 
-    public function getAll() : array
+    /**
+     * ゲームプレイヤー管理テーブル作成
+     * @param  int    $gameId  ゲーム管理ID
+     * @param  int    $groupId グループ管理ID
+     * @return [type]          [description]
+     */
+    public function createTable(int $gameId) : bool
     {
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $query = 'CALL CreateGamePlayers(' . $gameId . ')';
+        $this->writeLog($query);
+        return $this->db->simple_query($query);
     }
+
+    /**
+     * ユーザに関わるレコードを全て取得
+     * @param  int     $gameId ゲーム管理ID
+     * @param  integer $limit  取得するレコード数
+     * @param  integer $offset 取得を開始する位置
+     * @return array           [description]
+     */
+    public function getAllGamePlayers(int $gameId, int $limit = 20, int $offset = 0) : array
+    {
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->getAll($tableName, $limit, $offset);
+    }
+
     /**
      * 特定のユーザに関わるレコードを取得
+     * @param  int   $gameId       ゲーム管理ID
      * @param  int   $gamePlayerId [description]
      * @return array               [description]
      */
-    public function getByGamePlayerId(int $gamePlayerId) : array
+    public function getByGamePlayerId(int $gameId, int $gamePlayerId) : array
     {
-        $this->db->where('GamePlayerId', $gamePlayerId);
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        $result = $resultSet->result_array();
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $cond = array(
+            'WHERE' => array('GamePlayerId' => $gamePlayerId),
+        );
+        $result = $this->get($tableName, $cond);
         if (count($result) > 0) {
             return $result[0];
         }
-        return array();
+        return $result;
     }
+
     /**
      * 特定のユーザに関わるレコードを取得
-     * @param  int    $userId [description]
-     * @return [type]         [description]
+     * @param  int     $gameId ゲーム管理ID
+     * @param  int     $userId [description]
+     * @param  string  $order  [description]
+     * @param  integer $limit  [description]
+     * @param  integer $offset [description]
+     * @return array           [description]
      */
-    public function getByUserId(int $userId)
-    {
-        $this->db->where('UserId', $userId);
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+    public function getByUserId(
+        int $gameId,
+        int $userId,
+        string $order = 'ASC',
+        int $limit = 10,
+        int $offset = 0
+    ) : array {
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $cond = array(
+            'WHERE' => array('UserId' => $userId),
+            'ORDER_BY' => array('GameId' => $order),
+            'NUMBER' => array($limit, $offset),
+        );
+        return $this->get($tableName, $cond);
     }
 
     /**
@@ -56,107 +91,93 @@ class GamePlayers extends MY_Model
      * @param  int    $groupId [description]
      * @return [type]          [description]
      */
-    public function getByGroupId(int $groupId)
+    public function getByGroupId(int $gameId, int $groupId) : array
     {
-        $this->db->where('GroupId', $groupId);
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $cond = array(
+            'WHERE' => array('GroupId' => $groupId)
+        );
+        return $this->get($tableName, $cond);
     }
 
     /**
      * 特定のゲーム側のID持つレコードを取得
-     * @param  int    $playerId [description]
-     * @return [type]           [description]
+     * @param  int   $gameId    ゲーム管理ID
+     * @param  int   $playerId  [description]
+     * @return array           [description]
      */
-    public function getByPlayerId(int $playerId)
+    public function getByPlayerId(int $gameId, int $playerId) : array
     {
-        $this->db->where('PlayerId', $playerId);
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $cond = array(
+            'WHERE' => array(
+                'PlayerId' => $playerId
+            )
+        );
+        return $this->get($tableName, $cond);
     }
 
     /**
      * 特定のゲーム側のニックネームを持つレコードを取得
+     * @param  int    $gameId   ゲーム管理ID
      * @param  string $nickname [description]
-     * @return [type]           [description]
+     * @return array            [description]
      */
-    public function getLikeNickname(string $nickname)
+    public function getLikeNickname(int $gameId, string $nickname) : array
     {
-        $this->db->like('Nickname', $nickname);
-        $this->db->where('DeleteFlag', 0);
-        $query = $this->getQuerySelect(self::TABLE_NAME);
-        $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $cond = array(
+            'LIKE' => array('GameNickname' => $nickname)
+        );
+        return $this->get($tableName, $cond);
     }
 
     /**
      * レコードを追加する
-     * @param array $data 'UserId','GameId','PlayerId','GameNickname','GroupId','Authority'をキー名としたデータを持つ配列
+     * @param  int   $gameId ゲーム管理ID
+     * @param  array $data   'UserId','GameId','PlayerId','GameNickname','GroupId','Authority'をキー名としたデータを持つ配列
+     * @return int           [description]
      */
-    public function addNewGamePlayer(array $data)
+    public function addNewGamePlayer(int $gameId, array $data) : int
     {
-        $datetime = date("Y-m-d H:i:s");
-        $data['CreateDate'] = $datetime;
-        $query = $this->getQueryInsert(self::TABLE_NAME, $data);
-        $this->db->query($query);
-        return $this->db->insert_id();
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->add($tableName, $data);
     }
 
     /**
      * 特定のゲームプレイヤーIDのレコードを更新する
+     * @param  int    $gameId       ゲーム管理ID
      * @param  int    $gamePlayerId [description]
      * @param  array  $data         [description]
      * @return [type]               [description]
      */
-    public function updateByGamePlayerId(int $gamePlayerId, array $data)
+    public function updateByGamePlayerId(int $gameId, int $playerId, array $data) : bool
     {
-        $datetime = date("Y-m-d H:i:s");
-        $updateData = array(
-            'UpdateDate'    => $datetime
-        );
-        foreach ($data as $key => $value) {
-            $updateData[$key] = $value;
-        }
-        $this->db->where('GamePlayerId', $gamePlayerId);
-        $query = $this->getQueryUpdate(self::TABLE_NAME, $updateData);
-        return $this->db->query($query);
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->update($tableName, $data, array('PlayerId' => $playerId));
     }
 
     /**
      * 特定のユーザに関わるレコードを論理削除する
-     * @param  int    $userId [description]
-     * @return [type]         [description]
+     * @param  int  $gameId ゲーム管理ID
+     * @param  int  $userId [description]
+     * @return bool         [description]
      */
-    public function deleteByUserId(int $userId)
+    public function deleteByUserId(int $gameId, int $userId) : bool
     {
-        $datetime = date("Y-m-d H:i:s");
-        $data = array(
-            'DeleteDate' => $datetime,
-            'DeleteFlag' => 1
-        );
-        $this->db->where('UserId', $userId);
-        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-        return $this->db->query($query);
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->delete($tableName, array('UserId' => $userId));
     }
 
     /**
      * 特定のゲームプレイヤーIDのレコードを論理削除する
-     * @param  int    $playerId [description]
-     * @return [type]           [description]
+     * @param  int  $gameId   ゲーム管理ID
+     * @param  int  $playerId [description]
+     * @return bool           [description]
      */
-    public function deleteByGamePlayerId(int $playerId)
+    public function deleteByGamePlayerId(int $gameId, int $playerId) : bool
     {
-        $datetime = date("Y-m-d H:i:s");
-        $data = array(
-            'DeleteDate' => $datetime,
-            'DeleteFlag' => 1
-        );
-        $this->db->where('PlayerId', $playerId);
-        $query = $this->getQueryUpdate(self::TABLE_NAME, $data);
-        return $this->db->query($query);
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->delete($tableName, array('PlayerId' => $playerId));
     }
 }
