@@ -1,0 +1,33 @@
+@startuml
+left to right direction
+:ユーザ: as user
+rectangle 基本機能 {
+    (ゲーム選択) as selectGame
+    (グループ登録) as groupRegist
+    (掲示板) as board
+    (メッセージ) as message
+}
+rectangle グループ管理機能 {
+    (グループ作成) as makegroup
+    (メンバー予約) as bookingMember
+    (メンバー除名) as removeMember
+}
+:グループ管理者: as gmas
+user -> selectGame
+user -> groupRegist
+user -> board
+user -> message
+gmas -> groupRegist
+gmas -> makegroup
+gmas -> bookingMember
+gmas -> removeMember
+note "申請" as N1
+note "認可" as N2
+note "メンバー申請の管理者からの代行" as N3
+(user) .. N1
+N1 .. (groupRegist)
+(gmas) .. N2
+N2 .. (groupRegist)
+(bookingMember) .. N3
+N3 .. (groupRegist)
+@enduml
