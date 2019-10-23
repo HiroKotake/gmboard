@@ -55,12 +55,11 @@ class Group
 
     public function showGroup(int $gameId, int $groupId) : array
     {
-        $groupInfos = $this->cIns->daoGroups->getByGroupId($gameId, $groupId);
-        if (count($groupInfos) == 0) {
+        $group = $this->cIns->daoGroups->getByGroupId($gameId, $groupId);
+        if (count($group) == 0) {
             return array();
         }
         $this->cIns->load->model('dao/GameInfos', 'daoGameInfos');
-        $group = $groupInfos[0];
         $gameInfo = $this->cIns->daoGameInfos->getByGameId($gameId);
         if (count($gameInfo) == 0) {
             $group['GameName'] = '未登録ゲーム';

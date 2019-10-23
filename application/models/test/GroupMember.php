@@ -93,10 +93,18 @@ class GroupMember
         return $this->formAddGroupMember($groupId);
     }
 
-/*
-    public function listGroupMember()
+    public function listGroupMember(int $gameId, int $groupId) : array
     {
+        $data = array();
+        // グループ情報
+        $data['GroupInfo'] = $this->cIns->daoGroups->getByGroupId($gameId, $groupId);
+        // グループメンバー取得
+        $data['MemberList'] = $this->cIns->daoGamePlayers->getByGroupId($gameId, $groupId);
+        // 予約メンバー取得
+        $data['BookingList'] = $this->cIns->daoRegistBooking->getByGroupId($gameId, $groupId);
+        return $data;
     }
+/*
     public function formDelGroupMember()
     {
     }

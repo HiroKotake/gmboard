@@ -31,7 +31,7 @@
     <li><a href="TestGroup/showGroup?GID=1&GPID=1">グループ情報表示</a></li>
     <li><a href="TestGroupMember/formAddGroupMember?GPID=1">グループメンバー追加１</a></li>
     <li><a href="TestGroupMember/formSearchGroupMember?GPID=1">グループメンバー追加２</a></li>
-    <li><a href="TestGroupMember/listGroupMember?GPID=1">グループメンバー一覧表示</a></li>
+    <li><a href="TestGroupMember/listGroupMember?GMID=1&GID=1">グループメンバー一覧表示</a></li>
     <li><a href="TestGroupMember/delGroupMember?GPID=1">グループメンバー除名</a></li>
 </ul>
 <h3>掲示板関連</h3>

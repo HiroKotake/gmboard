@@ -136,7 +136,7 @@ class RegistBooking extends MY_Model
      * @param  int   $offset  [description]
      * @return array          [description]
      */
-    public function getByGroupId(int $gameId, int $groupId, int $limit, int $offset) : array
+    public function getByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
     {
         $cond = array(
             'WHERE' => array('GroupId' => $groupId),

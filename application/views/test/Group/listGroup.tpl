@@ -19,7 +19,7 @@
         <td>{$group.GroupName}</td>
         <td>{$group.Leader}</td>
         <td>{$group.Description}</td>
-        <td><a href="listGroupMember?GID={$GameId}&GPID={$group.GroupId}">メンバー一覧</a></td>
+        <td><a href="../TestGroupMember/listGroupMember?GMID={$GameId}&GID={$group.GroupId}">メンバー一覧</a></td>
         <td><a href="../TestGamePlayer/formGamePlayer?GID={$GameId}&GPID={$group.GroupId}">メンバー追加予約</a></td>
     </tr>
     {/foreach}

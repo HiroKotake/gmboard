@@ -78,7 +78,7 @@ class TestGroup extends MY_Controller
         $gameId = $this->input->get('GID');
         $groupId = $this->input->get('GPID');
         $this->load->model('test/Group', 'testGroup');
-        $groupInfo = $this->testGroup->showGroup($gameId, $groupId);
+        $groupInfo = $this->testGroup->showGroup((int)$gameId, (int)$groupId);
         $data = array(
             'Message' => '',
             'GroupInfo' => $groupInfo

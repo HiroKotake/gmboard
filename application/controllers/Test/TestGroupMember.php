@@ -19,7 +19,7 @@ class TestGroupMember extends MY_Controller
         $members = $this->testGroupMember->formAddGroupMember((int)$groupId);
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
-        $this->smarty->testView('formAddGroupMember', $data);
+        $this->smarty->testView('GroupMember/formAddGroupMember', $data);
     }
     public function addGroupMember()
     {
@@ -36,7 +36,7 @@ class TestGroupMember extends MY_Controller
             'BookingMembers' => $result['BookingMembers'],
             'BookingMember' => $result['BookingMember']
         );
-        $this->smarty->testView('addGroupMember', $data);
+        $this->smarty->testView('GroupMember/addGroupMember', $data);
     }
     // グループメンバー追加２
     public function formSearchGroupMember()
@@ -54,7 +54,7 @@ class TestGroupMember extends MY_Controller
         $data['GroupInfo'] = $members['GroupInfo'];
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
-        $this->smarty->testView('formSearchGroupMember', $data);
+        $this->smarty->testView('GroupMember/formSearchGroupMember', $data);
     }
     public function resultSearchGroupMember()
     {
@@ -71,7 +71,7 @@ class TestGroupMember extends MY_Controller
         $result = $this->testGroupMember->resultSearchGroupMember((int)$groupId, $playerId);
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
-        $this->smarty->testView('formResultSearchGroupMember', $data);
+        $this->smarty->testView('GroupMember/formResultSearchGroupMember', $data);
     }
     public function addSearchGroupMember()
     {
@@ -89,15 +89,22 @@ class TestGroupMember extends MY_Controller
         $members = $this->testGroupMember->addSearchGroupMember((int)$groupId, (int)$gameId, $playerId);
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
-        $this->smarty->testView('formSearchGroupMember', $data);
+        $this->smarty->testView('GroupMember/formSearchGroupMember', $data);
     }
     // グループメンバー一覧表示
     public function listGroupMember()
     {
+        $groupId = (int)$this->input->get('GID');
+        $gameId = (int)$this->input->get('GMID');
+        $this->load->model('test/GroupMember', 'testGroupMember');
+        $members = $this->testGroupMember->listGroupMember($gameId, $groupId);
         $data = array(
-            'Message' => ''
+            'Message' => '',
+            'GroupInfo' => $members['GroupInfo'],
+            'MemberList' => $members['MemberList'],
+            'BookingList' => $members['BookingList']
         );
-        $this->smarty->testView('listGroupMember', $data);
+        $this->smarty->testView('GroupMember/listGroupMember', $data);
     }
     // グループメンバー除名
     public function formDelGroupMember()
