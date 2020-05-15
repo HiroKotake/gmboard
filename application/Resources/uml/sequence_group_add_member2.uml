@@ -1,0 +1,39 @@
+@startuml
+title: <size:24>グループへのユーザ登録手順２ (グループ管理者招待版)</size>\n
+
+actor グループ管理者 as gmas
+actor ユーザ as user
+control システム as system
+database "グループ管理テーブル\nGroups" as groupTable
+database "予約テーブル\nRegisterBooking" as bookingTable
+database "グループメンバーテーブル\nGroupMenber" as memberTable
+database "ゲームプレイヤー管理テーブル\nGamePlayers" as playerTable
+autonumber
+== グループ管理者 ==
+gmas -> system: 招待確認
+activate system
+system <-> bookingTable: 招待済みメンバー一覧取得
+system --> gmas: 招待済みメンバー表示
+deactivate system
+gmas -> system: 新規招待メンバー登録
+activate system
+system -> bookingTable: 新規招待メンバーレコード登録
+system <-> bookingTable: 招待メンバー一覧取得
+system --> gmas: 招待メンバー一覧表示
+deactivate system
+== ユーザ側 ==
+user -> system: （ホーム画面表示）
+activate system
+system <-> playerTable: 加入ゲーム一覧取得
+system <-> bookingTable: 対象レコード一覧取得
+system <-> system: 新規招待抽出
+system <-> groupTable: グループ情報取得
+system --> user: 新規招待グループ表示
+deactivate system
+user -> system: 招待に応じるグループ指定
+activate system
+system -> memberTable: グループメンバー情報登録
+system -> bookingTable: 申請ユーザの処理済みフラグ設定
+system --> user: （ホーム画面表示）
+deactivate system
+@enduml

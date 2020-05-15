@@ -1,5 +1,5 @@
 @startuml
-title <size:24>グループへのユーザ登録手順</size>\n
+title <size:24>グループへのユーザ登録手順１(ユーザ側申請版)</size>\n
 
 actor ユーザ as user
 actor グループ管理者 as gmas
@@ -26,7 +26,7 @@ deactivate system
 gmas -> system: 申請者確認
 activate system
 system <-> bookingTable: 未認証レコード確認
-system -> gmas: 未認証ユーザ表示
+system --> gmas: 未認証ユーザ表示
 deactivate system
 gmas -> system: 認証対象ユーザ一覧
 activate system
@@ -34,12 +34,12 @@ system <-> memberTable: 認証ユーザ確認
 system -> system: 対象ユーザ抽出
 system -> memberTable: グループメンバー情報登録
 system -> bookingTable: 申請ユーザの処理済みフラグ設定
-system -> gmas: 処理結果表示
+system --> gmas: 処理結果表示
 deactivate system
 == ユーザ側 ==
 user -> system: グループ確認
 activate system
 system <-> groupTable: 登録確認
-system -> user: グループ登録情報表示
+system --> user: グループ登録情報表示
 deactivate system
 @enduml
