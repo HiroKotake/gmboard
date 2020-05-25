@@ -17,6 +17,7 @@ class Notices extends MY_Model
      * 告知追加
      * @param  array $data 表示内容
      *                      'Priority' => [優先度]
+     *                      'Target' => [表示ターゲット(0:全体告知, 1:メンバー告知, 10:グループ管理者向け告知)]
      *                      'Message' => [メッセージテキスト]
      *                      'ShowStartDateTime' => [表示開始日時]
      *                      'ShowEndDateTime' => [表示終了日時]
@@ -32,18 +33,24 @@ class Notices extends MY_Model
 
     /**
      * 告知取得
+     * @param  integer $target 表示ターゲット(0:全体告知, 1:メンバー告知, 10:グループ管理者向け告知)
      * @param  integer $number 取得するレコード数
      * @param  integer $offset オフセット値
      * @return array           取得したレコードを配列で返す
      */
-    public function getNotices(int $number = 10, int $offset = 0) : array
+    public function getNotices(int $target = 0, int $number = 10, int $offset = 0) : array
     {
         $now = date("Y-m-d H:i:s");
         $cond = array(
             'WHERE' => array(
                 'Showable' => 1,
+                'Target' => $target,
                 'ShowStartDateTime >=' => $now,
                 'ShowEndDateTime <' => $now
+            ),
+            'ORDER_BY' => array(
+                'ShowStartDateTime' => 'DESC',
+                'Priority' => 'ASC'
             ),
             'LIMIT' => array($number, $offset)
         );

@@ -27,7 +27,7 @@ class UserInfos extends MY_Model
      * @param  int $userId [description]
      * @return int         [description]
      */
-    public function getUserInfosByUserId(int $userId) : int
+    public function getUserInfosByUserId(int $userId) : array
     {
         $cond = array(
             'WHERE' => array('UserId' => $userId)

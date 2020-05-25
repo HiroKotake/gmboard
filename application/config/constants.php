@@ -95,3 +95,8 @@ defined('BROWSER_TYPE_SP')     OR define('BROWSER_TYPE_SP', 'sp');      // User'
 
 defined('SYSTEM_USER_ID')      or define('SYSTEM_USER_ID', '999999999999'); // System UserId
 defined('SYSTEM_GROUP_ID')     or define('SYSTEM_GROUP_ID', '999999999999'); // System GroupId
+// 告知関連コード
+defined('NOTICE_GLOBAL')       or define('NOTICE_GLOBAL', 0);           // 全体告知
+defined('NOTICE_MEMBER')       or define('NOTICE_MEMBER', 1);           // メンバー告知
+defined('NOTICE_GROUP_ADMIN')  or define('NOTICE_GROUP_ADMIN', 10);     // グループ管理者告知
+defined('NOTICE_GROUP_MEMBER') or define('NOTICE_GROUP_MEMBER', 11);    // グループメンバー告知

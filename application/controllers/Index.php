@@ -10,6 +10,13 @@ class Index extends MY_Controller
 
     public function index()
     {
+        // トップページ
+        // [表示内容]
+        // ・ 告知
+        $this->load->library('SystemNotice');
+        // ・ ログインエリア
+        // ・ 新規登録誘導
+        // ー フッター部
     	$this->load->view('welcome_message');
     }
 }
