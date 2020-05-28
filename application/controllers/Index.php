@@ -8,6 +8,10 @@ class Index extends MY_Controller
         parent::__construct();
     }
 
+    /**
+     * トップページ表示
+     * @return [type] [description]
+     */
     public function index()
     {
         // トップページ
@@ -17,6 +21,7 @@ class Index extends MY_Controller
         // ・ ログインエリア
         // ・ 新規登録誘導
         // ー フッター部
-    	$this->load->view('welcome_message');
+    	//$this->load->view('welcome_message');
+    	$this->smarty->view('top');
     }
 }

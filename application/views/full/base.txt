@@ -1,0 +1,11 @@
+#div id="box_top"
+@span style="color:red;" Hasarius Tags@
+##
+#div id="box_main"
+#div id="box_left"
+@include ./commonIndex.txt
+##
+#div id="box_right"
+@include #TAGFILE#
+##
+##
