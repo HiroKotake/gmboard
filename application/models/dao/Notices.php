@@ -11,6 +11,7 @@ class Notices extends MY_Model
     public function __construct()
     {
         parent::__construct();
+        $this->tableName = self::TABLE_NAME;
     }
 
     /**
@@ -23,10 +24,10 @@ class Notices extends MY_Model
      *                      'ShowEndDateTime' => [表示終了日時]
      * @return int         正常にレコード追加ができた場合は'NoticeId'である整数値を返し、失敗した場合は'0'を返す
      */
-    public function addNotice(array $data) : int
+    public function add(array $data) : int
     {
         if (count($data) > 0) {
-            return $this->add(self::TABLE_NAME, $data);
+            return $this->attach($data);
         }
         return false;
     }
@@ -38,7 +39,7 @@ class Notices extends MY_Model
      * @param  integer $offset オフセット値
      * @return array           取得したレコードを配列で返す
      */
-    public function getNotices(int $target = 0, int $number = 10, int $offset = 0) : array
+    public function get(int $target = 0, int $number = 10, int $offset = 0) : array
     {
         $now = date("Y-m-d H:i:s");
         $cond = array(
@@ -54,7 +55,7 @@ class Notices extends MY_Model
             ),
             'LIMIT' => array($number, $offset)
         );
-        return $this->get(self::TABLE_NAME, $cond);
+        return $this->search($cond);
     }
 
     // 更新
@@ -64,10 +65,10 @@ class Notices extends MY_Model
      * @param  int  $data     変更内容を含む連想配列
      * @return bool           [description]
      */
-    public function updateNotice(int $noticeId, int $data) : bool
+    public function set(int $noticeId, int $data) : bool
     {
         if (count($data) > 0) {
-            return $this->update(self::TABLE_NAME, $data, array('NoticeId' => $noticeId));
+            return $this->update($data, array('NoticeId' => $noticeId));
         }
         return false;
     }
@@ -80,7 +81,7 @@ class Notices extends MY_Model
     public function showNotice(int $noticeId) : bool
     {
         $data = array('Showable' => 1);
-        return $this->updateNotice($noticeId, $data);
+        return $this->set($noticeId, $data);
     }
 
     /**
@@ -91,7 +92,7 @@ class Notices extends MY_Model
     public function hideNotice(int $noticeId) : bool
     {
         $data = array('Showable' => 0);
-        return $this->updateNotice($noticeId, $data);
+        return $this->set($noticeId, $data);
     }
 
     /**
@@ -107,7 +108,7 @@ class Notices extends MY_Model
             'ShowStartDateTime' => $startDateTime,
             'ShowEndDateTime' => $endDateTime
         );
-        return $this->updateNotice($noticeId, $data);
+        return $this->set($noticeId, $data);
     }
 
     /**
@@ -115,8 +116,8 @@ class Notices extends MY_Model
      * @param  int  $noticeId 告知管理ID
      * @return bool           [description]
      */
-    public function deleteNotice(int $noticeId) : bool
+    public function delete(int $noticeId) : bool
     {
-        return $this->delete(self::TABLE_NAME, array('NoticeId' => $noticeId));
+        return $this->logicalDelete(array('NoticeId' => $noticeId));
     }
 }

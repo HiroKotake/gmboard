@@ -41,12 +41,12 @@ class GroupNotices extends MY_Model
      *                          'ShowEndDateTime' => [表示終了日時]
      * @return int            正常にレコード追加ができた場合は'NoticeId'である整数値を返し、失敗した場合は'0'を返す
      */
-    public function addNotice(int $gameId, int $groupId, array $data) : int
+    public function add(int $gameId, int $groupId, array $data) : int
     {
         if (count($data) > 0) {
-            $tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+            $this->tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                         . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
-            return $this->add($tableName, $data);
+            return $this->attach($data);
         }
         return false;
     }
@@ -60,14 +60,14 @@ class GroupNotices extends MY_Model
      * @param  integer $offset  オフセット値
      * @return array            取得したレコードを配列で返す
      */
-    public function getNotices(
+    public function get(
         int $gameId,
         int $groupId,
         string $order = 'DESC',
         int $number = 10,
         int $offset = 0
     ) : array {
-        $tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+        $this->tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                     . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
         $now = date("Y-m-d H:i:s");
         $cond = array(
@@ -79,7 +79,7 @@ class GroupNotices extends MY_Model
             'ORDER_BY' => array('NoticeId' => $order),
             'LIMIT' => array($number, $offset)
         );
-        return $this->get($tableName, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -90,12 +90,12 @@ class GroupNotices extends MY_Model
      * @param  int  $data     変更内容を含む連想配列
      * @return bool           [description]
      */
-    public function updateNotice(int $gameId, int $groupId, int $noticeId, int $data) : bool
+    public function set(int $gameId, int $groupId, int $noticeId, int $data) : bool
     {
         if (count($data) > 0) {
-            $tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+            $this->tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                         . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
-            return $this->update($tableName, $data, array('NoticeId' => $noticeId));
+            return $this->update($data, array('NoticeId' => $noticeId));
         }
         return false;
     }
@@ -110,7 +110,7 @@ class GroupNotices extends MY_Model
     public function showNotice(int $gameId, int $groupId, int $noticeId) : bool
     {
         $data = array('Showable' => 1);
-        return $this->updateNotice($gameId, $groupId, $noticeId, $data);
+        return $this->set($gameId, $groupId, $noticeId, $data);
     }
 
     /**
@@ -123,7 +123,7 @@ class GroupNotices extends MY_Model
     public function hideNotice(int $gameId, int $groupId, int $noticeId) : bool
     {
         $data = array('Showable' => 0);
-        return $this->updateNotice($gameId, $groupId, $noticeId, $data);
+        return $this->set($gameId, $groupId, $noticeId, $data);
     }
 
     /**
@@ -146,7 +146,7 @@ class GroupNotices extends MY_Model
             'ShowStartDateTime' => $startDateTime,
             'ShowEndDateTime' => $endDateTime
         );
-        return $this->updateNotice($gameId, $groupId, $noticeId, $data);
+        return $this->set($gameId, $groupId, $noticeId, $data);
     }
 
     /**
@@ -156,12 +156,12 @@ class GroupNotices extends MY_Model
      * @param  int  $noticeId 告知管理ID
      * @return bool           [description]
      */
-    public function deleteGroup(int $gameId, int $groupId, int $noticeId) : bool
+    public function delete(int $gameId, int $groupId, int $noticeId) : bool
     {
         $data = array(
             'DeleteDate' => date("Y-m-d H:i:s"),
             'DeleteFlag' => 1
         );
-        return $this->db->updateNotice($gameId, $groupId, $noticeId, $data);
+        return $this->db->set($gameId, $groupId, $noticeId, $data);
     }
 }

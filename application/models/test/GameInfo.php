@@ -17,7 +17,7 @@ class GameInfo
     public function addGameInfo(string $gameName, string $description) : array
     {
         // 追加
-        $newGameInfoId = $this->cIns->daoGameInfos->addGameinfo($gameName, $description);
+        $newGameInfoId = $this->cIns->daoGameInfos->add($gameName, $description);
         // プレイヤー管理テーブル追加
         $this->cIns->daoGamePlayers->createTable($newGameInfoId);
         // プレイヤー予約管理テーブル追加
@@ -32,7 +32,7 @@ class GameInfo
     // ゲーム情報一覧表示
     public function listGameInfo() : array
     {
-        return $this->cIns->daoGameInfos->getAllGameInfos();
+        return $this->cIns->daoGameInfos->getAll();
     }
 
     // ゲーム情報確認

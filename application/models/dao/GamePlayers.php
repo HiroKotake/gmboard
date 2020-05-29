@@ -36,10 +36,10 @@ class GamePlayers extends MY_Model
      * @param  integer $offset 取得を開始する位置
      * @return array           [description]
      */
-    public function getAllGamePlayers(int $gameId, int $limit = 20, int $offset = 0) : array
+    public function getAll(int $gameId, int $limit = 20, int $offset = 0) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->getAll($tableName, $limit, $offset);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->searchAll($limit, $offset);
     }
 
     /**
@@ -50,11 +50,11 @@ class GamePlayers extends MY_Model
      */
     public function getByGamePlayerId(int $gameId, int $gamePlayerId) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array('GamePlayerId' => $gamePlayerId),
         );
-        $result = $this->get($tableName, $cond);
+        $result = $this->search($cond);
         if (count($result) > 0) {
             return $result[0];
         }
@@ -77,13 +77,13 @@ class GamePlayers extends MY_Model
         int $limit = 10,
         int $offset = 0
     ) : array {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array('UserId' => $userId),
             'ORDER_BY' => array('GameId' => $order),
             'NUMBER' => array($limit, $offset),
         );
-        return $this->get($tableName, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -96,12 +96,12 @@ class GamePlayers extends MY_Model
      */
     public function getByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array('GroupId' => $groupId),
             'NUMBER' => array($limit, $offset)
         );
-        return $this->get($tableName, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -112,13 +112,13 @@ class GamePlayers extends MY_Model
      */
     public function getByPlayerId(int $gameId, int $playerId) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array(
                 'PlayerId' => $playerId
             )
         );
-        return $this->get($tableName, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -129,11 +129,11 @@ class GamePlayers extends MY_Model
      */
     public function getLikeNickname(int $gameId, string $nickname) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'LIKE' => array('GameNickname' => $nickname)
         );
-        return $this->get($tableName, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -142,10 +142,10 @@ class GamePlayers extends MY_Model
      * @param  array $data   'UserId','GameId','PlayerId','GameNickname','GroupId','Authority'をキー名としたデータを持つ配列
      * @return int           [description]
      */
-    public function addNewGamePlayer(int $gameId, array $data) : int
+    public function add(int $gameId, array $data) : int
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->add($tableName, $data);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->attach($data);
     }
 
     /**
@@ -155,10 +155,10 @@ class GamePlayers extends MY_Model
      * @param  array  $data         [description]
      * @return [type]               [description]
      */
-    public function updateByGamePlayerId(int $gameId, int $playerId, array $data) : bool
+    public function set(int $gameId, int $playerId, array $data) : bool
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->update($tableName, $data, array('PlayerId' => $playerId));
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->update($data, array('PlayerId' => $playerId));
     }
 
     /**
@@ -169,8 +169,8 @@ class GamePlayers extends MY_Model
      */
     public function deleteByUserId(int $gameId, int $userId) : bool
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->delete($tableName, array('UserId' => $userId));
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->logicalDelete(array('UserId' => $userId));
     }
 
     /**
@@ -181,7 +181,7 @@ class GamePlayers extends MY_Model
      */
     public function deleteByGamePlayerId(int $gameId, int $playerId) : bool
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->delete($tableName, array('PlayerId' => $playerId));
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->logicalDelete(array('PlayerId' => $playerId));
     }
 }

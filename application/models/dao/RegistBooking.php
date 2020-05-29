@@ -37,21 +37,21 @@ class RegistBooking extends MY_Model
      * @param  string $authCode [description]
      * @return int              [description]
      */
-    public function addNewBooking(
+    public function add(
         int $gameId,
         int $groupId,
         string $playerId,
         string $nickname,
         string $authCode
     ) : int {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $data = array(
             'GroupId'       => $groupId,
             'PlayerId'      => $playerId,
             'GameNickName'  => $nickname,
             'AuthCode'      => $authCode,
         );
-        return $this->add($tableName, $data);
+        return $this->attach($data);
     }
 
     /**
@@ -60,10 +60,10 @@ class RegistBooking extends MY_Model
      * @param  array $condition 検索条件を含む連想配列
      * @return array            検索結果を含む配列。該当するレコードがない場合は空の配列を返す
      */
-    public function getWithCondition(int $gameId, array $condition) : array
+    public function get(int $gameId, array $condition) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->get($tableName, $condition);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->search($condition);
     }
 
     /**
@@ -77,7 +77,7 @@ class RegistBooking extends MY_Model
         $cond = array(
             'WHERE' => array('RegistBookingId' => $registBookingId)
         );
-        $result = $this->getWithCondition($gameId, $cond);
+        $result = $this->get($gameId, $cond);
         if (count($result) == 0) {
             return array();
         }
@@ -96,7 +96,7 @@ class RegistBooking extends MY_Model
         $cond = array(
             'NUMBER' => array($limit, $offset)
         );
-        return $this->getWithCondition($gameId, $cond);
+        return $this->get($gameId, $cond);
     }
 
     /**
@@ -110,7 +110,7 @@ class RegistBooking extends MY_Model
         $cond = array(
             'WHERE' => array('PlayerId' => $playerId)
         );
-        return $this->getWithCondition($gameId, $cond);
+        return $this->get($gameId, $cond);
     }
 
     /**
@@ -124,7 +124,7 @@ class RegistBooking extends MY_Model
         $cond = array(
             'WHERE' => array('GameNickname' => $gameNickname)
         );
-        return $this->getWithCondition($gameId, $cond);
+        return $this->get($gameId, $cond);
     }
 
     // グループIDで検索
@@ -142,7 +142,7 @@ class RegistBooking extends MY_Model
             'WHERE' => array('GroupId' => $groupId),
             'LIMIT' => array($limit, $offset)
         );
-        return $this->getWithCondition($gameId, $cond);
+        return $this->get($gameId, $cond);
     }
 
     /**
@@ -159,7 +159,7 @@ class RegistBooking extends MY_Model
             'WHERE' => array('UserId' => $userId),
             'LIMIT' => array($limit, $offset)
         );
-        return $this->getWithCondition($gameId, $cond);
+        return $this->get($gameId, $cond);
     }
 
     /**
@@ -169,10 +169,10 @@ class RegistBooking extends MY_Model
      * @param  array $data            [description]
      * @return bool                   [description]
      */
-    public function updateRegistBooking(int $gameId, int $registBookingId, array $data) : bool
+    public function set(int $gameId, int $registBookingId, array $data) : bool
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->update($tableName, $data, array('RegistBookingId' => $registBookingId));
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->update($data, array('RegistBookingId' => $registBookingId));
     }
 
     /**
@@ -186,7 +186,7 @@ class RegistBooking extends MY_Model
         $data = array(
             'Registed'      => 1,
         );
-        return $this->updateRegistBooking($gameId, $registBookingId, $data);
+        return $this->set($gameId, $registBookingId, $data);
     }
 
     /**
@@ -201,7 +201,7 @@ class RegistBooking extends MY_Model
         $data = array(
             'Approved'      => 1,
         );
-        return $this->updateRegistBooking($gameId, $registBookingId, $data);
+        return $this->set($gameId, $registBookingId, $data);
     }
 
     /**
@@ -210,9 +210,9 @@ class RegistBooking extends MY_Model
      * @param  int  $registBookingId [description]
      * @return bool                  [description]
      */
-    public function deleteByRegistBookingId(int $gameId, int $registBookingId) : bool
+    public function delete(int $gameId, int $registBookingId) : bool
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->delete($tableName, array('RegistBookingId' => $registBookingId));
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->logicalDelete(array('RegistBookingId' => $registBookingId));
     }
 }

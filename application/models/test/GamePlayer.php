@@ -15,7 +15,7 @@ class GamePlayer
     public function formGameList() : array
     {
         $data = array();
-        $data['GameInfos'] = $this->cIns->daoGameInfos->getAllGameInfos();
+        $data['GameInfos'] = $this->cIns->daoGameInfos->getAll();
         return $data;
     }
 
@@ -23,7 +23,7 @@ class GamePlayer
     {
         $data = array();
         $data['GameInfo'] = $this->cIns->daoGameInfos->getByGameId($gameId);
-        $data['Groups'] = $this->cIns->daoGroups->getAllGroups($gameId);
+        $data['Groups'] = $this->cIns->daoGroups->getAll($gameId);
         return $data;
     }
 
@@ -36,7 +36,7 @@ class GamePlayer
         string $authCode
     ) : array {
         $data = array();
-        $newId = $this->cIns->daoRegistBooking->addNewBooking($gameId, $groupId, $playerId, $gameNickname, $authCode);
+        $newId = $this->cIns->daoRegistBooking->add($gameId, $groupId, $playerId, $gameNickname, $authCode);
         $data['PlayerInfo'] = $this->cIns->daoRegistBooking->getByRegistBookingId($gameId, $newId);
         $data['GameInfo'] = $this->cIns->daoGameInfos->getByGameId($gameId);
         return $data;
@@ -45,7 +45,7 @@ class GamePlayer
     public function listGames() : array
     {
         $data = array();
-        $data['GameInfos'] = $this->cIns->daoGameInfos->getAllGameInfos();
+        $data['GameInfos'] = $this->cIns->daoGameInfos->getAll();
         return $data;
     }
     public function listGamePlayers(int $gameId) : array

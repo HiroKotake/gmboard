@@ -11,28 +11,26 @@ class Users extends MY_Model
     public function __construct()
     {
         parent::__construct();
+        $this->tableName = self::TABLE_NAME;
     }
 
-    /**
-     * レコード追加
-     * @param array $data [description]
-     */
-    public function addNewUser(array $data) : int
+
+    public function add(array $data) : int
     {
-        return $this->add(self::TABLE_NAME, $data);
+        return $this->attach($data);
     }
 
-    public function getAllUsers(int $limit = 20, int $offset = 0) : array
+    public function getAll(int $limit = 20, int $offset = 0) : array
     {
-        return $this->getAll(self::TABLE_NAME, $limit, $offset);
+        return $this->searchAll($limit, $offset);
     }
 
-    public function getByUserId(int $userId) : array
+    public function get(int $userId) : array
     {
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
-        return $this->get(self::TABLE_NAME, $cond);
+        return $this->search($cond);
     }
 
     public function getByLoginId(string $loginId) : array
@@ -40,7 +38,7 @@ class Users extends MY_Model
         $cond = array(
             'WHERE' => array('LoginId' => $loginId)
         );
-        return $this->get(self::TABLE_NAME, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -49,10 +47,10 @@ class Users extends MY_Model
      * @param  array $data   [description]
      * @return bool          [description]
      */
-    public function updateWithData(int $userId, array $data) : bool
+    public function set(int $userId, array $data) : bool
     {
         if (count($data) > 0) {
-            return $this->update(self::TABLE_NAME, $data, array('UserId' => $userId));
+            return $this->update($data, array('UserId' => $userId));
         }
         return false;
     }
@@ -68,7 +66,7 @@ class Users extends MY_Model
             'MailAuthed'    => 1,
             'LastLogin'     => date("Y-m-d H:i:s")
         );
-        return $this->updateWithData($userId, $data);
+        return $this->set($userId, $data);
     }
 
     /**
@@ -82,7 +80,7 @@ class Users extends MY_Model
         $data = array(
             'Password' => $hashedPwd
         );
-        return $this->updateWithData($userId, $data);
+        return $this->set($userId, $data);
     }
 
     /**
@@ -95,7 +93,7 @@ class Users extends MY_Model
         $data = array(
             'LoginExclude' => 1,
         );
-        return $this->updateWithData($userId, $data);
+        return $this->set($userId, $data);
     }
 
     /**
@@ -108,7 +106,7 @@ class Users extends MY_Model
         $data = array(
             'LoginExclude' => 0,
         );
-        return $this->updateWithData($userId, $data);
+        return $this->set($userId, $data);
     }
 
     /**
@@ -116,8 +114,8 @@ class Users extends MY_Model
      * @param  int  $userId [description]
      * @return bool         [description]
      */
-    public function deleteUser(int $userId) : bool
+    public function delete(int $userId) : bool
     {
-        return $this->delete(self::TABLE_NAME, array('UserId' => $userId));
+        return $this->logicalDelete(array('UserId' => $userId));
     }
 }

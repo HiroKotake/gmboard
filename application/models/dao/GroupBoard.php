@@ -37,16 +37,16 @@ class GroupBoard extends MY_Model
      * @param  integer $offset     取得するメッセージの開始位置
      * @return array               [description]
      */
-    public function getMessages(int $gameId, int $groupId, string $order = 'DESC', int $lineNumber = 20, int $offset = 0) : array
+    public function get(int $gameId, int $groupId, string $order = 'DESC', int $lineNumber = 20, int $offset = 0) : array
     {
-        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $cond = array(
             'SELECT' => array('UserId, Message, Showable, CreateDate'),
             'ORDER_BY' => array('MessageId' => $order),
             'LIMIT' => array($lineNumber, $offset)
         );
-        return $this->get($table, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -57,16 +57,34 @@ class GroupBoard extends MY_Model
      * @param  string $message メッセージ
      * @return int             [description]
      */
-    public function addNewMessage(int $gameId, int $groupId, int $userId, string $message) : int
+    public function add(int $gameId, int $groupId, int $userId, string $message) : int
     {
-        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
             'GroupId'       => $groupId,
             'UserId'        => $userId,
             'Message'       => $message
         );
-        return $this->add($table, $data);
+        return $this->attach($data);
+    }
+
+    /**
+     * メッセージの内容を更新する
+     * @param  int    $gameId    [description]
+     * @param  int    $groupId   [description]
+     * @param  int    $messageId [description]
+     * @param  string $message   [description]
+     * @return bool              [description]
+     */
+    public function set(int $gameId, int $groupId, int $messageId, string $message) : bool
+    {
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
+        $data = array(
+            'Message'   => $message
+        );
+        return $this->update($data, array('MessageId' => $messageId));
     }
 
     /**
@@ -78,12 +96,12 @@ class GroupBoard extends MY_Model
      */
     public function hideMessage(int $gameId, int $groupId, int $messageId) : bool
     {
-        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
             'Showable'      => 0
         );
-        return $this->update($table, $data, array('MessageId' => $messageId));
+        return $this->update($data, array('MessageId' => $messageId));
     }
 
     /**
@@ -95,12 +113,12 @@ class GroupBoard extends MY_Model
      */
     public function showMessage(int $gameId, int $groupId, int $messageId) : bool
     {
-        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
             'Showable'      => 1,
         );
-        return $this->update($table, $data, array('MessageId' => $messageId));
+        return $this->update($data, array('MessageId' => $messageId));
     }
 
     /**
@@ -110,10 +128,10 @@ class GroupBoard extends MY_Model
      * @param  int  $messageId メッセージ管理ID
      * @return bool            [description]
      */
-    public function deleteLine(int $gameId, int $groupId, int $messageId) : bool
+    public function delete(int $gameId, int $groupId, int $messageId) : bool
     {
-        $table = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
-        return $this->delete($table, array('MessageId' => $messageId));
+        return $this->logicalDelete(array('MessageId' => $messageId));
     }
 }

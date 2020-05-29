@@ -36,7 +36,7 @@ class User
             'Nickname'  => $nickname,                               // ニックネーム
             'Mail'      => $mailAddr                                // 連絡先メールアドレス
         );
-        $userId = $this->cIns->daoUsers->addNewUser($data);
+        $userId = $this->cIns->daoUsers->add($data);
         // ユーザ用掲示板作成
         $this->cIns->load->model('dao/UserBoard', 'daoUserBoard');
         $this->cIns->daoUserBoard->createTable($userId);
@@ -46,7 +46,7 @@ class User
             'FromGroupId'   => SYSTEM_GROUP_ID,               // 送信者グループID
             'message'       => 'ようこそ、いらっしょいました！'    // メッセージテキスト
         );
-        $this->cIns->daoUserBoard->addNewMessage($userId, $welcomeMessage);
+        $this->cIns->daoUserBoard->add($userId, $welcomeMessage);
 
         return $userId;
     }
@@ -54,13 +54,13 @@ class User
     public function listUser() : array
     {
         $this->cIns->load->model('dao/Users', 'daoUsers');
-        return $this->cIns->daoUsers->getAllUsers();
+        return $this->cIns->daoUsers->getAll();
     }
 
     public function showUser(int $userId) : array
     {
         $this->cIns->load->model('dao/Users', 'daoUsers');
-        $result = $this->cIns->daoUsers->getByUserId($userId);
+        $result = $this->cIns->daoUsers->get($userId);
         if (!$result) {
             return array();
         }

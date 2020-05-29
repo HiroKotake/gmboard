@@ -11,15 +11,7 @@ class UserInfos extends MY_Model
     public function __construct()
     {
         parent::__construct();
-    }
-
-    /**
-     * レコード追加
-     * @param array $data [description]
-     */
-    public function addNewUserInfos(array $data) : int
-    {
-        return $this->add(self::TABLE_NAME, $data);
+        $this->tableName = self::TABLE_NAME;
     }
 
     /**
@@ -27,12 +19,12 @@ class UserInfos extends MY_Model
      * @param  int $userId [description]
      * @return int         [description]
      */
-    public function getUserInfosByUserId(int $userId) : array
+    public function get(int $userId) : array
     {
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
-        return $this->get(self::TABLE_NAME, $cond);
+        return $this->search($cond);
     }
 
     // 修正
@@ -42,17 +34,17 @@ class UserInfos extends MY_Model
      * @param  array $data   [description]
      * @return bool          [description]
      */
-    public function updateWithData(int $userId, array $data) : bool
+    public function set(int $userId, array $data) : bool
     {
         if (count($data) > 0) {
-            return $this->updata(self::TABLE_NAME, $data, array('UserId' => $userId));
+            return $this->updata($data, array('UserId' => $userId));
         }
         return false;
     }
 
     // 論理削除
-    public function deleteUserInfos(int $userId) : bool
+    public function delete(int $userId) : bool
     {
-        return $this->delete(self::TABLE_NAME, array('UserId' => $userId));
+        return $this->logicalDelete(array('UserId' => $userId));
     }
 }

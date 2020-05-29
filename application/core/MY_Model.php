@@ -7,6 +7,7 @@ use teleios\utils\LogWriter;
 class MY_Model extends CI_Model
 {
     private $logWriter = null;
+    protected $tableName = null;
 
     public function __construct()
     {
@@ -26,9 +27,9 @@ class MY_Model extends CI_Model
         }
     }
 
-    protected function getQuerySelect(string $tableName) : string
+    protected function getQuerySelect() : string
     {
-        $query = $this->db->get_compiled_select($tableName);
+        $query = $this->db->get_compiled_select($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
             $this->logWriter->dbLog($query);
@@ -36,9 +37,9 @@ class MY_Model extends CI_Model
         return $query;
     }
 
-    protected function getQueryInsert(string $tableName, array $data) : string
+    protected function getQueryInsert(array $data) : string
     {
-        $query = $this->db->set($data)->get_compiled_insert($tableName);
+        $query = $this->db->set($data)->get_compiled_insert($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
             $this->logWriter->dbLog($query);
@@ -46,9 +47,9 @@ class MY_Model extends CI_Model
         return $query;
     }
 
-    protected function getQueryUpdate(string $tableName, array $data) : string
+    protected function getQueryUpdate(array $data) : string
     {
-        $query = $this->db->set($data)->get_compiled_update($tableName);
+        $query = $this->db->set($data)->get_compiled_update($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
             $this->logWriter->dbLog($query);
@@ -56,7 +57,7 @@ class MY_Model extends CI_Model
         return $query;
     }
 
-    protected function getAll(string $tableName, int $limit = 0, int $offset = 0, bool $deleted = false) : array
+    protected function searchAll(int $limit = 0, int $offset = 0, bool $deleted = false) : array
     {
         // クエリービルド
         if ($limit !== 0) {
@@ -66,7 +67,7 @@ class MY_Model extends CI_Model
         if ($deleted) {
             $this->db->where('DeleteFlag', 1);
         }
-        $query = $this->getQuerySelect($tableName);
+        $query = $this->getQuerySelect();
         // クエリー実行
         $resultSet = $this->db->query($query);
         return $resultSet->result_array();
@@ -74,7 +75,6 @@ class MY_Model extends CI_Model
 
     /**
      * 検索条件に従いレコードを取得する
-     * @param  string $tableName レコード取得対象のテーブル名
      * @param  array  $condition 以下の検索条件を含む連想配列
      *                           'SELECT' => array([Key1], [Key2], ...[KeyX])
      *                           'WHERE' => array('KEY'=>'VALUE',,,)
@@ -83,7 +83,7 @@ class MY_Model extends CI_Model
      *                           'ORDER_BY' => array('KEY'=>'VALUE',,,)
      * @return array             検索結果を含む配列。結果がない場合は空の配列が返される
      */
-    protected function get(string $tableName, array $condition) : array
+    protected function search(array $condition) : array
     {
         // クエリービルド
         if (array_key_exists('SELECT', $condition) && !empty($condition['SELECT'])) {
@@ -112,7 +112,7 @@ class MY_Model extends CI_Model
         if (array_key_exists('NUMBER', $condition) && !empty($condition['NUMBER'])) {
             $this->db->limit($condition['NUMBER'][0], (count($condition['NUMBER']) > 1 ? $condition['NUMBER'][1]: 0));
         }
-        $query = $this->getQuerySelect($tableName);
+        $query = $this->getQuerySelect();
         // クエリー実行
         $resultSet = $this->db->query($query);
         $records = $resultSet->result_array();
@@ -122,53 +122,74 @@ class MY_Model extends CI_Model
         return $records;
     }
 
-    protected function add(string $tableName, array $data) : int
+    /**
+     * レコード追加
+     * @param  array $data [description]
+     * @return int         [description]
+     */
+    protected function attach(array $data) : int
     {
         // クエリービルド
-        $datetime = date("Y-m-d H:i:s");
-        $data['CreateDate'] = $datetime;
-        $query = $this->getQueryInsert($tableName, $data);
-        // クエリー実行
-        $this->db->query($query);
-        $newId = $this->db->insert_id();
-        return $newId;
+        if (count($data) > 0) {
+            $datetime = date("Y-m-d H:i:s");
+            $data['CreateDate'] = $datetime;
+            $query = $this->getQueryInsert($data);
+            // クエリー実行
+            $this->db->query($query);
+            $newId = $this->db->insert_id();
+            return $newId;
+        }
+        return 0;
     }
 
-    protected function update(string $tableName, array $data, array $where = null) : bool
+    /**
+     * レコード更新
+     * @param  array  $data  [description]
+     * @param  array  $where [description]
+     * @return bool          [description]
+     */
+    protected function update(array $data, array $where = null) : bool
     {
+        if (empty($where)) {
+            return false;
+        }
         // クエリービルド
-        if (!empty($where)) {
-            foreach ($where as $key => $value) {
-                if (is_array($value)) {
-                    $this->db->where_in($key, $value);
-                } else {
-                    $this->db->where($key, $value);
-                }
+        foreach ($where as $key => $value) {
+            if (is_array($value)) {
+                $this->db->where_in($key, $value);
+            } else {
+                $this->db->where($key, $value);
             }
         }
         $datetime = date("Y-m-d H:i:s");
         $data['UpdateDate'] = $datetime;
-        $query = $this->getQueryUpdate($tableName, $data);
+        $query = $this->getQueryUpdate($data);
         // クエリー実行
         return $this->db->simple_query($query);
     }
 
-    protected function delete(string $tableName, array $where = null) : bool
+    /**
+     * レコード論理削除
+     * @param  array  $where [description]
+     * @return bool          [description]
+     */
+    protected function logicalDelete(array $where = null) : bool
     {
+        if (empty($where)) {
+            return false;
+        }
         // クエリービルド
-        if (!empty($where)) {
-            foreach ($where as $key => $value) {
-                if (is_array($value)) {
-                    $this->db->where_in($key, $value);
-                } else {
-                    $this->db->where($key, $value);
-                }
+        foreach ($where as $key => $value) {
+            if (is_array($value)) {
+                $this->db->where_in($key, $value);
+            } else {
+                $this->db->where($key, $value);
             }
         }
         $datetime = date("Y-m-d H:i:s");
         $data['DeleteDate'] = $datetime;
         $data['DeleteFlag'] = 1;
-        $query = $this->getQueryUpdate($tableName, $data);
+        $query = $this->getQueryUpdate($data);
         // クエリー実行
         return $this->db->simple_query($query);
     }

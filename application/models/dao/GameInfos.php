@@ -11,6 +11,7 @@ class GameInfos extends MY_Model
     public function __construct()
     {
         parent::__construct();
+        $this->tableName = self::TABLE_NAME;
     }
 
     /**
@@ -18,14 +19,14 @@ class GameInfos extends MY_Model
      * @param string $name        ゲーム名
      * @param string $description ゲーム説明
      */
-    public function addGameInfo(string $name, string $description)
+    public function add(string $name, string $description)
     {
         $data = array(
             'Name'          => $name,
             'Description'   => $description
         );
         // ゲームレコード追加
-        return $this->add(self::TABLE_NAME, $data);
+        return $this->attach($data);
     }
 
     /**
@@ -34,9 +35,9 @@ class GameInfos extends MY_Model
      * @param  integer $offset 開始位置
      * @return array           対象のレコード情報を含む連想配列
      */
-    public function getAllGameInfos(int $limit = 20 , int $offset = 0) : array
+    public function getAll(int $limit = 20 , int $offset = 0) : array
     {
-        return $this->getAll(self::TABLE_NAME, $limit, $offset);
+        return $this->searchAll($limit, $offset);
     }
 
     /**
@@ -50,7 +51,7 @@ class GameInfos extends MY_Model
             'LIKE' => array('Name' => $name),
             'NUMBER' => array($limit, $offset)
         );
-        return $this->get(self::TABLE_NAME, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -63,7 +64,7 @@ class GameInfos extends MY_Model
         $cond = array(
             'WHERE' => array('GameId' => $gameId),
         );
-        $result = $this->get(self::TABLE_NAME, $cond);
+        $result = $this->search($cond);
         if (count($result) > 0) {
             return $result[0];
         }
@@ -75,9 +76,9 @@ class GameInfos extends MY_Model
      * @param  array  $data [description]
      * @return [type]       [description]
      */
-    public function updateGameInfo(int $gameId, array $data)
+    public function set(int $gameId, array $data)
     {
-        return $this->update(self::TABLE_NAME, $data, array('GamdId' => $gameId));
+        return $this->update($data, array('GamdId' => $gameId));
     }
 
     /**
@@ -85,8 +86,8 @@ class GameInfos extends MY_Model
      * @param  int    $gameId ゲーム情報管理ID
      * @return [type]         [description]
      */
-    public function deleteGame(int $gameId)
+    public function delete(int $gameId)
     {
-        return $this->delete(self::TABLE_NAME, array('GamdId' => $gameId));
+        return $this->logicalDelete(array('GamdId' => $gameId));
     }
 }

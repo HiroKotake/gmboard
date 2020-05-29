@@ -20,7 +20,7 @@ class AttachGame
     public function addAttachGame(int $userId, int $gameId, int $playerId, string $nickname) : array
     {
         // GamePlayerにレコード登録
-        $newId = $this->cIns->daoGamePlayers->addNewGamePlayer(
+        $newId = $this->cIns->daoGamePlayers->add(
             $gameId,
             array(
                 'UserId' => $userId,

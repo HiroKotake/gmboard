@@ -36,14 +36,14 @@ class UserBoard extends MY_Model
      * @param  integer $offset     [description]
      * @return array               [description]
      */
-    public function getMessage(int $userId, int $lineNumber = 100, int $offset = 0) : array
+    public function get(int $userId, int $lineNumber = 100, int $offset = 0) : array
     {
-        $userBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+        $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
         $cond = array(
             'WHERE' => array('UserId' => $userId),
             'LIMIT' => array($lineNumber, $offset)
         );
-        return $this->get($userBoardName, $cond);
+        return $this->search($cond);
     }
 
     /**
@@ -52,10 +52,10 @@ class UserBoard extends MY_Model
      * @param  array $data   [description]
      * @return int           [description]
      */
-    public function addNewMessage(int $userId, array $data) : int
+    public function add(int $userId, array $data) : int
     {
-        $userBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
-        return $this->add($userBoardName, $data);
+        $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+        return $this->attach($data);
     }
 
     /**
@@ -64,13 +64,13 @@ class UserBoard extends MY_Model
      * @param  int  $messageId [description]
      * @return bool            [description]
      */
-    public function setAlreadyRead(int $userId, int $messageId) : bool
+    public function set(int $userId, int $messageId) : bool
     {
-        $userBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+        $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
         $data = array(
             'AlreadyRead'   => 1,
         );
-        return $this->update($userBoardName, $data, array('MessageId' => $messageId));
+        return $this->update($data, array('MessageId' => $messageId));
     }
 
     /**
@@ -84,11 +84,11 @@ class UserBoard extends MY_Model
      * @param  array $messageIds [description]
      * @return bool              [description]
      */
-    public function deleteMessages(int $userId, array $messageIds) : bool
+    public function delete(int $userId, array $messageIds) : bool
     {
         if (count($messageIds) > 0) {
-            $userBoardName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
-            return $this->delete($userBoardName, array('MessageId' => $messageIds));
+            $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+            return $this->logicalDelete(array('MessageId' => $messageIds));
         }
         return false;
     }

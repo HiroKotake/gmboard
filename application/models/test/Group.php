@@ -14,7 +14,7 @@ class Group
     {
         // ゲームリスト取得
         $this->cIns->load->model('dao/GameInfos', 'daoGameInfos');
-        return $this->cIns->daoGameInfos->getAllGameInfos();
+        return $this->cIns->daoGameInfos->getAll();
     }
     /**
      * グループ追加
@@ -32,7 +32,7 @@ class Group
             'Description'   => $description     // 説明
         );
         // リータ追加
-        $newGroupId = $this->cIns->daoGroups->addGroup($gameId, $data);
+        $newGroupId = $this->cIns->daoGroups->add($gameId, $data);
         // グループ掲示板作成
         $this->cIns->load->model('dao/GroupBoard', 'daoGroupBoard');
         $this->cIns->daoGroupBoard->createTable($gameId, $newGroupId);
@@ -49,7 +49,7 @@ class Group
 
     public function listGroup(int $gameId) : array
     {
-        $groups = $this->cIns->daoGroups->getAllGroups($gameId);
+        $groups = $this->cIns->daoGroups->getAll($gameId);
         return $groups;
     }
 

@@ -42,7 +42,7 @@ class GroupMember
     {
         $data = $this->getRagistedBookingMember($groupId);
         // 登録
-        $newId = $this->cIns->daoRegistBooking->addNewBooking($groupId, $playerId, $gameNickName, $authCoce);
+        $newId = $this->cIns->daoRegistBooking->add($groupId, $playerId, $gameNickName, $authCoce);
         // データ再取得
         $bookingMember = $this->cIns->daoRegistBooking->getByRegistBookingId($newId);
         $data['BookingMember'] = array();
@@ -56,7 +56,8 @@ class GroupMember
 
     private function searchRegistBookingPlayer(int $gameId, string $playerId) : array
     {
-        $result = $this->cIns->daoGamePlayers->getWithCondition(array('GameId' => $gameId, 'PlayerId' => $playerId));
+        //$result = $this->cIns->daoGamePlayers->get(array('GameId' => $gameId, 'PlayerId' => $playerId));
+        $result = $this->cIns->daoGamePlayers->search(array('GameId' => $gameId, 'PlayerId' => $playerId));
         if (count($result) > 0) {
             return $result[0];
         }
@@ -88,7 +89,7 @@ class GroupMember
     public function addSearchGroupMember(int $groupId, int $gameId, string $playerId) : array
     {
         // グループへ編入
-        $this->cIns->daoRegistBooking->addNewBooking($groupId, $gameId, $playerId);
+        $this->cIns->daoRegistBooking->add($groupId, $gameId, $playerId);
         // 新データ取得
         return $this->formAddGroupMember($groupId);
     }

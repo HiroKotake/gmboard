@@ -29,10 +29,10 @@ class Groups extends MY_Model
         return $this->db->simple_query($query);
     }
 
-    public function getAllGroups(int $gameId) : array
+    public function getAll(int $gameId) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->getAll($tableName);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->searchAll();
     }
 
     /**
@@ -41,11 +41,11 @@ class Groups extends MY_Model
      * @param  array $data   [description]
      * @return int           [description]
      */
-    public function addGroup(int $gameId, array $data) : int
+    public function add(int $gameId, array $data) : int
     {
         if (count($data) > 0) {
-            $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-            return $this->add($tableName, $data);
+            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+            return $this->attach($data);
         }
         return false;
     }
@@ -61,13 +61,13 @@ class Groups extends MY_Model
      */
     public function getByGroupName(int $gameId, string $groupName, int $limit = 10, int $offset = 0) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'LIKE' => array('GroupName' => $groupName),
             'LIMIT' => array($limit, $offset),
             'ORDER_BY' => array('GroupId' => 'ASC')
         );
-        return $this->get($tableName, $cond);
+        return $this->search($cond);
     }
 
     // グループID検索
@@ -79,11 +79,11 @@ class Groups extends MY_Model
      */
     public function getByGroupId(int $gameId, int $groupId) : array
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array('GroupId' => $groupId)
         );
-        $result = $this->get($tableName, $cond);
+        $result = $this->search($cond);
         if (count($result) == 0) {
             return array();
         }
@@ -97,11 +97,11 @@ class Groups extends MY_Model
      * @param  array $data    変更する内容を含んだいフィールド名をキーとした連想配列
      * @return bool           [description]
      */
-    public function updateGroup(int $gameId, int $groupId, array $data) : bool
+    public function set(int $gameId, int $groupId, array $data) : bool
     {
         if (count($data) > 0) {
-            $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-            return $this->update($tableName, $data, array('GroupId' => $groupId));
+            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+            return $this->update($data, array('GroupId' => $groupId));
         }
         return false;
     }
@@ -113,10 +113,10 @@ class Groups extends MY_Model
      * @param  string $groupName グループ名
      * @return bool              [description]
      */
-    public function updateToGroupName(int $gameId, int $groupId, string $groupName) : bool
+    public function updateGroupName(int $gameId, int $groupId, string $groupName) : bool
     {
         $data = array('GroupName' => $groupName);
-        return $this->updateGroup($gameId, $groupId, $data);
+        return $this->set($gameId, $groupId, $data);
     }
 
     /**
@@ -126,10 +126,10 @@ class Groups extends MY_Model
      * @param  int  $userId  真リーダーのユーザID
      * @return bool          [description]
      */
-    public function updateToLeader(int $gameId, int $groupId, int $userId) : bool
+    public function updateLeader(int $gameId, int $groupId, int $userId) : bool
     {
         $data = array('Leader' => $userId);
-        return $this->updateGroup($gameId, $groupId, $data);
+        return $this->set($gameId, $groupId, $data);
     }
 
     /**
@@ -139,10 +139,10 @@ class Groups extends MY_Model
      * @param  string $description 説明文
      * @return bool                [description]
      */
-    public function updateToDescription(int $gameId, int $groupId, string $description) : bool
+    public function updateDescription(int $gameId, int $groupId, string $description) : bool
     {
         $data = array('Description' => $description);
-        return $this->updateGroup($gameId, $groupId, $data);
+        return $this->set($gameId, $groupId, $data);
     }
 
     /**
@@ -151,9 +151,9 @@ class Groups extends MY_Model
      * @param  int  $groupId グループ管理ID
      * @return bool          [description]
      */
-    public function deleteGroup(int $gameId, int $groupId) : bool
+    public function delete(int $gameId, int $groupId) : bool
     {
-        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->delete($tableName, array('GroupId' => $groupId));
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->logicalDelete(array('GroupId' => $groupId));
     }
 }
