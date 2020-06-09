@@ -100,3 +100,7 @@ defined('NOTICE_GLOBAL')       or define('NOTICE_GLOBAL', 0);           // 全�
 defined('NOTICE_MEMBER')       or define('NOTICE_MEMBER', 1);           // メンバー告知
 defined('NOTICE_GROUP_ADMIN')  or define('NOTICE_GROUP_ADMIN', 10);     // グループ管理者告知
 defined('NOTICE_GROUP_MEMBER') or define('NOTICE_GROUP_MEMBER', 11);    // グループメンバー告知
+// 認証関連
+defined('AUTH_MATCH_PASSWORD')      or define('AUTH_MATCH_PASSWORD', 1);
+defined('AUTH_NO_EXIST_USER')       or define('AUTH_NO_EXIST_USER', 10);
+defined('AUTH_UNMATCH_PASSWORD')    or define('AUTH_UNMATCH_PASSWORD', 11);

@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use teleios\gmboard\libs\SystemNotice;
+
 class Index extends MY_Controller
 {
     public function __construct()
@@ -17,11 +19,27 @@ class Index extends MY_Controller
         // トップページ
         // [表示内容]
         // ・ 告知
-        $this->load->library('SystemNotice');
+        $notices = null;
+        $libSystemNotice = new SystemNotice();
+        $notices = $libSystemNotice->getTopNotices();
         // ・ ログインエリア
         // ・ 新規登録誘導
         // ー フッター部
     	//$this->load->view('welcome_message');
-    	$this->smarty->view('top');
+    	$data = array(
+            'notices' => $notices
+        );
+    	$this->smarty->view('top', $data);
     }
+
+    /**
+     * [showNotices description]
+     * @return [type] [description]
+     */
+    public function showNotices()
+    {
+        $page = $this->input->get('page');  // 表示ページ番号
+echo "もっと見る($page)";
+    }
+
 }

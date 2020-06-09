@@ -33,10 +33,10 @@ class Users extends MY_Model
         return $this->search($cond);
     }
 
-    public function getByLoginId(string $loginId) : array
+    public function getByLoginId(string $mail) : array
     {
         $cond = array(
-            'WHERE' => array('LoginId' => $loginId)
+            'WHERE' => array('Mail' => $mail)
         );
         return $this->search($cond);
     }
