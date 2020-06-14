@@ -90,17 +90,30 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 | Special Codes
 |--------------------------------------------------------------------------
 */
-defined('BROWSER_TYPE_FULL')   OR define('BROWSER_TYPE_FULL', 'full');  // User's Browser Type is PC browser
-defined('BROWSER_TYPE_SP')     OR define('BROWSER_TYPE_SP', 'sp');      // User's Browser type is Smart Phone
+defined('BROWSER_TYPE_FULL')   OR define('BROWSER_TYPE_FULL', 'full');          // User's Browser Type is PC browser
+defined('BROWSER_TYPE_SP')     OR define('BROWSER_TYPE_SP', 'sp');              // User's Browser type is Smart Phone
 
-defined('SYSTEM_USER_ID')      or define('SYSTEM_USER_ID', '999999999999'); // System UserId
-defined('SYSTEM_GROUP_ID')     or define('SYSTEM_GROUP_ID', '999999999999'); // System GroupId
+defined('SYSTEM_USER_ID')      or define('SYSTEM_USER_ID', '999999999999');     // System UserId
+defined('SYSTEM_GROUP_ID')     or define('SYSTEM_GROUP_ID', '999999999999');    // System GroupId
+// メール送信関連
+defined('MAIL_SEND_SUCCESS')    or define('MAIL_SEND_SUCCESS', 0);              // メール送信成功
+defined('MAIL_SEND_FAILED')     or define('MAIL_SEND_FAILED', 1);               // メール送信不良
 // 告知関連コード
-defined('NOTICE_GLOBAL')       or define('NOTICE_GLOBAL', 0);           // 全体告知
-defined('NOTICE_MEMBER')       or define('NOTICE_MEMBER', 1);           // メンバー告知
-defined('NOTICE_GROUP_ADMIN')  or define('NOTICE_GROUP_ADMIN', 10);     // グループ管理者告知
-defined('NOTICE_GROUP_MEMBER') or define('NOTICE_GROUP_MEMBER', 11);    // グループメンバー告知
+defined('NOTICE_GLOBAL')       or define('NOTICE_GLOBAL', 0);                   // 全体告知
+defined('NOTICE_MEMBER')       or define('NOTICE_MEMBER', 1);                   // メンバー告知
+defined('NOTICE_GROUP_ADMIN')  or define('NOTICE_GROUP_ADMIN', 10);             // グループ管理者告知
+defined('NOTICE_GROUP_MEMBER') or define('NOTICE_GROUP_MEMBER', 11);            // グループメンバー告知
 // 認証関連
-defined('AUTH_MATCH_PASSWORD')      or define('AUTH_MATCH_PASSWORD', 1);
-defined('AUTH_NO_EXIST_USER')       or define('AUTH_NO_EXIST_USER', 10);
-defined('AUTH_UNMATCH_PASSWORD')    or define('AUTH_UNMATCH_PASSWORD', 11);
+defined('AUTH_MATCH_PASSWORD')      or define('AUTH_MATCH_PASSWORD', 100);      // パスワード認証正常
+defined('AUTH_NO_EXIST_USER')       or define('AUTH_NO_EXIST_USER', 110);       // ログインIDが合致するものが存在しない
+defined('AUTH_UNMATCH_PASSWORD')    or define('AUTH_UNMATCH_PASSWORD', 111);    // パスワード不一致
+defined('AUTH_DELETED_USER')        or define('AUTH_DELETED_USER', 121);        // 退会ユーザ
+defined('AUTH_EXPLODE_USER')        or define('AUTH_EXPLODE_USER', 122);        // アカBangユーザ
+defined('AUTH_REGIST_SUCCESS')      or define('AUTH_REGIST_SUCCESS', 200);      // 新規登録正常終了
+defined('AUTH_REGIST_DEV_SUCCESS')  or define('AUTH_REGIST_DEV_SUCCESS', 201);  // 開発環境でのユーザ新規登録正常終了
+defined('AUTH_REGIST_DONE')         or define('AUTH_REGIST_DONE', 210);         // レジストレーション正常終了
+defined('AUTH_REGIST_ERROR')        or define('AUTH_REGIST_ERROR', 290);        // ユーザ新規登録失敗
+defined('AUTH_ACTIVATE_SUCCESS')    or define('AUTH_ACTIVATE_SUCCESS', 300);    // アクティベーション成功
+defined('AUTH_ACTIVATE_NOEXIST')    or define('AUTH_ACTIVATE_NOEXIST', 312);     // 対象のアクティベーションコードが存在しない
+defined('AUTH_ACTIVATE_EXPIRE')     or define('AUTH_ACTIVATE_EXPIRE', 312);     // アクティベーション期限切れ
+defined('AUTH_ACTIVATE_UNMATCH')    or define('AUTH_ACTIVATE_UNMATCH', 313);    // アクティベーションコード不一致

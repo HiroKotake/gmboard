@@ -123,6 +123,20 @@ class MY_Model extends CI_Model
     }
 
     /**
+     * 検索結果が唯一の検索を実施した場合に、確実に検索結果のみ取り出す。
+     * 万一複数の結果が出た場合はエラーとして空の配列にする。
+     * @param  array $resultSet searchで得られた結果
+     * @return array
+     */
+    protected function getMonoResult(array $resultSet) : array
+    {
+        if (count($resultSet) <= 0) {
+            return $resultSet;
+        }
+        return $resultSet[0];
+    }
+
+    /**
      * レコード追加
      * @param  array $data [description]
      * @return int         [description]

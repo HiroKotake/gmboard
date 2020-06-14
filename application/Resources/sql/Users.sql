@@ -5,8 +5,7 @@ DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users`
 (
     `UserId` BIGINT(12) UNSIGNED AUTO_INCREMENT COMMENT '管理ID',
-    `Mail` VARCHAR(256) COMMENT '連絡先メールアドレス',
-/*    `LoginId` VARCHAR(30) NOT NULL COMMENT 'ログインID', */
+    `Mail` VARCHAR(256) COMMENT 'ログイン用メールアドレス',
     `Password` CHAR(60) NOT NULL COMMENT 'ハッシュ済みパスワード',
     `Nickname` VARCHAR(30) COMMENT 'ニックネーム',
     `LastLogin` DATETIME COMMENT '最終ログイン日時',

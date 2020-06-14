@@ -30,7 +30,8 @@ class Users extends MY_Model
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
-        return $this->search($cond);
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
     }
 
     public function getByLoginId(string $mail) : array
@@ -38,7 +39,8 @@ class Users extends MY_Model
         $cond = array(
             'WHERE' => array('Mail' => $mail)
         );
-        return $this->search($cond);
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
     }
 
     /**

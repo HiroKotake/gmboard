@@ -8,7 +8,7 @@
      `UserId` BIGINT(12) UNSIGNED COMMENT 'ユーザ管理ID',
      `Rcode` VARCHAR(128) COMMENT '登録確認コード',
      `ExpireDate` DATETIME COMMENT '有効期限',
-     `RegistDate` DATETIME COMMENT '登録日',
+     `ActivatedDate` DATETIME COMMENT '正規化日',
      `CreateDate` DATETIME COMMENT 'レコード登録日',
      `UpdateDate` DATETIME COMMENT 'レコード更新日',
      `DeleteDate` DATETIME COMMENT 'レコード無効日',

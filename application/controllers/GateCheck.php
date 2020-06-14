@@ -1,7 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use teleios\utils\StringUtility;
+use teleios\gmboard\libs\SystemNotice;
 use teleios\gmboard\libs\Auth;
+use teleios\gmboard\libs\UserPage;
 
 class GateCheck extends MY_Controller
 {
@@ -17,14 +20,17 @@ class GateCheck extends MY_Controller
      */
     public function login()
     {
-        $loginId = $this->input->get('lid');  // 表示ページ番号
-        $password = $this->input->get('pwd');  // 表示ページ番号
+        $loginId = $this->input->post('lid');  // 表示ページ番号
+        $password = $this->input->post('pwd');  // 表示ページ番号
         $libAuth = new Auth();
         $authResult = $libAuth->checkPassword($loginId, $password);
 
-        if ($authResult == AUTH_MATCH_PASSWORD) {
+        if ($authResult['status'] == AUTH_MATCH_PASSWORD) {
             // ユーザページ表示
-echo 'ユーザページ';
+            $libUserPage = new UserPage();
+            $data = $libUserPage->getPageData($authResult['userId']);
+            $this->smarty->view('mypage', $data);
+            return;
         }
 
         $data = array('Message' => '存在しないログインIDです。');
@@ -41,30 +47,75 @@ echo 'ユーザページ';
      *  Userテーブルにレコード登録し、
      *  レジストレーションコードを生成、Registrationテーブルに登録
      *  インビテーションメール送信
-     * @return [type] [description]
+     * @return none
      */
     public function regist()
     {
-        $loginId    = $this->input->post('uid');
+        $nickname   = $this->input->post('nickname');
+        $mail       = $this->input->post('mail');
         $pwd        = $this->input->post('pwd');
         $rpd        = $this->input->post('rpd');
-        $mail       = $this->input->post('mail');
-        $libAuth = new Auth();
+        $message    = "";
+
+        // ニックネーム未入力
+        if (empty($nickname)) {
+            $message .= "ニックネーム未入力<br />";
+        }
+        // メイルアドレス不良
+        $fCheckMailAddr = StringUtility::isMailAddr($mail);
+        if (!$fCheckMailAddr) {
+            $message .= "メールアドレス不良<br />";
+        }
+        if (empty($pwd)) {
+            $message .= "パスワード未入力<br />";
+        }
+        if (empty($rpd)) {
+            $message .= "確認用パスワード未入力<br />";
+        }
         // パスワード確認
         if ($pwd != $rpd) {
             // 告知取得
-echo "パスワード同一性エラー";
-            return;
+            $message .= "パスワード同一性エラー<br />";
         }
+
+        $libAuth = new Auth();
         // ログインID重複チェック
-        if (!$libAuth->checkDeplicateLid($loginId)) {
-            // 告知取得
-echo "すでに使われいるログインID";
+        if ($fCheckMailAddr) {
+            if (!$libAuth->checkDeplicateLid($mail)) {
+                $message .= "すでに使われいるログインID<br />";
+            }
+        }
+
+        // エラーが発生している場合はここで終了
+        if (!empty($message)) {
+            // ・ 告知
+            $notices = null;
+            $libSystemNotice = new SystemNotice();
+            $notices = $libSystemNotice->getTopNotices();
+            $this->smarty->view('top', ['message' => $message]);
             return;
         }
+
         // ユーザ追加
+        $userId = $libAuth->newUser($nickname, $mail, $pwd);
+        // レジストレーションコード生成
+        $regCode = $libAuth->buildActivationCode($mail);
+        // レジストレーションコードを登録
+        $regId = $libAuth->addRegistration($userId, $regCode);
+
         // レジストレーションデータ追加
-        // メース送信
-echo "新規登録";
+        if (ENVIRONMENT == 'production') {
+            // メール送信し、レジストレーションコードを入力する画面へ遷移
+            $result = $libAuth->sendRegistrationMail($mail, $regId, $regCode);
+            $this->smarty->view('mypage', ['regid' => $regId, 'mailResult' => $result]);
+        } else {
+            // レジストレーションを実施
+            $result = $libAuth->checkRegCode($regId, $regCode);
+echo 'RESULT: ' . $result . '<br />';
+            // デバッグ環境なのでレジスト済みにして、ユーザページへ遷移
+            $libUserPage = new UserPage();
+            $data = $libUserPage->getPageData($userId);
+            $this->smarty->view('mypage', $data);
+        }
     }
 }

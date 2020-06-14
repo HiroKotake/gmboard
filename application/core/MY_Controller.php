@@ -9,6 +9,8 @@ class MY_Controller extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        // タイムゾーン設定
+        date_default_timezone_set('Asia/Tokyo');
         // ユーザ情報
         $this->load->library('user_agent');
         // セッション情報

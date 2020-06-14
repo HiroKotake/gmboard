@@ -76,7 +76,7 @@ class StringUtility
      * @param  [type] $mailAddr 入力された文字列
      * @return bool             emailアドレスであれば true を、そうでない場合は false を返す
      */
-    public function isMailAddr($mailAddr) : bool
+    static public function isMailAddr($mailAddr) : bool
     {
         $checked = filter_var($mailAddr, FILTER_VALIDATE_EMAIL);
         if ($checked) {

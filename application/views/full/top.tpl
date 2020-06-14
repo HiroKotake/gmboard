@@ -21,14 +21,18 @@
             <a href="index/regist">新規登録</a>
         </div>
         <div id="TopRegist">
+            {if isset($message)}
+                {$message}
+            {/if}
             <form action="GateCheck/regist" method="post">
                 <ul>
+                    <li>ニックネーム : <input type="text" name="nickname" /></li>
                     <li>Mail : <input type="mail" name="mail" />
                     <br />メールアドレスがログインIDになる</li>
                     <li>Password : <input type="password" name="pwd" /></li>
                     <li>Password(Re) : <input type="password" name="rpd" /></li>
-                    <li><input type="submit" /></li>
                 </ul>
+                <input type="submit" />
             </form>
         </div>
     </div>

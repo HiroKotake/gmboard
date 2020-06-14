@@ -21,13 +21,14 @@ class Registration extends MY_Model
     }
 
     // 検索
-    public function get(string $rcode) : array
+    public function get(int $regId) : array
     {
-        if (!empty($rcode)) {
+        if (!empty($regId)) {
             $cond = array(
-                'WHERE' => array('Rcode' => $rcode)
+                'WHERE' => array('RegistrationId' => $regId)
             );
-            return $this->search($cond);
+            $resultSet = $this->search($cond);
+            return $this->getMonoResult($resultSet);
         }
         return null;
     }
@@ -38,7 +39,8 @@ class Registration extends MY_Model
             $cond = array(
                 'WHERE' => array('UserId' => $userId)
             );
-            return $this->search($cond);
+            $resultSet = $this->search($cond);
+            return $this->getMonoResult($resultSet);
         }
         return null;
     }
@@ -47,7 +49,7 @@ class Registration extends MY_Model
     public function set(int $registrationId, array $data) : bool
     {
         if (count($data) > 0) {
-            return $this->updata($data, array('RegistrationId' => $registrationId));
+            return $this->update($data, array('RegistrationId' => $registrationId));
         }
         return false;
     }
