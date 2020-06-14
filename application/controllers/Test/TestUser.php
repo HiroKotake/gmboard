@@ -17,21 +17,17 @@ class TestUser extends MY_Controller
     }
     public function addUser()
     {
-        $loginId    = $this->input->post('LoginID');
+        $mailAddr   = $this->input->post('MAIL');
         $passwd     = $this->input->post('PWD');
         $repasswd   = $this->input->post('RPWD');
         $nickname   = $this->input->post('NNAME');
-        $mailAddr   = $this->input->post('MAIL');
         // 入力確認
         $notice = "";
-        if (mb_strlen($loginId) == 0) {
-            $notice .= 'ログインIDが入力されていません。<br />';
+        if (mb_strlen($mailAddr) == 0) {
+            $notice .= 'メールアドレスが入力されていません。<br />';
         }
-        if (!preg_match("/^[a-zA-Z0-9_-]+$/", $loginId)) {
-            $notice .= 'ログインIDは半角英数、ハイフン、アンダーバーのみ使用できます。<br />';
-        }
-        if (mb_strlen($passwd) == 0) {
-            $notice .= 'パスワードが入力されていません。<br />';
+        if (!StringUtility::isMailAddr($mailAddr)) {
+            $notice .= 'メールアドレスの記述が間違っています<br />';
         }
         if (mb_strlen($repasswd) == 0) {
             $notice .= 'パスワード(確認)が入力されていません。<br />';
@@ -42,22 +38,17 @@ class TestUser extends MY_Controller
         if (mb_strlen($nickname) == 0) {
             $notice .= 'ニックネームが入力されていません。<br />';
         }
-        if (mb_strlen($mailAddr) == 0) {
-            $notice .= 'メールアドレスが入力されていません。<br />';
-        }
+        /*
         if (!preg_match("/^[a-zA-Z0-9_-]+$/", $loginId)) {
             $notice .= 'ログインIDは半角英数、ハイフン、アンダーバーのみ使用できます。<br />';
         }
-        $sUtil = new StringUtility();
-        if (!$sUtil->isMailAddr($mailAddr)) {
-            $notice .= 'メールアドレスの記述が間違っています<br />';
-        }
+        */
 
         // ログインID重複チェック
         $this->load->model('test/User', 'testUser');
-        $isLoginIdDeplicate = $this->testUser->checkDeplicate($loginId);
+        $isLoginIdDeplicate = $this->testUser->checkDeplicate($mailAddr);
         if (!$isLoginIdDeplicate) {
-            $notice .= '入力されたログインIDは、既に使われています。<br />';
+            $notice .= '入力されたメールアドレスは、既に使われています。<br />';
         }
 
         // エラーがある場合は入力画面を再表示
@@ -68,7 +59,7 @@ class TestUser extends MY_Controller
         }
 
         // 登録
-        $newUserId = $this->testUser->addUser($loginId, $passwd, $nickname, $mailAddr);
+        $newUserId = $this->testUser->addUser($mailAddr, $passwd, $nickname, $mailAddr);
 
         // 登録情報取得
         $userInfo = $this->testUser->showUser($newUserId);
