@@ -15,7 +15,7 @@ class AttachGame
 
     public function formAttachGame() : array
     {
-        return $this->cIns->daoGameInfos->getAllGameInfos();
+        return $this->cIns->daoGameInfos->getAll();
     }
     public function addAttachGame(int $userId, int $gameId, int $playerId, string $nickname) : array
     {

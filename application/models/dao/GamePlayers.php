@@ -54,11 +54,8 @@ class GamePlayers extends MY_Model
         $cond = array(
             'WHERE' => array('GamePlayerId' => $gamePlayerId),
         );
-        $result = $this->search($cond);
-        if (count($result) > 0) {
-            return $result[0];
-        }
-        return $result;
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
     }
 
     /**
@@ -66,24 +63,16 @@ class GamePlayers extends MY_Model
      * @param  int     $gameId ゲーム管理ID
      * @param  int     $userId [description]
      * @param  string  $order  [description]
-     * @param  integer $limit  [description]
-     * @param  integer $offset [description]
      * @return array           [description]
      */
-    public function getByUserId(
-        int $gameId,
-        int $userId,
-        string $order = 'ASC',
-        int $limit = 10,
-        int $offset = 0
-    ) : array {
+    public function getByUserId(int $gameId, int $userId) : array
+    {
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
-            'WHERE' => array('UserId' => $userId),
-            'ORDER_BY' => array('GameId' => $order),
-            'NUMBER' => array($limit, $offset),
+            'WHERE' => array('UserId' => $userId)
         );
-        return $this->search($cond);
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
     }
 
     /**
@@ -106,6 +95,7 @@ class GamePlayers extends MY_Model
 
     /**
      * 特定のゲーム側のID持つレコードを取得
+     * ：間違えて同じPlayerIdで複数のユーザが登録されている場合がある。
      * @param  int   $gameId    ゲーム管理ID
      * @param  int   $playerId  [description]
      * @return array           [description]
@@ -123,6 +113,7 @@ class GamePlayers extends MY_Model
 
     /**
      * 特定のゲーム側のニックネームを持つレコードを取得
+     * ：同じニックネームが複数のユーザが登録されている場合がある。
      * @param  int    $gameId   ゲーム管理ID
      * @param  string $nickname [description]
      * @return array            [description]
@@ -139,7 +130,7 @@ class GamePlayers extends MY_Model
     /**
      * レコードを追加する
      * @param  int   $gameId ゲーム管理ID
-     * @param  array $data   'UserId','GameId','PlayerId','GameNickname','GroupId','Authority'をキー名としたデータを持つ配列
+     * @param  array $data   'UserId','PlayerId','GameNickname','GroupId','Authority'をキー名としたデータを持つ配列
      * @return int           [description]
      */
     public function add(int $gameId, array $data) : int

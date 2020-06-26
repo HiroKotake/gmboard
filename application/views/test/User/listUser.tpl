@@ -6,10 +6,9 @@
 <table>
     <tr>
         <th>UserId</th>
-        <th>LoginId</th>
+        <th>Mail(LoginId)</th>
         <th>Password</th>
         <th>Nickname</th>
-        <th>Mail</th>
         <th>LastLogin</th>
         <th>MailAuthed</th>
         <th>LoginExclude</th>
@@ -19,10 +18,9 @@
 {foreach from=$Users item=User}
     <tr>
         <td><a href="showUser?UserId={$User.UserId}">{$User.UserId}</a></td>
-        <td>{$User.LoginId}</td>
+        <td>{$User.Mail}</td>
         <td>{$User.Password}</td>
         <td>{$User.Nickname}</td>
-        <td>{$User.Mail}</td>
         <td>{$User.LastLogin}</td>
         <td>{$User.MailAuthed}</td>
         <td>{$User.LoginExclude}</td>

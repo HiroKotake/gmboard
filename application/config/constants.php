@@ -92,9 +92,13 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 */
 defined('BROWSER_TYPE_FULL')   OR define('BROWSER_TYPE_FULL', 'full');          // User's Browser Type is PC browser
 defined('BROWSER_TYPE_SP')     OR define('BROWSER_TYPE_SP', 'sp');              // User's Browser type is Smart Phone
-
+// システム固有キー名
+defined('SYSTEM_KEY_GAMELIST_VER') OR define('SYSTEM_KEY_GAMELIST_VER', 'GamesListVer'); // 設定ゲームのリストのバージョンを示すキー名
+// 運営のID
 defined('SYSTEM_USER_ID')      or define('SYSTEM_USER_ID', '999999999999');     // System UserId
+defined('SYSTEM_USER_NAME')    or define('SYSTEM_USER_NAME', '運営');            // System User名
 defined('SYSTEM_GROUP_ID')     or define('SYSTEM_GROUP_ID', '999999999999');    // System GroupId
+defined('SYSTEM_GROUP_NAME')   or define('SYSTEM_GROUP_NAME', '運営');           // System GroupId
 // メール送信関連
 defined('MAIL_SEND_SUCCESS')    or define('MAIL_SEND_SUCCESS', 0);              // メール送信成功
 defined('MAIL_SEND_FAILED')     or define('MAIL_SEND_FAILED', 1);               // メール送信不良
@@ -117,3 +121,31 @@ defined('AUTH_ACTIVATE_SUCCESS')    or define('AUTH_ACTIVATE_SUCCESS', 300);    
 defined('AUTH_ACTIVATE_NOEXIST')    or define('AUTH_ACTIVATE_NOEXIST', 312);     // 対象のアクティベーションコードが存在しない
 defined('AUTH_ACTIVATE_EXPIRE')     or define('AUTH_ACTIVATE_EXPIRE', 312);     // アクティベーション期限切れ
 defined('AUTH_ACTIVATE_UNMATCH')    or define('AUTH_ACTIVATE_UNMATCH', 313);    // アクティベーションコード不一致
+// マイページ関連
+defined('MYPAGE_MODE_PERSONAL')  or define('MYPAGE_MODE_PERSONAL', 'Personal'); // マイページ画面モード：個人トップ表示
+defined('MYPAGE_MODE_GROUP')     or define('MYPAGE_MODE_GROUP', 'Group');       // マイページ画面モード：グループ
+
+defined('KEY_GAME_INFO')        or define('KEY_GAME_INFO', 'GameInfomation');   // Redisキー名 (ゲーム情報)
+defined('KEY_GAME_CATEGORY')    or define('KEY_GAME_CATEGORY', 'GameCategory'); // Redisキー名 (カテゴリ別ゲームリスト)
+defined('GAME_CATEGORY')        or define('GAME_CATEGORY', [                    // ゲームカテゴリ
+    'RPG'           => 1,
+    'MMO'           => 2,
+    'FPS'           => 3,
+    'TPS'           => 4,
+    'シミュレーション' => 5,
+    'レース'         => 6,
+    'スポーツ'        => 7,
+    'テーブルゲーム'   => 8,
+    'カードゲーム'    => 9,
+]);
+defined('GAME_CATEGORY_RB')        or define('GAME_CATEGORY_RB', [                    // ゲームカテゴリ(インデックス)
+    1   =>  'RPG',
+    2   =>  'MMO',
+    3   =>  'FPS',
+    4   =>  'TPS',
+    5   =>  'シミュレーション',
+    6   =>  'レース',
+    7   =>  'スポーツ',
+    8   =>  'テーブルゲーム',
+    9   =>  'カードゲーム',
+]);

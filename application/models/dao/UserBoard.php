@@ -36,12 +36,13 @@ class UserBoard extends MY_Model
      * @param  integer $offset     [description]
      * @return array               [description]
      */
-    public function get(int $userId, int $lineNumber = 100, int $offset = 0) : array
+    public function get(int $userId, int $lineNumber = 100, int $offset = 0, $order = "DESC") : array
     {
         $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
         $cond = array(
-            'WHERE' => array('UserId' => $userId),
-            'LIMIT' => array($lineNumber, $offset)
+//            'WHERE' => array('UserId' => $userId),
+            'LIMIT' => array($lineNumber, $offset),
+            'ORDER_BY' => ["CreateDate", $order]
         );
         return $this->search($cond);
     }

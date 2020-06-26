@@ -26,6 +26,12 @@ class GameInfo
         $this->cIns->daoGroups->createTable($newGameInfoId);
         // 結果取得
         $data = $this->cIns->daoGameInfos->getByGameId($newGameInfoId);
+        // GameListのバージョンを更新
+        $currentVer = $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER);
+        if (empty($currentVer)) {
+            $currentVer = 0;
+        }
+        $this->cIns->sysComns->set(SYSTEM_KEY_GAMELIST_VER, $currentVer + 1);
         return $data;
     }
 

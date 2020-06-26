@@ -72,6 +72,20 @@ class GameInfos extends MY_Model
     }
 
     /**
+     * 複数のゲームIDを元にゲーム情報を取得する
+     * @param  array $gameId ゲームID
+     * @return array         対象が存在した場合にはゲーム情報を含む連想を配列を返し、ない場合には空の配列を返す
+     */
+    public function getByGameIds(array $gameIds) : array
+    {
+        $cond = array(
+            'WHERE' => array('GameId' => $gameIds),
+        );
+        $result = $this->search($cond);
+        return $result;
+    }
+
+    /**
      * ゲーム情報を更新する
      * @param  array  $data [description]
      * @return [type]       [description]

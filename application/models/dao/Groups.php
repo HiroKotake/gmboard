@@ -38,7 +38,7 @@ class Groups extends MY_Model
     /**
      * グループを追加
      * @param  int   $gameId ゲーム管理ID
-     * @param  array $data   [description]
+     * @param  array $data   'GroupName','Leader(<-UserIdを入れる)','Description'をキー名としたデータを持つ配列
      * @return int           [description]
      */
     public function add(int $gameId, array $data) : int
@@ -83,11 +83,8 @@ class Groups extends MY_Model
         $cond = array(
             'WHERE' => array('GroupId' => $groupId)
         );
-        $result = $this->search($cond);
-        if (count($result) == 0) {
-            return array();
-        }
-        return $result[0];
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
     }
 
     /**

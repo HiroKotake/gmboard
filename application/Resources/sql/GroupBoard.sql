@@ -11,8 +11,11 @@ BEGIN
     'CREATE TABLE GBoard_', @GameIndex, '_', @BoardNumber,
     '(
         `MessageId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'管理ID\',
-        `GamePlayerId` BIGINT(12) UNSIGNED NOT NULL COMMENT \'ユーザ管理ID\',
+        `UserId` BIGINT(12) NOT NULL COMMENT \'ユーザID\',
+        `GamePlayerId` BIGINT(12) UNSIGNED NOT NULL COMMENT \'ゲームユーザ管理ID\',
+        `GamePlayerName` VARCHAR(30) COMMENT \'送信者ニックネーム\',
         `Message` TEXT COMMENT \'メッセージテキスト\',
+        `Images` TEXT COMMNEt \'イメージのファイル名のJSON配列\',
         `Showable` TINYINT(1) UNSIGNED DEFAULT 1 COMMENT \'メッセージ表示フラグ(0:無効, 1:有効)\',
         `CreateDate` DATETIME COMMENT \'レコード登録日\',
         `UpdateDate` DATETIME COMMENT \'レコード更新日\',

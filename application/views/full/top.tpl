@@ -10,7 +10,7 @@
             <a href="Index/showNotices?page=2">もっと見る</a>
         </div>
         <div>
-            <form action="GateCheck/login" method="post">
+            <form action="MyPage/login" method="post">
                 <ul>
                     <li>Login ID : <input type="text" name="lid" />
                     <br />(ログインIDはメールアドレス)</li>
@@ -24,7 +24,7 @@
             {if isset($message)}
                 {$message}
             {/if}
-            <form action="GateCheck/regist" method="post">
+            <form action="MyPage/regist" method="post">
                 <ul>
                     <li>ニックネーム : <input type="text" name="nickname" /></li>
                     <li>Mail : <input type="mail" name="mail" />

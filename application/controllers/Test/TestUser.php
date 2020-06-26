@@ -92,15 +92,12 @@ class TestUser extends MY_Controller
         $this->load->model('test/User', 'testUser');
         $userInfo = $this->testUser->showUser($userId);
         $message = '';
-        $user = null;
         if (count($userInfo) == 0) {
             $message = '該当するユーザは存在しません。';
-        } else {
-            $user = $userInfo[0];
         }
         $data = array(
             'Message' => $message,
-            'UserInfo' => $user
+            'UserInfo' => $userInfo
         );
         $this->smarty->testView('User/showUser', $data);
     }

@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `GameInfos`;
 CREATE TABLE `GameInfos`
 (
     `GameId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT 'ゲーム管理ID',
+    `Genre` TINYINT(3) UNSIGNED COMMENT 'ジャンル',
     `Name` TEXT COMMENT 'ゲーム名',
     `Description` TEXT COMMENT '説明',
     `CreateDate` DATETIME COMMENT 'レコード登録日',
@@ -14,4 +15,4 @@ CREATE TABLE `GameInfos`
     PRIMARY KEY (`GameId`)
 ) ENGINE=InnoDB COMMENT 'ゲーム情報';
 
-INSERT INTO `GameInfos` (`Name`, `Description`) VALUE ("プリンセスコネクト Re:dive", "サイゲームが送るシネマティックRPG");
+INSERT INTO `GameInfos` (`Name`, `Genre`, `Description`) VALUE ("プリンセスコネクト Re:dive", 1, "サイゲームが送るシネマティックRPG");

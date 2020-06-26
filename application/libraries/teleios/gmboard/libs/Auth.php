@@ -151,8 +151,10 @@ class Auth
         // ウェルカムメッセージ追加
         $welcomeMessage = array(
             'FromUserId'    => SYSTEM_USER_ID,                // 送信者ユーザID
+            'FromUserName'  => SYSTEM_USER_NAME,              // 送信者表示名
             'FromGroupId'   => SYSTEM_GROUP_ID,               // 送信者グループID
-            'message'       => 'ようこそ、いらっしょいました！'    // メッセージテキスト
+            'FromGroupName' => SYSTEM_GROUP_NAME,             // 送信者グループ名
+            'message'       => 'ようこそ、いらっしゃいました！'    // メッセージテキスト
         );
         $this->cIns->daoUserBoard->add($userId, $welcomeMessage);
 

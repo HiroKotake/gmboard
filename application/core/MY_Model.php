@@ -23,7 +23,7 @@ class MY_Model extends CI_Model
     protected function writeLog(string $log)
     {
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog($log);
+            $this->logWriter->dbLog(trim($log));
         }
     }
 
@@ -32,7 +32,7 @@ class MY_Model extends CI_Model
         $query = $this->db->get_compiled_select($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog($query);
+            $this->logWriter->dbLog(trim($query));
         }
         return $query;
     }
@@ -42,7 +42,7 @@ class MY_Model extends CI_Model
         $query = $this->db->set($data)->get_compiled_insert($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog($query);
+            $this->logWriter->dbLog(trim($query));
         }
         return $query;
     }
@@ -52,7 +52,7 @@ class MY_Model extends CI_Model
         $query = $this->db->set($data)->get_compiled_update($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog($query);
+            $this->logWriter->dbLog(trim($query));
         }
         return $query;
     }
@@ -64,10 +64,14 @@ class MY_Model extends CI_Model
             $this->db->limit($limit, $offset);
         }
         // 削除済みを含むか
-        if ($deleted) {
-            $this->db->where('DeleteFlag', 1);
+        if (!$deleted) {
+            $this->db->where('DeleteFlag', 0);
         }
         $query = $this->getQuerySelect();
+        // log書き込み
+        if (ENVIRONMENT != 'production') {
+            $this->logWriter->dbLog(trim($query));
+        }
         // クエリー実行
         $resultSet = $this->db->query($query);
         return $resultSet->result_array();
@@ -92,7 +96,10 @@ class MY_Model extends CI_Model
         if (array_key_exists('WHERE', $condition) && !empty($condition['WHERE'])) {
             foreach ($condition['WHERE'] as $key => $value) {
                 if (is_array($value)) {
-                    $this->db->where_in($key, $value);
+                    if (!empty($value)) {
+                        // 空の配列でなければ処理に入る 2020-06-15
+                        $this->db->where_in($key, $value);
+                    }
                 } else {
                     $this->db->where($key, $value);
                 }

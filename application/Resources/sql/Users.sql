@@ -16,5 +16,5 @@ CREATE TABLE `Users`
     `DeleteDate` DATETIME COMMENT 'レコード無効日',
     `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT 'レコード無効フラグ(0:有効, 1:無効)',
     PRIMARY KEY (`UserId`),
-    INDEX `MailIDX`('Mail')
+    INDEX `MailIDX`(`Mail`)
 ) ENGINE=InnoDB COMMENT 'ユーザ';
