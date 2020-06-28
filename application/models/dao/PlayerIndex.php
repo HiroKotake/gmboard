@@ -43,6 +43,17 @@ class PlayerIndex extends MY_Model
     }
 
     /**
+     * ユーザIDとゲームIDを指定して、対象のレコードが存在するか確認する
+     * @param  int  $userId ユーザID
+     * @param  int  $gameId ゲームID
+     * @return bool         レコードが存在する場合は真を、存在しない場合は偽を返す
+     */
+    public function isExist(int $userId, int $gameId) : bool
+    {
+        return $this->isExisted(array('UserId' => $userId, 'GameId' => $gameId));
+    }
+
+    /**
      * レコード論理削除
      * @param  int  $playerIndexId [description]
      * @return bool         [description]

@@ -21,14 +21,16 @@
             <!-- ゲーム -->
                     <select id="TargetGame" name="Target">
                     {foreach from=$GameList[1] item=GameInfo}
+                        {if $GameInfo.Joined == 0}
                         <option value="{$GameInfo.GameId}">{$GameInfo.Name}</option>
+                        {/if}
                     {/foreach}
                     </select>
                 </li>
             <!-- ゲーム側のプレイヤーID -->
-                <li>ゲーム側のプレイヤーID:<input type="text" name="gpid" /></li>
+                <li>ゲーム側のプレイヤーID:<input type="text" id="TargePID" name="gpid" /></li>
             <!-- ゲーム側のニックネーム -->
-                <li>ゲーム側のニックネーム:<input type="text" name="gnn" /></li>
+                <li>ゲーム側のニックネーム:<input type="text" id="TargetNickname" name="gnn" /></li>
             </ul>
         </form>
     </div>
@@ -53,25 +55,29 @@
     <div>
     <!-- メインエリア（左：ゲーム・グループリスト表示) -->
         <div name="AreaGameList">ゲームリスト表示<br />
+            <ul name="GameList" id="ulGameList" style="list-style-type: none">
             {if count($GameInfos) > 0}
             <!-- ゲームリスト -->
                 {foreach from=$GameInfos item=Game name=GameInfoList}
-                {$Game.Name}<br />
+                <li>{$Game.Name}</li>
                 {/foreach}
             {else}
-            登録されているゲームはありません。
+            <li>登録されているゲームはありません。</li>
             {/if}
+            </ul>
             <br /><button id="MyPageBtnAddGame">ゲーム追加</button>
         </div>
         <div name="AreaGroupList">グループリスト表示<br />
+            <ul name="GroupList" id="ulGroupList"style="list-style-type: none">
             {if count($GroupInfos) > 0}
             <!-- グループリスト -->
                 {foreach from=$GroupInfos item=Group name=GroupList}
-                [{$Group.GameName}]&nbsp;{$Group.GroupName}<br />
+                <li>[{$Group.GameName}]&nbsp;{$Group.GroupName}</li>
                 {/foreach}
             {else}
-            登録されているグループはありません。
+            <li>登録されているグループはありません。</li>
             {/if}
+            </ul>
             <br /><button id="MyPageBtnAddGroup">グループ追加</button>
         </div>
     <!-- メインエリア（右：データ表示） -->

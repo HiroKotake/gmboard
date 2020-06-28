@@ -17,7 +17,7 @@ class UserPage
      * @param  int   $userId [description]
      * @return array         [description]
      */
-    private function getGameList(int $userId) : array
+    public function getGameList(int $userId) : array
     {
         $this->cIns->load->model('dao/PlayerIndex', 'daoPlayerIndex');
         $games = $this->cIns->daoPlayerIndex->getByUserId($userId);
@@ -51,7 +51,7 @@ class UserPage
         $this->cIns->load->model('dao/Groups', 'daoGroups');
         foreach ($gameInfos as $game) {
             $tempData = $this->cIns->daoGamePlayer->getByUserId($game['GameId'], $userId);
-            if (!empty($tempData)) {
+            if (!empty($tempData) && !empty($tempData['GroupId'])) {
                 // グループの情報を取得
                 $tempGroup = $this->cIns->daoGroups->getByGroupId($game['GameId'], $tempData['GroupId']);
                 if (!empty($tempGroup)) {
@@ -101,10 +101,11 @@ class UserPage
                 if (!array_key_exists($gameInfo['Genre'], $list)) {
                     $list[(int)$gameInfo['Genre']] = array();
                 }
-                $list[$gameInfo['Genre']][] = array(
+                $list[$gameInfo['Genre']][$gameInfo['GameId']] = array(
                     'GameId'        => $gameInfo['GameId'],
                     'Name'          => $gameInfo['Name'],
-                    'Description'   => $gameInfo['Description']
+                    'Description'   => $gameInfo['Description'],
+                    'Joined'        => 0
                 );
             }
             // ゲームが存在しないカテゴリは除外する
@@ -126,6 +127,32 @@ class UserPage
     }
 
     /**
+     * 個人向けにゲームリストを登録状況に合わせてカスタマイズする
+     * @param  array $gameList      [description]
+     * @param  array $attachedGames [description]
+     * @return array                [description]
+     */
+    public function getGameListsModifedByPersonal(array $gameList, array $attachedGames) : array
+    {
+        if (count($attachedGames) == 0) {
+            return $gameList;
+        }
+        $data = array();
+        foreach ($gameList as $genre => $datas) {
+            $data[$genre] = array();
+            foreach ($datas as $info) {
+                foreach ($attachedGames as $game) {
+                    if ($info['GameId'] == $game['GameId']) {
+                        $info['Joined'] = 1;
+                    }
+                }
+                $data[$genre][] = $info;
+            }
+        }
+        return $data;
+    }
+
+    /**
      * ユーザページの初期画面で表示するデータを取得する
      * @param  int   $userId [description]
      * @return array         [description]
@@ -141,8 +168,9 @@ class UserPage
         }
         // 個人向けメッセージ取得
         $personalMessage = $this->getPersonalMessage($userId);
-        // ゲームリスト(カテゴリ別)取得
-        $gameList = $this->getGamelistWithCategory();
+        // ゲームリスト(カテゴリ別)取得 (個人別にカスタマイズしたもの)
+        //$gameList = $this->getGamelistWithCategory();
+        $gameList = $this->getGameListsModifedByPersonal($this->getGamelistWithCategory(), $gameInfos);
         // カテゴリリスト作成
         $categorys = array();
         foreach(array_keys($gameList) as $key) {
@@ -163,20 +191,28 @@ class UserPage
 
     public function attachGame(int $userId, int $gameId, string $playerId, string $gameNickname) : array
     {
+        $data = array(
+            'Status' => DB_STATUS_EXISTED,
+            'PlayerIndexId' => null,
+            'GamePlayersId' => null
+        );
         $this->cIns->load->model('dao/PlayerIndex', 'daoPlayerIndex');
         $this->cIns->load->model('dao/GamePlayers', 'daoGamePlayers');
+        // 登録済み確認
+        $fExist = $this->cIns->daoPlayerIndex->isExist($userId, $playerId);
+        if ($fExist) {
+            return $data;
+        }
         // PlayerIndexテーブルへ情報を追加
-        $playerIndexId = $this->cIns->daoPlayerIndex->add($userId, $gameId);
+        $data["PlayerIndexId "] = $this->cIns->daoPlayerIndex->add($userId, $gameId);
         // GamePlayers_xxxxxxxxテーブルへ情報を追加
         $gamePlayersData = array(
             'UserId'        => $userId,
             'PlayerId'      => $playerId,
             'GameNickname'  => $gameNickname
         );
-        $gamePlsyersId = $this->cIns->daoGamePlayers->add($gameId, $playerId, $gamePlayersData);
-        return array(
-            'PlayerIndexId' => $playerIndexId,
-            'GamePlayersId' => $gamePlsyersId
-        );
+        $data["GamePlsyersId"] = $this->cIns->daoGamePlayers->add($gameId, $gamePlayersData);
+        $data["Status"] = DB_STATUS_ADDED;
+        return $data;
     }
 }

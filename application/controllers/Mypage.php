@@ -124,18 +124,24 @@ class MyPage extends MY_Controller
     public function getGames()
     {
         $libUserPage = new UserPage();
-        $gamesList = $libUserPage->getGamelistWithCategory();
+        $games = $libUserPage->getGamelistWithCategory();
+        $joins = $libUserPage->getGameList($this->userId);
+        $gamesList = $libUserPage->getGameListsModifedByPersonal($games, $joins);
         $data = json_encode($gamesList);
         echo $data;
     }
 
     public function attachGame()
     {
-        $targetGameId = $this->input->post("Target");
+        $targetGameId = $this->input->post("target");
         $gamePlayerId = $this->input->post("gpid");
         $gameNickname = $this->input->post("gnn");
         // PlayerIndexテーブルとGamePlayers_xxxxxxxxテーブルへ情報を追加
         $libUserPage = new UserPage();
-        $libUserPage->attachGame($this->userId, (int)$targetGameId, $gamePlayerId, $gameNickname);
+        $result = $libUserPage->attachGame($this->userId, (int)$targetGameId, $gamePlayerId, $gameNickname);
+        $data = array(
+            "Status" => $result["Status"]
+        );
+        echo json_encode($data);
     }
 }

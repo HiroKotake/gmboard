@@ -130,6 +130,36 @@ class MY_Model extends CI_Model
     }
 
     /**
+     * 検索条件に従いレコードが存在するか確認する
+     * @param  array  $condition 以下の検索条件を含む連想配列
+     * @return bool              対象が存在する場合は真を返し、存在しない場合は偽を返す
+     */
+    protected function isExisted(array $condition) : bool
+    {
+        // クエリービルド
+        if (array_key_exists('SELECT', $condition) && !empty($condition['SELECT'])) {
+            $this->db->select($condition['SELECT']);
+        }
+        if (array_key_exists('WHERE', $condition) && !empty($condition['WHERE'])) {
+            foreach ($condition['WHERE'] as $key => $value) {
+                if (is_array($value)) {
+                    if (!empty($value)) {
+                        // 空の配列でなければ処理に入る 2020-06-15
+                        $this->db->where_in($key, $value);
+                    }
+                } else {
+                    $this->db->where($key, $value);
+                }
+            }
+        }
+        $query = $this->getQuerySelect();
+        // クエリー実行
+        $resultSet = $this->db->query($query);
+        $records = $resultSet->result_array();
+        return count($records) != 0 ? true : false;
+    }
+
+    /**
      * 検索結果が唯一の検索を実施した場合に、確実に検索結果のみ取り出す。
      * 万一複数の結果が出た場合はエラーとして空の配列にする。
      * @param  array $resultSet searchで得られた結果

@@ -90,44 +90,49 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 | Special Codes
 |--------------------------------------------------------------------------
 */
-defined('BROWSER_TYPE_FULL')   OR define('BROWSER_TYPE_FULL', 'full');          // User's Browser Type is PC browser
-defined('BROWSER_TYPE_SP')     OR define('BROWSER_TYPE_SP', 'sp');              // User's Browser type is Smart Phone
+defined('BROWSER_TYPE_FULL')    OR define('BROWSER_TYPE_FULL', 'full');         // User's Browser Type is PC browser
+defined('BROWSER_TYPE_SP')      OR define('BROWSER_TYPE_SP', 'sp');             // User's Browser type is Smart Phone
+defined('DB_STATUS_NO_EXISTED') OR define('DB_STATUS_NO_EXISTED', 100);         // 対象のレコードが存在しない
+defined('DB_STATUS_EXISTED')    OR define('DB_STATUS_EXISTED', 101);            // 対象のレコードは既に存在する
+defined('DB_STATUS_ADDED')      OR define('DB_STATUS_ADDED', 102);              // レコードの追加が完了
+defined('DB_STATUS_UPDATED')    OR define('DB_STATUS_UPDATED', 103);            // レコードの更新が完了
+defined('DB_STATUS_FALIED')     OR define('DB_STATUS_FALIED', 190);             // DB操作に失敗
 // システム固有キー名
 defined('SYSTEM_KEY_GAMELIST_VER') OR define('SYSTEM_KEY_GAMELIST_VER', 'GamesListVer'); // 設定ゲームのリストのバージョンを示すキー名
 // 運営のID
-defined('SYSTEM_USER_ID')      or define('SYSTEM_USER_ID', '999999999999');     // System UserId
-defined('SYSTEM_USER_NAME')    or define('SYSTEM_USER_NAME', '運営');            // System User名
-defined('SYSTEM_GROUP_ID')     or define('SYSTEM_GROUP_ID', '999999999999');    // System GroupId
-defined('SYSTEM_GROUP_NAME')   or define('SYSTEM_GROUP_NAME', '運営');           // System GroupId
+defined('SYSTEM_USER_ID')       OR define('SYSTEM_USER_ID', '999999999999');    // System UserId
+defined('SYSTEM_USER_NAME')     OR define('SYSTEM_USER_NAME', '運営');           // System User名
+defined('SYSTEM_GROUP_ID')      OR define('SYSTEM_GROUP_ID', '999999999999');   // System GroupId
+defined('SYSTEM_GROUP_NAME')    OR define('SYSTEM_GROUP_NAME', '運営');          // System GroupId
 // メール送信関連
-defined('MAIL_SEND_SUCCESS')    or define('MAIL_SEND_SUCCESS', 0);              // メール送信成功
-defined('MAIL_SEND_FAILED')     or define('MAIL_SEND_FAILED', 1);               // メール送信不良
+defined('MAIL_SEND_SUCCESS')    OR define('MAIL_SEND_SUCCESS', 0);              // メール送信成功
+defined('MAIL_SEND_FAILED')     OR define('MAIL_SEND_FAILED', 1);               // メール送信不良
 // 告知関連コード
-defined('NOTICE_GLOBAL')       or define('NOTICE_GLOBAL', 0);                   // 全体告知
-defined('NOTICE_MEMBER')       or define('NOTICE_MEMBER', 1);                   // メンバー告知
-defined('NOTICE_GROUP_ADMIN')  or define('NOTICE_GROUP_ADMIN', 10);             // グループ管理者告知
-defined('NOTICE_GROUP_MEMBER') or define('NOTICE_GROUP_MEMBER', 11);            // グループメンバー告知
+defined('NOTICE_GLOBAL')        OR define('NOTICE_GLOBAL', 0);                  // 全体告知
+defined('NOTICE_MEMBER')        OR define('NOTICE_MEMBER', 1);                  // メンバー告知
+defined('NOTICE_GROUP_ADMIN')   OR define('NOTICE_GROUP_ADMIN', 10);            // グループ管理者告知
+defined('NOTICE_GROUP_MEMBER')  OR define('NOTICE_GROUP_MEMBER', 11);           // グループメンバー告知
 // 認証関連
-defined('AUTH_MATCH_PASSWORD')      or define('AUTH_MATCH_PASSWORD', 100);      // パスワード認証正常
-defined('AUTH_NO_EXIST_USER')       or define('AUTH_NO_EXIST_USER', 110);       // ログインIDが合致するものが存在しない
-defined('AUTH_UNMATCH_PASSWORD')    or define('AUTH_UNMATCH_PASSWORD', 111);    // パスワード不一致
-defined('AUTH_DELETED_USER')        or define('AUTH_DELETED_USER', 121);        // 退会ユーザ
-defined('AUTH_EXPLODE_USER')        or define('AUTH_EXPLODE_USER', 122);        // アカBangユーザ
-defined('AUTH_REGIST_SUCCESS')      or define('AUTH_REGIST_SUCCESS', 200);      // 新規登録正常終了
-defined('AUTH_REGIST_DEV_SUCCESS')  or define('AUTH_REGIST_DEV_SUCCESS', 201);  // 開発環境でのユーザ新規登録正常終了
-defined('AUTH_REGIST_DONE')         or define('AUTH_REGIST_DONE', 210);         // レジストレーション正常終了
-defined('AUTH_REGIST_ERROR')        or define('AUTH_REGIST_ERROR', 290);        // ユーザ新規登録失敗
-defined('AUTH_ACTIVATE_SUCCESS')    or define('AUTH_ACTIVATE_SUCCESS', 300);    // アクティベーション成功
-defined('AUTH_ACTIVATE_NOEXIST')    or define('AUTH_ACTIVATE_NOEXIST', 312);     // 対象のアクティベーションコードが存在しない
-defined('AUTH_ACTIVATE_EXPIRE')     or define('AUTH_ACTIVATE_EXPIRE', 312);     // アクティベーション期限切れ
-defined('AUTH_ACTIVATE_UNMATCH')    or define('AUTH_ACTIVATE_UNMATCH', 313);    // アクティベーションコード不一致
+defined('AUTH_MATCH_PASSWORD')      OR define('AUTH_MATCH_PASSWORD', 100);      // パスワード認証正常
+defined('AUTH_NO_EXIST_USER')       OR define('AUTH_NO_EXIST_USER', 110);       // ログインIDが合致するものが存在しない
+defined('AUTH_UNMATCH_PASSWORD')    OR define('AUTH_UNMATCH_PASSWORD', 111);    // パスワード不一致
+defined('AUTH_DELETED_USER')        OR define('AUTH_DELETED_USER', 121);        // 退会ユーザ
+defined('AUTH_EXPLODE_USER')        OR define('AUTH_EXPLODE_USER', 122);        // アカBangユーザ
+defined('AUTH_REGIST_SUCCESS')      OR define('AUTH_REGIST_SUCCESS', 200);      // 新規登録正常終了
+defined('AUTH_REGIST_DEV_SUCCESS')  OR define('AUTH_REGIST_DEV_SUCCESS', 201);  // 開発環境でのユーザ新規登録正常終了
+defined('AUTH_REGIST_DONE')         OR define('AUTH_REGIST_DONE', 210);         // レジストレーション正常終了
+defined('AUTH_REGIST_ERROR')        OR define('AUTH_REGIST_ERROR', 290);        // ユーザ新規登録失敗
+defined('AUTH_ACTIVATE_SUCCESS')    OR define('AUTH_ACTIVATE_SUCCESS', 300);    // アクティベーション成功
+defined('AUTH_ACTIVATE_NOEXIST')    OR define('AUTH_ACTIVATE_NOEXIST', 312);    // 対象のアクティベーションコードが存在しない
+defined('AUTH_ACTIVATE_EXPIRE')     OR define('AUTH_ACTIVATE_EXPIRE', 312);     // アクティベーション期限切れ
+defined('AUTH_ACTIVATE_UNMATCH')    OR define('AUTH_ACTIVATE_UNMATCH', 313);    // アクティベーションコード不一致
 // マイページ関連
-defined('MYPAGE_MODE_PERSONAL')  or define('MYPAGE_MODE_PERSONAL', 'Personal'); // マイページ画面モード：個人トップ表示
-defined('MYPAGE_MODE_GROUP')     or define('MYPAGE_MODE_GROUP', 'Group');       // マイページ画面モード：グループ
+defined('MYPAGE_MODE_PERSONAL')  OR define('MYPAGE_MODE_PERSONAL', 'Personal'); // マイページ画面モード：個人トップ表示
+defined('MYPAGE_MODE_GROUP')     OR define('MYPAGE_MODE_GROUP', 'Group');       // マイページ画面モード：グループ
 
-defined('KEY_GAME_INFO')        or define('KEY_GAME_INFO', 'GameInfomation');   // Redisキー名 (ゲーム情報)
-defined('KEY_GAME_CATEGORY')    or define('KEY_GAME_CATEGORY', 'GameCategory'); // Redisキー名 (カテゴリ別ゲームリスト)
-defined('GAME_CATEGORY')        or define('GAME_CATEGORY', [                    // ゲームカテゴリ
+defined('KEY_GAME_INFO')        OR define('KEY_GAME_INFO', 'GameInfomation');   // Redisキー名 (ゲーム情報)
+defined('KEY_GAME_CATEGORY')    OR define('KEY_GAME_CATEGORY', 'GameCategory'); // Redisキー名 (カテゴリ別ゲームリスト)
+defined('GAME_CATEGORY')        OR define('GAME_CATEGORY', [                    // ゲームカテゴリ
     'RPG'           => 1,
     'MMO'           => 2,
     'FPS'           => 3,
@@ -138,7 +143,7 @@ defined('GAME_CATEGORY')        or define('GAME_CATEGORY', [                    
     'テーブルゲーム'   => 8,
     'カードゲーム'    => 9,
 ]);
-defined('GAME_CATEGORY_RB')        or define('GAME_CATEGORY_RB', [                    // ゲームカテゴリ(インデックス)
+defined('GAME_CATEGORY_RB')     OR define('GAME_CATEGORY_RB', [                 // ゲームカテゴリ(インデックス)
     1   =>  'RPG',
     2   =>  'MMO',
     3   =>  'FPS',
