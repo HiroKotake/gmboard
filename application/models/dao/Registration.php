@@ -13,6 +13,7 @@ class Registration extends MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->calledClass = __CLASS__;
     }
 
     public function add(array $data) : int
@@ -23,6 +24,7 @@ class Registration extends MY_Model
     // 検索
     public function get(int $regId) : array
     {
+        $this->calledMethod == __FUNCTION__;
         if (!empty($regId)) {
             $cond = array(
                 'WHERE' => array('RegistrationId' => $regId)
@@ -35,6 +37,7 @@ class Registration extends MY_Model
 
     public function getByUserId(string $userId) : array
     {
+        $this->calledMethod == __FUNCTION__;
         if (!empty($userId)) {
             $cond = array(
                 'WHERE' => array('UserId' => $userId)
@@ -48,6 +51,7 @@ class Registration extends MY_Model
     // 更新
     public function set(int $registrationId, array $data) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         if (count($data) > 0) {
             return $this->update($data, array('RegistrationId' => $registrationId));
         }
@@ -57,6 +61,7 @@ class Registration extends MY_Model
     // 論理削除
     public function delete(int $registrationId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('RegistrationId' => $registrationId));
     }
 

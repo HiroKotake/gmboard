@@ -12,6 +12,7 @@ class UserInfos extends MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->calledClass = __CLASS__;
     }
 
     /**
@@ -21,6 +22,7 @@ class UserInfos extends MY_Model
      */
     public function get(int $userId) : array
     {
+        $this->calledMethod == __FUNCTION__;
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
@@ -36,6 +38,7 @@ class UserInfos extends MY_Model
      */
     public function set(int $userId, array $data) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         if (count($data) > 0) {
             return $this->updata($data, array('UserId' => $userId));
         }
@@ -45,6 +48,7 @@ class UserInfos extends MY_Model
     // 論理削除
     public function delete(int $userId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('UserId' => $userId));
     }
 }

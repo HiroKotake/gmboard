@@ -12,6 +12,7 @@ class PlayerIndex extends MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->calledClass = __CLASS__;
     }
 
     /**
@@ -21,11 +22,13 @@ class PlayerIndex extends MY_Model
      */
     public function add(int $userId, int $gameId) : int
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->attach(['UserId' => $userId, 'GameId' => $gameId]);
     }
 
     public function getAll(int $limit = 20, int $offset = 0) : array
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->searchAll($limit, $offset);
     }
 
@@ -36,6 +39,7 @@ class PlayerIndex extends MY_Model
      */
     public function getByUserId(int $userId) : array
     {
+        $this->calledMethod == __FUNCTION__;
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
@@ -50,6 +54,7 @@ class PlayerIndex extends MY_Model
      */
     public function isExist(int $userId, int $gameId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->isExisted(array('UserId' => $userId, 'GameId' => $gameId));
     }
 
@@ -60,6 +65,7 @@ class PlayerIndex extends MY_Model
      */
     public function delete(int $playerIndexId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('PlayerIndexId' => $playerIndexId));
     }
 

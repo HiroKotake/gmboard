@@ -12,6 +12,7 @@ class Notices extends MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->calledClass = __CLASS__;
     }
 
     /**
@@ -26,6 +27,7 @@ class Notices extends MY_Model
      */
     public function add(array $data) : int
     {
+        $this->calledMethod == __FUNCTION__;
         if (count($data) > 0) {
             return $this->attach($data);
         }
@@ -41,6 +43,7 @@ class Notices extends MY_Model
      */
     public function get(int $target = 0, int $number = 10, int $offset = 0) : array
     {
+        $this->calledMethod == __FUNCTION__;
         $now = date("Y-m-d H:i:s");
         $cond = array(
             'WHERE' => array(
@@ -67,6 +70,7 @@ class Notices extends MY_Model
      */
     public function set(int $noticeId, int $data) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         if (count($data) > 0) {
             return $this->update($data, array('NoticeId' => $noticeId));
         }
@@ -80,6 +84,7 @@ class Notices extends MY_Model
      */
     public function showNotice(int $noticeId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $data = array('Showable' => 1);
         return $this->set($noticeId, $data);
     }
@@ -91,6 +96,7 @@ class Notices extends MY_Model
      */
     public function hideNotice(int $noticeId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $data = array('Showable' => 0);
         return $this->set($noticeId, $data);
     }
@@ -104,6 +110,7 @@ class Notices extends MY_Model
      */
     public function updateShowTerm(int $noticeId, string $startDateTime, string $endDateTime) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $data = array(
             'ShowStartDateTime' => $startDateTime,
             'ShowEndDateTime' => $endDateTime
@@ -118,6 +125,7 @@ class Notices extends MY_Model
      */
     public function delete(int $noticeId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('NoticeId' => $noticeId));
     }
 }

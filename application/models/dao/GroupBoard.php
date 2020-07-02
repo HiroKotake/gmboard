@@ -14,6 +14,7 @@ class GroupBoard extends MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
+        $this->calledClass == __CLASS__;
     }
 
     /**
@@ -24,6 +25,7 @@ class GroupBoard extends MY_Model
      */
     public function createTable(int $gameId, int $groupId)
     {
+        $this->calledMethod == __FUNCTION__;
         $query = 'CALL CreateGroupBoard(' . $gameId . ', ' . $groupId . ')';
         $this->writeLog($query);
         return $this->db->simple_query($query);
@@ -39,6 +41,7 @@ class GroupBoard extends MY_Model
      */
     public function get(int $gameId, int $groupId, string $order = 'DESC', int $lineNumber = 20, int $offset = 0) : array
     {
+        $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $cond = array(
@@ -59,6 +62,7 @@ class GroupBoard extends MY_Model
      */
     public function add(int $gameId, int $groupId, int $userId, string $message) : int
     {
+        $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
@@ -79,6 +83,7 @@ class GroupBoard extends MY_Model
      */
     public function set(int $gameId, int $groupId, int $messageId, string $message) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
@@ -96,6 +101,7 @@ class GroupBoard extends MY_Model
      */
     public function hideMessage(int $gameId, int $groupId, int $messageId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
@@ -113,6 +119,7 @@ class GroupBoard extends MY_Model
      */
     public function showMessage(int $gameId, int $groupId, int $messageId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         $data = array(
@@ -130,6 +137,7 @@ class GroupBoard extends MY_Model
      */
     public function delete(int $gameId, int $groupId, int $messageId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         return $this->logicalDelete(array('MessageId' => $messageId));

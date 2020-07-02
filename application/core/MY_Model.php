@@ -8,6 +8,8 @@ class MY_Model extends CI_Model
 {
     private $logWriter = null;
     protected $tableName = null;
+    protected $calledClass = null;
+    protected $calledMethod = null;
 
     public function __construct()
     {
@@ -17,13 +19,16 @@ class MY_Model extends CI_Model
 
     protected function execQuery(string $query)
     {
+        if (ENVIRONMENT != 'production') {
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
+        }
         return $this->db->query($query);
     }
 
     protected function writeLog(string $log)
     {
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog(trim($log));
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($log));
         }
     }
 
@@ -32,7 +37,7 @@ class MY_Model extends CI_Model
         $query = $this->db->get_compiled_select($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog(trim($query));
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
         }
         return $query;
     }
@@ -42,7 +47,7 @@ class MY_Model extends CI_Model
         $query = $this->db->set($data)->get_compiled_insert($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog(trim($query));
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
         }
         return $query;
     }
@@ -52,13 +57,16 @@ class MY_Model extends CI_Model
         $query = $this->db->set($data)->get_compiled_update($this->tableName);
         $this->db->flush_cache();
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog(trim($query));
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
         }
         return $query;
     }
 
     protected function searchAll(int $limit = 0, int $offset = 0, bool $deleted = false) : array
     {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __METHOD__;
+        }
         // クエリービルド
         if ($limit !== 0) {
             $this->db->limit($limit, $offset);
@@ -70,7 +78,7 @@ class MY_Model extends CI_Model
         $query = $this->getQuerySelect();
         // log書き込み
         if (ENVIRONMENT != 'production') {
-            $this->logWriter->dbLog(trim($query));
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
         }
         // クエリー実行
         $resultSet = $this->db->query($query);
@@ -89,6 +97,9 @@ class MY_Model extends CI_Model
      */
     protected function search(array $condition) : array
     {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __METHOD__;
+        }
         // クエリービルド
         if (array_key_exists('SELECT', $condition) && !empty($condition['SELECT'])) {
             $this->db->select($condition['SELECT']);
@@ -136,6 +147,9 @@ class MY_Model extends CI_Model
      */
     protected function isExisted(array $condition) : bool
     {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __METHOD__;
+        }
         // クエリービルド
         if (array_key_exists('SELECT', $condition) && !empty($condition['SELECT'])) {
             $this->db->select($condition['SELECT']);
@@ -180,6 +194,9 @@ class MY_Model extends CI_Model
      */
     protected function attach(array $data) : int
     {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __METHOD__;
+        }
         // クエリービルド
         if (count($data) > 0) {
             $datetime = date("Y-m-d H:i:s");
@@ -203,6 +220,9 @@ class MY_Model extends CI_Model
     {
         if (empty($where)) {
             return false;
+        }
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __METHOD__;
         }
         // クエリービルド
         foreach ($where as $key => $value) {
@@ -242,6 +262,30 @@ class MY_Model extends CI_Model
         $data['DeleteFlag'] = 1;
         $query = $this->getQueryUpdate($data);
         // クエリー実行
+        return $this->db->simple_query($query);
+    }
+
+    protected function truncate() : bool
+    {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __METHOD__;
+        }
+        $query = "TRUNCATE TABLE " . $this->tableName;
+        if (ENVIRONMENT != 'production') {
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
+        }
+        return $this->db->simple_query($query);
+    }
+
+    protected function drop() : bool
+    {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __METHOD__;
+        }
+        $query = "DROP TABLE " . $this->tableName;
+        if (ENVIRONMENT != 'production') {
+            $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
+        }
         return $this->db->simple_query($query);
     }
 }

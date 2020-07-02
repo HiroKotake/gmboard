@@ -12,6 +12,7 @@ class SystemCommon extends MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->calledClass = __CLASS__;
     }
 
     /**
@@ -21,6 +22,7 @@ class SystemCommon extends MY_Model
      */
     public function set(string $name, $value)
     {
+        $this->calledMethod == __FUNCTION__;
         $type = gettype($value);
         if (empty($this->get($name))) {
             // 対象のデータがなければ追加
@@ -47,6 +49,7 @@ class SystemCommon extends MY_Model
      */
     public function get(string $name)
     {
+        $this->calledMethod == __FUNCTION__;
         $cond = array(
             'WHERE' => array('Name' => $name),
         );

@@ -12,21 +12,25 @@ class Users extends MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->calledClass = __CLASS__;
     }
 
 
     public function add(array $data) : int
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->attach($data);
     }
 
     public function getAll(int $limit = 20, int $offset = 0) : array
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->searchAll($limit, $offset);
     }
 
     public function get(int $userId) : array
     {
+        $this->calledMethod == __FUNCTION__;
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
@@ -36,6 +40,7 @@ class Users extends MY_Model
 
     public function getByLoginId(string $mail) : array
     {
+        $this->calledMethod == __FUNCTION__;
         $cond = array(
             'WHERE' => array('Mail' => $mail)
         );
@@ -51,6 +56,7 @@ class Users extends MY_Model
      */
     public function set(int $userId, array $data) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         if (count($data) > 0) {
             return $this->update($data, array('UserId' => $userId));
         }
@@ -64,6 +70,7 @@ class Users extends MY_Model
      */
     public function mailAuthed(int $userId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $data = array(
             'MailAuthed'    => 1,
             'LastLogin'     => date("Y-m-d H:i:s")
@@ -79,6 +86,7 @@ class Users extends MY_Model
      */
     public function updatePassward(int $userId, string $hashedPwd) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $data = array(
             'Password' => $hashedPwd
         );
@@ -92,6 +100,7 @@ class Users extends MY_Model
      */
     public function setLoginExclude(int $userId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $data = array(
             'LoginExclude' => 1,
         );
@@ -105,6 +114,7 @@ class Users extends MY_Model
      */
     public function resetLoginExclude(int $userId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         $data = array(
             'LoginExclude' => 0,
         );
@@ -118,6 +128,7 @@ class Users extends MY_Model
      */
     public function delete(int $userId) : bool
     {
+        $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('UserId' => $userId));
     }
 }
