@@ -1,0 +1,32 @@
+{
+    "TableName": "SystemCommon",
+    "Fields": {
+        "Id": {
+            "type": "INT",
+            "constraint": 8,
+            "unsigned": true,
+            "auto_increment": true,
+            "comment": "管理ID"
+        },
+        "Name": {
+            "type": "VARCHAR",
+            "constraint": 60,
+            "comment": "キー名"
+        },
+        "Type": {
+            "type": "VARCHAR",
+            "constraint": 10,
+            "comment": "int:数値, array:配列, text:文字列"
+        },
+        "Value": {
+            "type": "TEXT",
+            "comment": "値(文字列化して登録)"
+        }
+    },
+    "PrimaryKey": "Id",
+    "Index": [],
+    "Attribute": {
+        "ENGINE": "InnoDB",
+        "COMMENT": "'システム共通'"
+    }
+}

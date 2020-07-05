@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class UserInfos extends MY_Model
 {
-    const TABLE_NAME = 'UsersInfos';
+    const TABLE_NAME = TABLE_NAME_USER_INFOS;
 
     public function __construct()
     {
@@ -27,6 +27,16 @@ class UserInfos extends MY_Model
             'WHERE' => array('UserId' => $userId)
         );
         return $this->search($cond);
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @return array [description]
+     */
+    public function getAllRecords() : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->searchAll(0, 0, true);
     }
 
     // 修正
@@ -50,5 +60,15 @@ class UserInfos extends MY_Model
     {
         $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('UserId' => $userId));
+    }
+
+    /**
+     * テーブルを初期化する
+     * @return bool [description]
+     */
+    public function clearTable() : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->truncate();
     }
 }

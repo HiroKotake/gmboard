@@ -7,7 +7,7 @@ use teleios\utils\StringUtility;
  */
 class GamePlayers extends MY_Model
 {
-    const TABLE_PREFIX = 'GamePlayers_';
+    const TABLE_PREFIX = TABLE_PREFIX_GAME_PLAYER;
     private $stringUtil = null;
 
     public function __construct()
@@ -43,6 +43,18 @@ class GamePlayers extends MY_Model
         $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->searchAll($limit, $offset);
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @param  int     $gameId ゲーム管理ID
+     * @return array [description]
+     */
+    public function getAllRecords(int $gameId) : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->searchAll(0, 0, true);
     }
 
     /**
@@ -138,7 +150,7 @@ class GamePlayers extends MY_Model
     /**
      * レコードを追加する
      * @param  int   $gameId ゲーム管理ID
-     * @param  array $data   'UserId','PlayerId','GameNickname','GroupId','Authority'をキー名としたデータを持つ配列
+     * @param  array $data   'UserId','PlayerId','GameNickname','GroupId'(任意),'Authority'(任意)をキー名としたデータを持つ配列
      * @return int           [description]
      */
     public function add(int $gameId, array $data) : int
@@ -149,17 +161,31 @@ class GamePlayers extends MY_Model
     }
 
     /**
+     * 特定のユーザIDのレコードを更新する
+     * @param  int    $gameId       ゲーム管理ID
+     * @param  int    $userId       [description]
+     * @param  array  $data         [description]
+     * @return [type]               [description]
+     */
+    public function set(int $gameId, int $userId, array $data) : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->update($data, array('UserId' => $userId));
+    }
+
+    /**
      * 特定のゲームプレイヤーIDのレコードを更新する
      * @param  int    $gameId       ゲーム管理ID
      * @param  int    $gamePlayerId [description]
      * @param  array  $data         [description]
      * @return [type]               [description]
      */
-    public function set(int $gameId, int $playerId, array $data) : bool
+    public function setByGamePlayerId(int $gameId, int $gamePlayerId, array $data) : bool
     {
         $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->update($data, array('PlayerId' => $playerId));
+        return $this->update($data, array('GamePlayerId' => $gamePlayerId));
     }
 
     /**
@@ -186,5 +212,17 @@ class GamePlayers extends MY_Model
         $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->logicalDelete(array('PlayerId' => $playerId));
+    }
+
+    /**
+     * 対象のテーブルを初期化する
+     * @param  int  $gameId   ゲーム管理ID
+     * @return bool         [description]
+     */
+    public function clearTable(int $gameId) : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->truncate();
     }
 }

@@ -7,7 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Registration extends MY_Model
 {
 
-    const TABLE_NAME = 'Registration';
+    const TABLE_NAME = TABLE_NAME_REGISTRATION;
 
     public function __construct()
     {
@@ -33,6 +33,16 @@ class Registration extends MY_Model
             return $this->getMonoResult($resultSet);
         }
         return null;
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @return array [description]
+     */
+    public function getAllRecords() : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->searchAll(0, 0, true);
     }
 
     public function getByUserId(string $userId) : array
@@ -65,4 +75,13 @@ class Registration extends MY_Model
         return $this->logicalDelete(array('RegistrationId' => $registrationId));
     }
 
+    /**
+     * テーブルを初期化する
+     * @return bool [description]
+     */
+    public function clearTable() : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->truncate();
+    }
 }

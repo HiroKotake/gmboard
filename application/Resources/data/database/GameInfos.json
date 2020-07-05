@@ -1,0 +1,32 @@
+{
+    "TableName": "GameInfos",
+    "Fields": {
+        "GameId": {
+            "type": "INT",
+            "constraint": 8,
+            "unsigned": true,
+            "auto_increment": true,
+            "comment": "ゲーム管理"
+        },
+        "Genre": {
+            "type": "TINYINT",
+            "constraint": 3,
+            "unsigned": true,
+            "comment": "ジャンル"
+        },
+        "Name": {
+            "type": "TEXT",
+            "comment": "ゲーム名"
+        },
+        "Description": {
+            "type": "TEXT",
+            "comment": "説明"
+        }
+    },
+    "PrimaryKey": "GameId",
+    "Index": [],
+    "Attribute": {
+        "ENGINE": "InnoDB",
+        "COMMENT": "'ゲーム情報'"
+    }
+}

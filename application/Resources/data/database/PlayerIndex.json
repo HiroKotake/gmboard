@@ -1,0 +1,30 @@
+{
+    "TableName": "PlayerIndex",
+    "Fields": {
+        "PlayerIndexId": {
+            "type": "INT",
+            "constraint": 8,
+            "unsigned": true,
+            "auto_increment": true,
+            "comment": "プレイヤー管理ID"
+        },
+        "UserId": {
+            "type": "BIGINT",
+            "constraint": 12,
+            "unsigned": true,
+            "comment": "ユーザ管理ID"
+        },
+        "GameId": {
+            "type": "INT",
+            "constraint": 8,
+            "unsigned": true,
+            "comment": "ゲーム管理ID"
+        }
+    },
+    "PrimaryKey": "PlayerIndexId",
+    "Index": {},
+    "Attribute": {
+        "ENGINE": "InnoDB",
+        "COMMENT": "'プレイヤー管理'"
+    }
+}

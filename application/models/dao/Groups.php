@@ -7,7 +7,7 @@ use teleios\utils\StringUtility;
  */
 class Groups extends MY_Model
 {
-    const TABLE_PREFIX = 'Groups_';
+    const TABLE_PREFIX = TABLE_PREFIX_GROUP;
     private $stringUtil = null;
 
     public function __construct()
@@ -36,6 +36,18 @@ class Groups extends MY_Model
         $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->searchAll();
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @param  int     $gameId ゲーム管理ID
+     * @return array [description]
+     */
+    public function getAllRecords(int $gameId) : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->searchAll(0, 0, true);
     }
 
     /**
@@ -163,5 +175,17 @@ class Groups extends MY_Model
         $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->logicalDelete(array('GroupId' => $groupId));
+    }
+
+    /**
+     * 対象のテーブルを初期化する
+     * @param  int  $gameId   ゲーム管理ID
+     * @return bool         [description]
+     */
+    public function clearTable(int $gameId) : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->truncate();
     }
 }

@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class Notices extends MY_Model
 {
-    const TABLE_NAME = 'Notices';
+    const TABLE_NAME = TABLE_NAME_NOTICES;
 
     public function __construct()
     {
@@ -59,6 +59,16 @@ class Notices extends MY_Model
             'LIMIT' => array($number, $offset)
         );
         return $this->search($cond);
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @return array [description]
+     */
+    public function getAllRecords() : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->searchAll(0, 0, true);
     }
 
     // 更新
@@ -127,5 +137,15 @@ class Notices extends MY_Model
     {
         $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('NoticeId' => $noticeId));
+    }
+
+    /**
+     * テーブルを初期化する
+     * @return bool [description]
+     */
+    public function clearTable() : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->truncate();
     }
 }

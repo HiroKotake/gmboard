@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class SystemCommon extends MY_Model
 {
-    const TABLE_NAME = 'SystemCommon';
+    const TABLE_NAME = TABLE_NAME_SYSTEM_COMMON;
 
     public function __construct()
     {
@@ -60,4 +60,25 @@ class SystemCommon extends MY_Model
         }
         return unserialize($temp['Value']);
     }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @return array [description]
+     */
+    public function getAllRecords() : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->searchAll(0, 0, true);
+    }
+
+    /**
+     * テーブルを初期化する
+     * @return bool [description]
+     */
+    public function clearTable() : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->truncate();
+    }
+
 }

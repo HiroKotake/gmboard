@@ -1,0 +1,23 @@
+{
+    "Fields": {
+        "CreateDate": {
+            "type": "DATETIME",
+            "comment": "レコード登録日"
+        },
+        "UpdateDate": {
+            "type": "DATETIME",
+            "comment": "レコード更新日"
+        },
+        "DeleteDate": {
+            "type": "DATETIME",
+            "comment": "レコード無効日"
+        },
+        "DeleteFlag": {
+            "type": "TINYINT",
+            "constraint": 1,
+            "unsigned": true,
+            "default": 0,
+            "comment": "レコード無効フラグ(0:有効, 1:無効)"
+        }
+    }
+}

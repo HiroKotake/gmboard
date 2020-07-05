@@ -14,6 +14,7 @@ BEGIN
         `FromUserName` VARCHAR(30) COMMENT \'送信者ニックネーム\',
         `FromGroupId` BIGINT(12) COMMENT \'送信者グループID\',
         `FromGroupName` VARCHAR(60) COMMENT \'送信者ニックネーム\',
+        `Idiom` INT(6) UNSIGNED COMMENT \'慣用句コード\',
         `Message` TEXT COMMENT \'メッセージテキスト\',
         `Images` TEXT COMMENT \'イメージのファイル名のJSON配列\',
         `AlreadyRead` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'メッセージ既読フラグ(0:無効, 1:有効)\',

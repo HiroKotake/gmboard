@@ -1,0 +1,9 @@
+{
+    "Colums": {
+        "Genre": ["Genre", "Name", "Description"],
+        "Name": ["Mail", "Password", "Nickname"]
+    },
+    "Data": [
+        "Genre", "Name", "Description"
+    ]
+}

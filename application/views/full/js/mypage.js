@@ -20,29 +20,6 @@
             $("#TargetNickname").val("");
         }
 
-        /*
-        function maskGameInfo(genre, gameId) {
-            var checkDone = false;
-            for (var tGenre in gameListByGenre) {
-                for (var tGame in tGenre) {
-                    if (gameListByGenre[tGenre][tGame]["GameId"] == gameId) {
-                        gameListByGenre[tGenre][tGame]["Joined"] = 1;
-                        checkDone = true;
-                        break;
-                    }
-                }
-                if (checkDone) break;
-            }
-            localStorage.setItem("GamesList", JSON.stringify(gameListByGenre));
-            // when current selected genre is same value.
-            var selected = $("select[name=Genre]").val();
-            if (genre == selected) {
-                changeGameGenre();
-            }
-
-        }
-        */
-
         $(function(){
             // localStorage
             var gamesListVar = localStorage.getItem("GamesListVer");

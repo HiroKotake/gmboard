@@ -1,0 +1,50 @@
+{
+    "TableName": "Notices",
+    "Fields": {
+        "NoticeId": {
+            "type": "INT",
+            "constraint": 8,
+            "unsigned": true,
+            "auto_increment": true,
+            "comment": "管理ID"
+        },
+        "Target": {
+            "type": "TINYINT",
+            "constraint": 2,
+            "unsigned": true,
+            "comment": "表示タイプ(0:全体告知, 1:メンバー告知, 10:グループ管理者向け告知)"
+        },
+        "Priority": {
+            "type": "INT",
+            "constraint": 4,
+            "unsigned": true,
+            "default": 100,
+            "comment": "優先度"
+        },
+        "Message": {
+            "type": "TEXT",
+            "comment": "メッセージテキスト"
+        },
+        "ShowStartDateTime": {
+            "type": "DATETIME",
+            "comment": "表示開始日時"
+        },
+        "ShowEndDateTime": {
+            "type": "DATETIME",
+            "comment": "表示終了日時"
+        },
+        "Showable": {
+            "type": "TINYINT",
+            "constraint": 1,
+            "unsigned": true,
+            "default": 1,
+            "comment": "メッセージ表示フラグ(0:無効, 1:有効)"
+        }
+    },
+    "PrimaryKey": "NoticeId",
+    "Index": {},
+    "Attribute": {
+        "ENGINE": "InnoDB",
+        "COMMENT": "'全体告知'"
+    }
+}

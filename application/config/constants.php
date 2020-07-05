@@ -102,6 +102,8 @@ defined('SYSTEM_KEY_GAMELIST_VER') OR define('SYSTEM_KEY_GAMELIST_VER', 'GamesLi
 // 運営のID
 defined('SYSTEM_USER_ID')       OR define('SYSTEM_USER_ID', '999999999999');    // System UserId
 defined('SYSTEM_USER_NAME')     OR define('SYSTEM_USER_NAME', '運営');           // System User名
+defined('SYSTEM_NOTICE_ID')     OR define('SYSTEM_NOTICE_ID', '999999999998');  // System UserId (Notice)
+defined('SYSTEM_NOTICE_NAME')   OR define('SYSTEM_NOTICE_NAME', 'システム告知');  // System User名
 defined('SYSTEM_GROUP_ID')      OR define('SYSTEM_GROUP_ID', '999999999999');   // System GroupId
 defined('SYSTEM_GROUP_NAME')    OR define('SYSTEM_GROUP_NAME', '運営');          // System GroupId
 // メール送信関連
@@ -154,3 +156,23 @@ defined('GAME_CATEGORY_RB')     OR define('GAME_CATEGORY_RB', [                 
     8   =>  'テーブルゲーム',
     9   =>  'カードゲーム',
 ]);
+// 自動作成テーブル名
+defined('TABLE_PREFIX_GAME_PLAYER')    OR define('TABLE_PREFIX_GAME_PLAYER', 'GamePlayers_');
+defined('TABLE_PREFIX_GROUP_BOARD')    OR define('TABLE_PREFIX_GROUP_BOARD', 'GBoard_');
+defined('TABLE_PREFIX_GROUP_NOTICE')   OR define('TABLE_PREFIX_GROUP_NOTICE', 'GNotice_');
+defined('TABLE_PREFIX_GROUP')          OR define('TABLE_PREFIX_GROUP', 'Groups_');
+defined('TABLE_PREFIX_REGIST_BOOKING') OR define('TABLE_PREFIX_REGIST_BOOKING', 'RegistBooking_');
+defined('TABLE_PREFIX_USER_BOARD')     OR define('TABLE_PREFIX_USER_BOARD', 'UBoard_');
+// テーブル名
+defined('TABLE_NAME_GAME_INFOS')    OR define('TABLE_NAME_GAME_INFOS', 'GameInfos');
+defined('TABLE_NAME_NOTICES')       OR define('TABLE_NAME_NOTICES', 'Notices');
+defined('TABLE_NAME_PLAYER_INDEX')  OR define('TABLE_NAME_PLAYER_INDEX', 'PlayerIndex');
+defined('TABLE_NAME_REGISTRATION')  OR define('TABLE_NAME_REGISTRATION', 'Registration');
+defined('TABLE_NAME_SYSTEM_COMMON') OR define('TABLE_NAME_SYSTEM_COMMON', 'SystemCommon');
+defined('TABLE_NAME_USER_INFOS')    OR define('TABLE_NAME_USER_INFOS', 'UserInfos');
+defined('TABLE_NAME_USERS')         OR define('TABLE_NAME_USERS', 'Users');
+// グループ権限タイプ
+defined('GROUP_AUTHORITY_LEADER')      OR define('GROUP_AUTHORITY_LEADER', 1);
+defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2);
+defined('GROUP_AUTHORITY_MENBER')      OR define('GROUP_AUTHORITY_MENBER', 3);
+defined('GROUP_AUTHORITY_GUEST')       OR define('GROUP_AUTHORITY_GUEST', 4);

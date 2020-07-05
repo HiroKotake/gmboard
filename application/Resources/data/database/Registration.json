@@ -1,0 +1,39 @@
+{
+    "TableName": "Registration",
+    "Fields": {
+        "RegistrationId": {
+            "type": "BIGINT",
+            "constraint": 12,
+            "unsigned": true,
+            "auto_increment": true,
+            "comment":  "管理ID"
+        },
+        "UserId": {
+            "type": "BIGINT",
+            "constraint": 12,
+            "unsigned": true,
+            "comment": "ユーザ管理ID"
+        },
+        "Rcode": {
+            "type": "VARCHAR",
+            "constraint": 128,
+            "comment": "登録確認コード"
+        },
+        "ExpireDate": {
+            "type": "DATETIME",
+            "comment": "有効期限"
+        },
+        "ActivatedDate": {
+            "type": "DATETIME",
+            "comment": "正規化日"
+        }
+    },
+     "PrimaryKey": "RegistrationId",
+     "Index": [
+        ["Rcode"]
+    ],
+    "Attribute": {
+        "ENGINE": "InnoDB",
+        "COMMENT": "'ユーザ登録管理テーブル'"
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "TableName": "UserInfos",
+    "Fields": {
+        "UserId": {
+            "type": "BIGINT",
+            "constraint": 12,
+            "unsigned": true,
+            "auto_increment": true,
+            "comment": "管理ID"
+        },
+        "Country": {
+            "type": "TINYINT",
+            "constraint": 3,
+            "unsigned": true,
+            "comment": "国番号"
+        },
+        "State": {
+            "type": "TINYINT",
+            "constraint": 3,
+            "unsigned": true,
+            "comment": "都道府県"
+        },
+        "Gender": {
+            "type": "TINYINT",
+            "constraint": 1,
+            "unsigned": true,
+            "comment": "性別"
+        },
+        "BirthYear": {
+            "type": "TINYINT",
+            "constraint": 4,
+            "unsigned": true,
+            "comment": "生年(予備)"
+        },
+        "BirthMonth": {
+            "type": "TINYINT",
+            "constraint": 2,
+            "unsigned": true,
+            "comment": "生月(予備)"
+        },
+        "BirthDay": {
+            "type": "TINYINT",
+            "constraint": 2,
+            "unsigned": true,
+            "comment": "生日(予備)"
+        }
+    },
+    "PrimaryKey": "UserId",
+    "Index": [],
+    "Attribute": {
+        "ENGINE": "InnoDB",
+        "COMMENT": "'ユーザ情報'"
+    }
+}

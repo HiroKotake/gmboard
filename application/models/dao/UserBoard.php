@@ -8,7 +8,7 @@ use teleios\utils\StringUtility;
  */
 class UserBoard extends MY_Model
 {
-    const TABLE_NAME = 'UBoard_';
+    const TABLE_PREFIX = TABLE_PREFIX_USER_BOARD;
     private $stringUtil = null;
 
     public function __construct()
@@ -41,13 +41,25 @@ class UserBoard extends MY_Model
     public function get(int $userId, int $lineNumber = 100, int $offset = 0, $order = "DESC") : array
     {
         $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         $cond = array(
 //            'WHERE' => array('UserId' => $userId),
             'LIMIT' => array($lineNumber, $offset),
             'ORDER_BY' => ["CreateDate", $order]
         );
         return $this->search($cond);
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @param  int     $userId     [description]
+     * @return array [description]
+     */
+    public function getAllRecords(int $userId) : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
+        return $this->searchAll(0, 0, true);
     }
 
     /**
@@ -59,7 +71,7 @@ class UserBoard extends MY_Model
     public function add(int $userId, array $data) : int
     {
         $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         return $this->attach($data);
     }
 
@@ -72,7 +84,7 @@ class UserBoard extends MY_Model
     public function set(int $userId, int $messageId) : bool
     {
         $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         $data = array(
             'AlreadyRead'   => 1,
         );
@@ -94,9 +106,21 @@ class UserBoard extends MY_Model
     {
         $this->calledMethod == __FUNCTION__;
         if (count($messageIds) > 0) {
-            $this->tableName = self::TABLE_NAME . $this->stringUtil->lpad($userId, "0", 12);
+            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
             return $this->logicalDelete(array('MessageId' => $messageIds));
         }
         return false;
+    }
+
+    /**
+     * 対象のテーブルを初期化する
+     * @param  int  $userId ユーザID
+     * @return bool         [description]
+     */
+    public function clearTable(int $userId) : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
+        return $this->truncate();
     }
 }

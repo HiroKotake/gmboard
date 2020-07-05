@@ -6,7 +6,7 @@ use teleios\utils\LogWriter;
 
 class MY_Model extends CI_Model
 {
-    private $logWriter = null;
+    protected $logWriter = null;
     protected $tableName = null;
     protected $calledClass = null;
     protected $calledMethod = null;
@@ -15,6 +15,11 @@ class MY_Model extends CI_Model
     {
         parent::__construct();
         $this->logWriter = new LogWriter();
+    }
+
+    public function setTableName(string $tableName) : void
+    {
+        $this->tableName = $tableName;
     }
 
     protected function execQuery(string $query)
@@ -192,7 +197,7 @@ class MY_Model extends CI_Model
      * @param  array $data [description]
      * @return int         [description]
      */
-    protected function attach(array $data) : int
+    public function attach(array $data) : int
     {
         if (empty($this->calledMethod)) {
             $this->calledMethod = __METHOD__;
@@ -273,8 +278,9 @@ class MY_Model extends CI_Model
         $query = "TRUNCATE TABLE " . $this->tableName;
         if (ENVIRONMENT != 'production') {
             $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
+            $this->db->simple_query($query);
         }
-        return $this->db->simple_query($query);
+        return false;
     }
 
     protected function drop() : bool
@@ -285,7 +291,8 @@ class MY_Model extends CI_Model
         $query = "DROP TABLE " . $this->tableName;
         if (ENVIRONMENT != 'production') {
             $this->logWriter->dbLog("[$this->calledClass::$this->calledMethod] " . trim($query));
+            $this->db->simple_query($query);
         }
-        return $this->db->simple_query($query);
+        return false;
     }
 }

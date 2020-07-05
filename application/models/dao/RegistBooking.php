@@ -7,7 +7,7 @@ use teleios\utils\StringUtility;
  */
 class RegistBooking extends MY_Model
 {
-    const TABLE_PREFIX = 'RegistBooking_';
+    const TABLE_PREFIX = TABLE_PREFIX_REGIST_BOOKING;
     private $stringUtil = null;
 
     public function __construct()
@@ -55,6 +55,18 @@ class RegistBooking extends MY_Model
             'AuthCode'      => $authCode,
         );
         return $this->attach($data);
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @param  int     $gameId ゲーム管理ID
+     * @return array [description]
+     */
+    public function getAllRecords(int $gameId) : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->searchAll(0, 0, true);
     }
 
     /**
@@ -228,5 +240,17 @@ class RegistBooking extends MY_Model
         $this->calledMethod == __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->logicalDelete(array('RegistBookingId' => $registBookingId));
+    }
+
+    /**
+     * 対象のテーブルを初期化する
+     * @param  int  $gameId   ゲーム管理ID
+     * @return bool         [description]
+     */
+    public function clearTable(int $gameId) : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        return $this->truncate();
     }
 }

@@ -7,7 +7,7 @@ use teleios\utils\StringUtility;
  */
 class GroupNotices extends MY_Model
 {
-    CONST TABLE_PREFIX = 'GNotice_';
+    CONST TABLE_PREFIX = TABLE_PREFIX_GROUP_NOTICE;
     private $stringUtil = null;
 
     public function __construct()
@@ -47,7 +47,7 @@ class GroupNotices extends MY_Model
     {
         $this->calledMethod == __FUNCTION__;
         if (count($data) > 0) {
-            $this->tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                         . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
             return $this->attach($data);
         }
@@ -71,7 +71,7 @@ class GroupNotices extends MY_Model
         int $offset = 0
     ) : array {
         $this->calledMethod == __FUNCTION__;
-        $this->tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                     . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
         $now = date("Y-m-d H:i:s");
         $cond = array(
@@ -87,6 +87,20 @@ class GroupNotices extends MY_Model
     }
 
     /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @param  int     $gameId ゲーム管理ID
+     * @param  int     $groupId    グループ管理ID
+     * @return array [description]
+     */
+    public function getAllRecords(int $gameId, int $groupId) : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
+        return $this->searchAll(0, 0, true);
+    }
+
+    /**
      * 指定された告知を変更する
      * @param  int  $gameId   ゲーム管理ID
      * @param  int  $groupId  グループ管理ID
@@ -98,7 +112,7 @@ class GroupNotices extends MY_Model
     {
         $this->calledMethod == __FUNCTION__;
         if (count($data) > 0) {
-            $this->tableName = TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                         . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
             return $this->update($data, array('NoticeId' => $noticeId));
         }
@@ -172,5 +186,19 @@ class GroupNotices extends MY_Model
             'DeleteFlag' => 1
         );
         return $this->db->set($gameId, $groupId, $noticeId, $data);
+    }
+
+    /**
+     * 対象のテーブルを初期化する
+     * @param  int  $gameId   ゲーム管理ID
+     * @param  int  $groupId  グループ管理ID
+     * @return bool         [description]
+     */
+    public function clearTable(int $gameId, int $groupId) : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                    . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+        return $this->truncate();
     }
 }

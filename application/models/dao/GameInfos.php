@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  */
 class GameInfos extends MY_Model
 {
-    const TABLE_NAME = 'GameInfos';
+    const TABLE_NAME = TABLE_NAME_GAME_INFOS;
 
     public function __construct()
     {
@@ -41,6 +41,16 @@ class GameInfos extends MY_Model
     {
         $this->calledMethod == __FUNCTION__;
         return $this->searchAll($limit, $offset);
+    }
+
+    /**
+     * 論理削除されたレコードを含む全レコードを取得する
+     * @return array [description]
+     */
+    public function getAllRecords() : array
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->searchAll(0, 0, true);
     }
 
     /**
@@ -111,5 +121,15 @@ class GameInfos extends MY_Model
     {
         $this->calledMethod == __FUNCTION__;
         return $this->logicalDelete(array('GamdId' => $gameId));
+    }
+
+    /**
+     * テーブルを初期化する
+     * @return bool [description]
+     */
+    public function clearTable() : bool
+    {
+        $this->calledMethod == __FUNCTION__;
+        return $this->truncate();
     }
 }
