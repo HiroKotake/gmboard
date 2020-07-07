@@ -1,6 +1,7 @@
 <?php
 
 use teleios\utils\StringUtility;
+use teleios\gmboard\dao\test\User;
 
 /********************************************************
  * ユーザ関連１   lib: User
@@ -45,8 +46,8 @@ class TestUser extends MY_Controller
         */
 
         // ログインID重複チェック
-        $this->load->model('test/User', 'testUser');
-        $isLoginIdDeplicate = $this->testUser->checkDeplicate($mailAddr);
+        $testUser = new User();
+        $isLoginIdDeplicate = $testUser->checkDeplicate($mailAddr);
         if (!$isLoginIdDeplicate) {
             $notice .= '入力されたメールアドレスは、既に使われています。<br />';
         }
@@ -59,10 +60,10 @@ class TestUser extends MY_Controller
         }
 
         // 登録
-        $newUserId = $this->testUser->addUser($mailAddr, $passwd, $nickname, $mailAddr);
+        $newUserId = $testUser->addUser($mailAddr, $passwd, $nickname, $mailAddr);
 
         // 登録情報取得
-        $userInfo = $this->testUser->showUser($newUserId);
+        $userInfo = $testUser->showUser($newUserId);
         $data = array(
             'Message' => '',
             'UserInfo' => $userInfo[0]
@@ -73,8 +74,8 @@ class TestUser extends MY_Controller
     // ユーザ一覧表示
     public function listUser()
     {
-        $this->load->model('test/User', 'testUser');
-        $users = $this->testUser->listUser();
+        $testUser = new User();
+        $users = $testUser->listUser();
         $message = '';
         if (count($users) == 0) {
             $message = 'ユーザが登録されていません。';
@@ -89,8 +90,8 @@ class TestUser extends MY_Controller
     public function showUser()
     {
         $userId = $this->input->get('UserId');
-        $this->load->model('test/User', 'testUser');
-        $userInfo = $this->testUser->showUser($userId);
+        $testUser = new User();
+        $userInfo = $testUser->showUser($userId);
         $message = '';
         if (count($userInfo) == 0) {
             $message = '該当するユーザは存在しません。';
@@ -113,8 +114,8 @@ class TestUser extends MY_Controller
         $password = $this->input->post('PWD');
         echo 'LoginId：' . $loginId . '<br />';
         echo 'Password：' . $password. '<br />';
-        $this->load->model('test/User', 'testUser');
-        $result = $this->testUser->auth($loginId, $password);
+        $testUser = new User();
+        $result = $testUser->auth($loginId, $password);
         if ($result) {
             echo 'ログイン認証成功<br />';
             echo '<a href="../top">戻る</a>';

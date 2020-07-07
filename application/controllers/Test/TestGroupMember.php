@@ -1,5 +1,7 @@
 <?php
 
+use teleios\gmboard\dao\test\GroupMember;
+
 /********************************************************
  * グループメンバー関連   lib: GroupMember
  ********************************************************/
@@ -15,8 +17,8 @@ class TestGroupMember extends MY_Controller
             'RegistedMembers' => null,
             'BookingMembers' => null
         );
-        $this->load->model('test/GroupMember', 'testGroupMember');
-        $members = $this->testGroupMember->formAddGroupMember((int)$groupId);
+        $testGroupMember = new GroupMember();
+        $members = $testGroupMember->formAddGroupMember((int)$groupId);
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
         $this->smarty->testView('GroupMember/formAddGroupMember', $data);
@@ -28,8 +30,8 @@ class TestGroupMember extends MY_Controller
         $gameNickName   = $this->input->post('GNIN');
         $groupId        = $this->input->post('GID');
         // データ登録
-        $this->load->model('test/GroupMember', 'testGroupMember');
-        $result = $this->testGroupMember->addGroupMember((int)$groupId, $playerId, $authCode, $gameNickName);
+        $testGroupMember = new GroupMember();
+        $result = $testGroupMember->addGroupMember((int)$groupId, $playerId, $authCode, $gameNickName);
         $data = array(
             'Message' => '',
             'RegistedMembers' => $result['RegistedMembers'],
@@ -49,8 +51,8 @@ class TestGroupMember extends MY_Controller
             'RegistedMembers' => null,
             'BookingMembers' => null
         );
-        $this->load->model('test/GroupMember', 'testGroupMember');
-        $members = $this->testGroupMember->formSearchGroupMember((int)$groupId);
+        $testGroupMember = new GroupMember();
+        $members = $testGroupMember->formSearchGroupMember((int)$groupId);
         $data['GroupInfo'] = $members['GroupInfo'];
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
@@ -67,8 +69,8 @@ class TestGroupMember extends MY_Controller
             'RegistedMembers' => null,
             'BookingMembers' => null,
         );
-        $this->load->model('test/GroupMember', 'testGroupMember');
-        $result = $this->testGroupMember->resultSearchGroupMember((int)$groupId, $playerId);
+        $testGroupMember = new GroupMember();
+        $members = $testGroupMember->resultSearchGroupMember((int)$groupId, $playerId);
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
         $this->smarty->testView('GroupMember/formResultSearchGroupMember', $data);
@@ -84,9 +86,9 @@ class TestGroupMember extends MY_Controller
             'RegistedMembers' => null,
             'BookingMembers' => null,
         );
-        $this->load->model('test/GroupMember', 'testGroupMember');
+        $testGroupMember = new GroupMember();
         // メンバーを追加し、追加後のグループの状態情報を取得
-        $members = $this->testGroupMember->addSearchGroupMember((int)$groupId, (int)$gameId, $playerId);
+        $members = $testGroupMember->addSearchGroupMember((int)$groupId, (int)$gameId, $playerId);
         $data['RegistedMembers'] = $members['RegistedMembers'];
         $data['BookingMembers'] = $members['BookingMembers'];
         $this->smarty->testView('GroupMember/formSearchGroupMember', $data);
@@ -96,8 +98,8 @@ class TestGroupMember extends MY_Controller
     {
         $groupId = (int)$this->input->get('GID');
         $gameId = (int)$this->input->get('GMID');
-        $this->load->model('test/GroupMember', 'testGroupMember');
-        $members = $this->testGroupMember->listGroupMember($gameId, $groupId);
+        $testGroupMember = new GroupMember();
+        $members = $testGroupMember->listGroupMember($gameId, $groupId);
         $data = array(
             'Message' => '',
             'GroupInfo' => $members['GroupInfo'],

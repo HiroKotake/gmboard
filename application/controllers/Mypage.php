@@ -36,7 +36,11 @@ class MyPage extends MY_Controller
             return;
         }
 
-        $data = array('Message' => '存在しないログインIDです。');
+        $data = array(
+            'Message' => '存在しないログインIDです。',
+            'Login' => 'login',
+            'Regist' => 'regist'
+        );
         if ($authResult == AUTH_UNMATCH_PASSWORD) {
             $data['Message'] = 'パスワードが違います。';
         }

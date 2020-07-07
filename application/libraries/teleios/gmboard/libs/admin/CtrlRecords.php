@@ -112,6 +112,14 @@ class CtrlRecords
             $user['Password'] = StringUtility::getHashedPassword($user['Password']);
             $this->cIns->daoUsers->attach($user);
             $this->cIns->daoUserBoard->createTable($user["UserId"]);
+            $message = array(
+                'FromUserId'    => SYSTEM_USER_ID,                // 送信者ユーザID
+                'FromUserName'  => SYSTEM_USER_NAME,              // 送信者表示名
+                'FromGroupId'   => SYSTEM_GROUP_ID,               // 送信者グループID
+                'FromGroupName' => SYSTEM_GROUP_NAME,             // 送信者グループ名
+                'message'       => 'ようこそ、いらっしゃいました！'    // メッセージテキスト
+            );
+            $this->cIns->daoUserBoard->add($user["UserId"], $message);
             $this->cIns->daoUserInfos->attach(["UserId" => $user["UserId"]]);
         }
     }

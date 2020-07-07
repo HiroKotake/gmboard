@@ -1,10 +1,10 @@
 <?php
-namespace teleios\gmboard\lib;
+namespace teleios\gmboard\libs;
 
 class GroupAdmin
 {
     public function __construct()
     {
-        
+
     }
 }

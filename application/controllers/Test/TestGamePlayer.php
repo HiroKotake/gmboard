@@ -1,5 +1,7 @@
 <?php
 
+use teleios\gmboard\dao\test\GamePlayer;
+
 /********************************************************
  * ユーザ関連２   lib: GamePlayer
  ********************************************************/
@@ -7,8 +9,8 @@ class TestGamePlayer extends MY_Controller
 {
     public function formGameList()
     {
-        $this->load->model('test/GamePlayer', 'testGamePlayer');
-        $data = $this->testGamePlayer->formGameList();
+        $testGamePlayer = new GamePlayer();
+        $data = $testGamePlayer->formGameList();
         $this->smarty->testView('GamePlayer/formGameList', $data);
     }
     public function formGamePlayer()
@@ -20,8 +22,8 @@ class TestGamePlayer extends MY_Controller
             'GameId' => $gameId,
             'GroupId' => $groupId
         );
-        $this->load->model('test/GamePlayer', 'testGamePlayer');
-        $result = $this->testGamePlayer->formGamePlayer($gameId, $groupId);
+        $testGamePlayer = new GamePlayer();
+        $result = $testGamePlayer->formGamePlayer($gameId, $groupId);
         $data = array_merge($data, $result);
         $this->smarty->testView('GamePlayer/formGamePlayer', $data);
     }
@@ -45,8 +47,8 @@ class TestGamePlayer extends MY_Controller
             'GroupId' => $groupId
         );
 
-        $this->load->model('test/GamePlayer', 'testGamePlayer');
-        $result = $this->testGamePlayer->addGamePlayer($gameId, $groupId, $playerId, $nickname, $authcode);
+        $testGamePlayer = new GamePlayer();
+        $result = $testGamePlayer->addGamePlayer($gameId, $groupId, $playerId, $nickname, $authcode);
         if (count($result['PlayerInfo']) == 0) {
             $data['Message'] = '登録に失敗しました';
         }
@@ -57,15 +59,15 @@ class TestGamePlayer extends MY_Controller
 
     public function listGames()
     {
-        $this->load->model('test/GamePlayer', 'testGamePlayer');
-        $data = $this->testGamePlayer->listGames();
+        $testGamePlayer = new GamePlayer();
+        $data = $testGamePlayer->listGames();
         $this->smarty->testView('GamePlayer/listGames', $data);
     }
     public function listGamePlayers()
     {
         $gameId = $this->input->get('GID');
-        $this->load->model('test/GamePlayer', 'testGamePlayer');
-        $data = $this->testGamePlayer->listGamePlayers((int)$gameId);
+        $testGamePlayer = new GamePlayer();
+        $data = $testGamePlayer->listGamePlayers((int)$gameId);
         $this->smarty->testView('GamePlayer/listGamePlayers', $data);
     }
     public function showGamePlayer()
@@ -76,8 +78,8 @@ class TestGamePlayer extends MY_Controller
         );
         $registBookingId = $this->input->get('RBID');
         $gameId = $this->input->get('GID');
-        $this->load->model('test/GamePlayer', 'testGamePlayer');
-        $data['GamePlayer'] = $this->testGamePlayer->showGamePlayer((int)$gameId, (int)$registBookingId);
+        $testGamePlayer = new GamePlayer();
+        $data['GamePlayer'] = $testGamePlayer->showGamePlayer((int)$gameId, (int)$registBookingId);
         $this->smarty->testView('GamePlayer/showGamePlayer', $data);
     }
 }

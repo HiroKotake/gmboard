@@ -1,5 +1,5 @@
 <?php
-namespace teleios\gmboar\lib;
+namespace teleios\gmboard\libs;
 
 class Group
 {

@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta charset="utf-8"/>
+    <title>API Documentation</title>
+    <meta name="author" content=""/>
+    <meta name="description" content=""/>
+
+    <link href="../css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/prism.css" rel="stylesheet" media="all"/>
+    <link href="../css/template.css" rel="stylesheet" media="all"/>
+    
+    <!--[if lt IE 9]>
+    <script src="../js/html5.js"></script>
+    <![endif]-->
+    <script src="../js/jquery-1.11.0.min.js"></script>
+    <script src="../js/ui/1.10.4/jquery-ui.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.smooth-scroll.js"></script>
+    <script src="../js/prism.min.js"></script>
+    <!-- TODO: Add http://jscrollpane.kelvinluck.com/ to style the scrollbars for browsers not using webkit-->
+    <script type="text/javascript">
+    function loadExternalCodeSnippets() {
+        Array.prototype.slice.call(document.querySelectorAll('pre[data-src]')).forEach(function (pre) {
+            var src = pre.getAttribute('data-src');
+            var extension = (src.match(/\.(\w+)$/) || [, ''])[1];
+            var language = 'php';
+
+            var code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+
+            code.textContent = 'Loading…';
+
+            pre.appendChild(code);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.open('GET', src, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+
+                    if (xhr.status < 400 && xhr.responseText) {
+                        code.textContent = xhr.responseText;
+
+                        Prism.highlightElement(code);
+                    }
+                    else if (xhr.status >= 400) {
+                        code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    }
+                    else {
+                        code.textContent = '✖ Error: File does not exist or is empty';
+                    }
+                }
+            };
+
+            xhr.send(null);
+        });
+    }
+
+    $(document).ready(function(){
+        loadExternalCodeSnippets();
+    });
+    $('#source-view').on('shown', function () {
+        loadExternalCodeSnippets();
+    })
+</script>
+
+    <link rel="shortcut icon" href="../images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="../images/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="../images/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="../images/apple-touch-icon-114x114.png"/>
+</head>
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <i class="icon-ellipsis-vertical"></i>
+            </a>
+            <a class="brand" href="../index.html">API Documentation</a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                                        <li class="dropdown">
+                        <a href="../index.html" class="dropdown-toggle" data-toggle="dropdown">
+                            API Documentation <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                                                        <li><a href="../namespaces/teleios.html">\teleios</a></li>
+                                                    </ul>
+                    </li>
+                                        <li class="dropdown" id="charts-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Charts <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../graphs/class.html">
+                                    <i class="icon-list-alt"></i>&#160;Class hierarchy diagram
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="reports-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Reports <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="../reports/errors.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Errors <span class="label label-info pull-right">382</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/markers.html">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="icon-list-alt"></i>&#160;Markers <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="../reports/deprecated.html">
+                                                                                                            <i class="icon-list-alt"></i>&#160;Deprecated <span class="label label-info pull-right">0</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--<div class="go_to_top">-->
+    <!--<a href="#___" style="color: inherit">Back to top&#160;&#160;<i class="icon-upload icon-white"></i></a>-->
+    <!--</div>-->
+</div>
+
+<div id="___" class="container-fluid">
+        <section class="row-fluid">
+        <div class="span2 sidebar">
+                                <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1025944266"></a>
+                                <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
+            </div>
+            <div id="namespace-1025944266" class="accordion-body collapse in">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-21048347"></a>
+                                <a href="../namespaces/teleios.html" style="margin-left: 30px; padding-left: 0">teleios</a>
+            </div>
+            <div id="namespace-21048347" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-276226749"></a>
+                                <a href="../namespaces/teleios.consts.html" style="margin-left: 30px; padding-left: 0">consts</a>
+            </div>
+            <div id="namespace-276226749" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/teleios.consts.BaseConsts.html">BaseConsts</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1311550794"></a>
+                                <a href="../namespaces/teleios.gmboard.html" style="margin-left: 30px; padding-left: 0">gmboard</a>
+            </div>
+            <div id="namespace-1311550794" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-244484783"></a>
+                                <a href="../namespaces/teleios.gmboard.dao.html" style="margin-left: 30px; padding-left: 0">dao</a>
+            </div>
+            <div id="namespace-244484783" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-1394051790"></a>
+                                <a href="../namespaces/teleios.gmboard.dao.test.html" style="margin-left: 30px; padding-left: 0">test</a>
+            </div>
+            <div id="namespace-1394051790" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.AttachGame.html">AttachGame</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.GameInfo.html">GameInfo</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.GamePlayer.html">GamePlayer</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.Group.html">Group</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.GroupMember.html">GroupMember</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.GroupMessage.html">GroupMessage</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.User.html">User</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.dao.test.UserMessage.html">UserMessage</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-371234986"></a>
+                                <a href="../namespaces/teleios.gmboard.libs.html" style="margin-left: 30px; padding-left: 0">libs</a>
+            </div>
+            <div id="namespace-371234986" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-425055480"></a>
+                                <a href="../namespaces/teleios.gmboard.libs.admin.html" style="margin-left: 30px; padding-left: 0">admin</a>
+            </div>
+            <div id="namespace-425055480" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/teleios.gmboard.libs.admin.CtrlRecords.html">CtrlRecords</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/teleios.gmboard.libs.Auth.html">Auth</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.libs.Group.html">Group</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.libs.GroupAdmin.html">GroupAdmin</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.libs.Mypage.html">Mypage</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.libs.SystemNotice.html">SystemNotice</a></li>
+                                                    <li class="class"><a href="../classes/teleios.gmboard.libs.UserPage.html">UserPage</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                                    <div class="accordion" style="margin-bottom: 0">
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-2054977572"></a>
+                                <a href="../namespaces/teleios.utils.html" style="margin-left: 30px; padding-left: 0">utils</a>
+            </div>
+            <div id="namespace-2054977572" class="accordion-body collapse ">
+                <div class="accordion-inner">
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/teleios.utils.DBTables.html">DBTables</a></li>
+                                                    <li class="class"><a href="../classes/teleios.utils.DBUtility.html">DBUtility</a></li>
+                                                    <li class="class"><a href="../classes/teleios.utils.FileUtility.html">FileUtility</a></li>
+                                                    <li class="class"><a href="../classes/teleios.utils.LogWriter.html">LogWriter</a></li>
+                                                    <li class="class"><a href="../classes/teleios.utils.MemCacheUtility.html">MemCacheUtility</a></li>
+                                                    <li class="class"><a href="../classes/teleios.utils.RedisUtility.html">RedisUtility</a></li>
+                                                    <li class="class"><a href="../classes/teleios.utils.StringUtility.html">StringUtility</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                    
+                    <ul>
+                                                                                                    <li class="class"><a href="../classes/CiSessions.html">CiSessions</a></li>
+                                                    <li class="class"><a href="../classes/GameInfos.html">GameInfos</a></li>
+                                                    <li class="class"><a href="../classes/GamePlayers.html">GamePlayers</a></li>
+                                                    <li class="class"><a href="../classes/GroupBoard.html">GroupBoard</a></li>
+                                                    <li class="class"><a href="../classes/GroupNotices.html">GroupNotices</a></li>
+                                                    <li class="class"><a href="../classes/Groups.html">Groups</a></li>
+                                                    <li class="class"><a href="../classes/Index.html">Index</a></li>
+                                                    <li class="class"><a href="../classes/Login.html">Login</a></li>
+                                                    <li class="class"><a href="../classes/MY_Controller.html">MY_Controller</a></li>
+                                                    <li class="class"><a href="../classes/MY_Model.html">MY_Model</a></li>
+                                                    <li class="class"><a href="../classes/MyPage.html">MyPage</a></li>
+                                                    <li class="class"><a href="../classes/Notices.html">Notices</a></li>
+                                                    <li class="class"><a href="../classes/PlayerIndex.html">PlayerIndex</a></li>
+                                                    <li class="class"><a href="../classes/RegistBooking.html">RegistBooking</a></li>
+                                                    <li class="class"><a href="../classes/Registration.html">Registration</a></li>
+                                                    <li class="class"><a href="../classes/SystemCommon.html">SystemCommon</a></li>
+                                                    <li class="class"><a href="../classes/TableCtl.html">TableCtl</a></li>
+                                                    <li class="class"><a href="../classes/TestAttachGame.html">TestAttachGame</a></li>
+                                                    <li class="class"><a href="../classes/TestData.html">TestData</a></li>
+                                                    <li class="class"><a href="../classes/TestGameInfo.html">TestGameInfo</a></li>
+                                                    <li class="class"><a href="../classes/TestGamePlayer.html">TestGamePlayer</a></li>
+                                                    <li class="class"><a href="../classes/TestGroup.html">TestGroup</a></li>
+                                                    <li class="class"><a href="../classes/TestGroupMember.html">TestGroupMember</a></li>
+                                                    <li class="class"><a href="../classes/TestGroupMessage.html">TestGroupMessage</a></li>
+                                                    <li class="class"><a href="../classes/TestUser.html">TestUser</a></li>
+                                                    <li class="class"><a href="../classes/TestUserMessage.html">TestUserMessage</a></li>
+                                                    <li class="class"><a href="../classes/Top.html">Top</a></li>
+                                                    <li class="class"><a href="../classes/Top.html">Top</a></li>
+                                                    <li class="class"><a href="../classes/UserBoard.html">UserBoard</a></li>
+                                                    <li class="class"><a href="../classes/UserInfos.html">UserInfos</a></li>
+                                                    <li class="class"><a href="../classes/Users.html">Users</a></li>
+                                                    <li class="class"><a href="../classes/Welcome.html">Welcome</a></li>
+                                            </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </section>
+    <section class="row-fluid">
+        <div class="span10 offset2">
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <nav>
+                                                <a href="../namespaces/default.html">\</a> <i class="icon-level-up"></i>
+                                            </nav>
+                    <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal"><i class="icon-code"></i></a>
+
+                    <h1><small>\</small>MY_Model</h1>
+                    <p><em></em></p>
+                    
+                    
+                                        
+                    <section id="summary">
+                        <h2>Summary</h2>
+                        <section class="row-fluid heading">
+                            <section class="span4">
+                                <a href="#methods">Methods</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#properties">Properties</a>
+                            </section>
+                            <section class="span4">
+                                <a href="#constants">Constants</a>
+                            </section>
+                        </section>
+                        <section class="row-fluid public">
+                            <section class="span4">
+                                                                    <a href="../classes/MY_Model.html#method___construct" class="">__construct()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_setTableName" class="">setTableName()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_attach" class="">attach()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No public properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No constants found</em>
+                                                            </section>
+                        </section>
+                        <section class="row-fluid protected">
+                            <section class="span4">
+                                                                    <a href="../classes/MY_Model.html#method_execQuery" class="">execQuery()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_writeLog" class="">writeLog()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_getQuerySelect" class="">getQuerySelect()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_getQueryInsert" class="">getQueryInsert()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_getQueryUpdate" class="">getQueryUpdate()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_searchAll" class="">searchAll()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_search" class="">search()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_isExisted" class="">isExisted()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_getMonoResult" class="">getMonoResult()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_update" class="">update()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_logicalDelete" class="">logicalDelete()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_truncate" class="">truncate()</a><br />
+                                                                    <a href="../classes/MY_Model.html#method_drop" class="">drop()</a><br />
+                                                            </section>
+                            <section class="span4">
+                                                                    <a href="../classes/MY_Model.html#property_logWriter" class="">$logWriter</a><br />
+                                                                    <a href="../classes/MY_Model.html#property_tableName" class="">$tableName</a><br />
+                                                                    <a href="../classes/MY_Model.html#property_calledClass" class="">$calledClass</a><br />
+                                                                    <a href="../classes/MY_Model.html#property_calledMethod" class="">$calledMethod</a><br />
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                        <section class="row-fluid private">
+                            <section class="span4">
+                                                                    <em>No private methods found</em>
+                                                            </section>
+                            <section class="span4">
+                                                                    <em>No private properties found</em>
+                                                            </section>
+                            <section class="span4">
+                                <em>N/A</em>
+                            </section>
+                        </section>
+                    </section>
+                </div>
+                <aside class="span4 detailsbar">
+                                        
+                    
+                    <dl>
+                        <dt>File</dt>
+                            <dd><a href="../files/core.MY_Model.html"><div class="path-wrapper">core/MY_Model.php</div></a></dd>
+                                                <dt>Package</dt>
+                            <dd><div class="namespace-wrapper">Default</div></dd>
+                                                <dt>Class hierarchy</dt>
+                            <dd class="hierarchy">
+                                                                                                                                                                                                                                                                                                
+                                        <div class="namespace-wrapper">\CI_Model</div>
+                                                                                                    <div class="namespace-wrapper">\MY_Model</div>
+                            </dd>
+
+                        
+                        
+                        
+                        
+                                                                        </dl>
+                    <h2>Tags</h2>
+                    <table class="table table-condensed">
+                                            <tr><td colspan="2"><em>None found</em></td></tr>
+                                        </table>
+                </aside>
+            </div>
+
+                        
+                                    <a id="properties" name="properties"></a>
+            <div class="row-fluid">
+                <div class="span8 content class">
+                    <h2>Properties</h2>
+                </div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_logWriter" name="property_logWriter" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$logWriter</h3>
+                <pre class="signature">$logWriter : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_tableName" name="property_tableName" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$tableName</h3>
+                <pre class="signature">$tableName : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_calledClass" name="property_calledClass" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$calledClass</h3>
+                <pre class="signature">$calledClass : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="property_calledMethod" name="property_calledMethod" class="anchor"></a>
+            <article class="property">
+                <h3 class="protected ">$calledMethod</h3>
+                <pre class="signature">$calledMethod : </pre>
+                <p><em></em></p>
+                
+
+                                <h4>Type</h4>
+                
+                                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                        <dl>
+                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                            
+                                    <a id="methods" name="methods"></a>
+            <div class="row-fluid">
+                <div class="span8 content class"><h2>Methods</h2></div>
+                <aside class="span4 detailsbar"></aside>
+            </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method___construct" name="method___construct" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">__construct()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">__construct() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_setTableName" name="method_setTableName" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">setTableName()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">setTableName(\string  <span class="argument">$tableName</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\string</td>
+                                <td>$tableName </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_attach" name="method_attach" class="anchor"></a>
+            <article class="method">
+                <h3 class="public ">attach()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">attach(array  <span class="argument">$data</span>) : integer</pre>
+                <p><em>レコード追加</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>[description]</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    integer
+                                            &mdash; <p>[description]</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_execQuery" name="method_execQuery" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">execQuery()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">execQuery(\string  <span class="argument">$query</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\string</td>
+                                <td>$query </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_writeLog" name="method_writeLog" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">writeLog()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">writeLog(\string  <span class="argument">$log</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\string</td>
+                                <td>$log </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getQuerySelect" name="method_getQuerySelect" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getQuerySelect()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getQuerySelect() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getQueryInsert" name="method_getQueryInsert" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getQueryInsert()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getQueryInsert(array  <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getQueryUpdate" name="method_getQueryUpdate" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getQueryUpdate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getQueryUpdate(array  <span class="argument">$data</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_searchAll" name="method_searchAll" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">searchAll()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">searchAll(\int  <span class="argument">$limit</span>, \int  <span class="argument">$offset</span>, \bool  <span class="argument">$deleted = false</span>) </pre>
+                <p><em></em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>\int</td>
+                                <td>$limit </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>\int</td>
+                                <td>$offset </td>
+                                <td></td>
+                            </tr>
+                                                    <tr>
+                                <td>\bool</td>
+                                <td>$deleted </td>
+                                <td></td>
+                            </tr>
+                                            </table>
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_search" name="method_search" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">search()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">search(array  <span class="argument">$condition</span>) : array</pre>
+                <p><em>検索条件に従いレコードを取得する</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$condition </td>
+                                <td><p>以下の検索条件を含む連想配列
+'SELECT' =&gt; array([Key1], [Key2], ...[KeyX])
+'WHERE' =&gt; array('KEY'=&gt;'VALUE',,,)
+'LIKE' =&gt; array('KEY'=&gt;'VALUE',,,)
+'NUMBER' =&gt; array(limit[,offset])
+'ORDER_BY' =&gt; array('KEY'=&gt;'VALUE',,,)</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                            &mdash; <p>検索結果を含む配列。結果がない場合は空の配列が返される</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_isExisted" name="method_isExisted" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">isExisted()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">isExisted(array  <span class="argument">$condition</span>) : boolean</pre>
+                <p><em>検索条件に従いレコードが存在するか確認する</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$condition </td>
+                                <td><p>以下の検索条件を含む連想配列</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>対象が存在する場合は真を返し、存在しない場合は偽を返す</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_getMonoResult" name="method_getMonoResult" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">getMonoResult()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">getMonoResult(array  <span class="argument">$resultSet</span>) : array</pre>
+                <p><em>検索結果が唯一の検索を実施した場合に、確実に検索結果のみ取り出す。
+万一複数の結果が出た場合はエラーとして空の配列にする。</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$resultSet </td>
+                                <td><p>searchで得られた結果</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    array
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_update" name="method_update" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">update()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">update(array  <span class="argument">$data</span>, array  <span class="argument">$where = null</span>) : boolean</pre>
+                <p><em>レコード更新</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$data </td>
+                                <td><p>[description]</p></td>
+                            </tr>
+                                                    <tr>
+                                <td>array</td>
+                                <td>$where </td>
+                                <td><p>[description]</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>[description]</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_logicalDelete" name="method_logicalDelete" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">logicalDelete()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">logicalDelete(array  <span class="argument">$where = null</span>) : boolean</pre>
+                <p><em>レコード論理削除</em></p>
+                
+
+                                    <h4>Parameters</h4>
+                    <table class="table table-condensed table-hover">
+                                                    <tr>
+                                <td>array</td>
+                                <td>$where </td>
+                                <td><p>[description]</p></td>
+                            </tr>
+                                            </table>
+                
+                
+                                    <h4>Returns</h4>
+                    boolean
+                                            &mdash; <p>[description]</p>
+                                    				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_truncate" name="method_truncate" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">truncate()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">truncate() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                    <div class="row-fluid">
+        <div class="span8 content class">
+            <a id="method_drop" name="method_drop" class="anchor"></a>
+            <article class="method">
+                <h3 class="protected ">drop()</h3>
+                <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
+                <pre class="signature" style="margin-right: 54px;">drop() </pre>
+                <p><em></em></p>
+                
+
+                
+                
+                				
+                            </article>
+        </div>
+        <aside class="span4 detailsbar">
+            <h1><i class="icon-arrow-down"></i></h1>
+                                                            <dl>
+                                                                            </dl>
+            <h2>Tags</h2>
+            <table class="table table-condensed">
+                                    <tr><td colspan="2"><em>None found</em></td></tr>
+                            </table>
+        </aside>
+    </div>
+
+                                                    </div>
+    </section>
+
+    <div id="source-view" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="source-view-label" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="source-view-label">MY_Model.php</h3>
+        </div>
+        <div class="modal-body">
+            <pre data-src="../files/core/MY_Model.php.txt" class="language-php line-numbers"></pre>
+        </div>
+    </div>
+
+    <footer class="row-fluid">
+        <section class="span10 offset2">
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <section class="row-fluid footer-sections">
+                        <section class="span4">
+                                                        <h1><i class="icon-code"></i></h1>
+                            <div>
+                                <ul>
+                                                                            <li><a href="../namespaces/teleios.html">\teleios</a></li>
+                                                                    </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-bar-chart"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../graphs/class.html">Class Hierarchy Diagram</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="span4">
+                                                        <h1><i class="icon-pushpin"></i></h1>
+                            <div>
+                                <ul>
+                                    <li><a href="../reports/errors.html">Errors</a></li>
+                                    <li><a href="../reports/markers.html">Markers</a></li>
+                                </ul>
+                            </div>
+                        </section>
+                    </section>
+                </section>
+            </section>
+            <section class="row-fluid">
+                <section class="span10 offset1">
+                    <hr />
+                    Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
+                    on July 7th, 2020 at 04:14.
+                </section>
+            </section>
+        </section>
+    </footer>
+</div>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 <?php
-namespace taleios\gmboard\libs;
+namespace teleios\gmboard\libs;
 
 class Mypage
 {

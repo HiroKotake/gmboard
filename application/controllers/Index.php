@@ -27,7 +27,9 @@ class Index extends MY_Controller
         // ー フッター部
     	//$this->load->view('welcome_message');
     	$data = array(
-            'notices' => $notices
+            'Notices' => $notices,
+            'Login' => 'MyPage/login',
+            'Regist' => 'MyPage/regist'
         );
     	$this->smarty->view('top', $data);
     }

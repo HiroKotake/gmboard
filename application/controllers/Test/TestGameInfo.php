@@ -1,5 +1,7 @@
 <?php
 
+use teleios\gmboard\dao\test\GameInfo;
+
 class TestGameInfo extends MY_Controller
 {
     /********************************************************
@@ -25,8 +27,8 @@ class TestGameInfo extends MY_Controller
             $this->smarty->testView('GameInfo/formGameInfo', $data);
             return;
         }
-        $this->load->model('test/GameInfo', 'testGameInfo');
-        $result = $this->testGameInfo->addGameInfo($gameName, $description);
+        $testGameInfo = new GameInfo();
+        $result = $testGameInfo->addGameInfo($gameName, $description);
         $data = array(
             'Message'  => '',
             'GameId'   => $result['GameId'],
@@ -40,9 +42,9 @@ class TestGameInfo extends MY_Controller
     // ゲーム情報一覧表示
     public function listGameInfo()
     {
-        $this->load->model('test/GameInfo', 'testGameInfo');
+        $testGameInfo = new GameInfo();
         $data = array(
-            'list' => $this->testGameInfo->listGameInfo()
+            'list' => $testGameInfo->listGameInfo()
         );
         $this->smarty->testView('GameInfo/listGameInfo', $data);
     }
@@ -50,8 +52,8 @@ class TestGameInfo extends MY_Controller
     public function showGameInfo()
     {
         $gameId = $this->input->get('GameID');
-        $this->load->model('test/GameInfo', 'testGameInfo');
-        $gameInfo = $this->testGameInfo->showGameInfo((int)$gameId);
+        $testGameInfo = new GameInfo();
+        $gameInfo = $testGameInfo->showGameInfo((int)$gameId);
         $data = array(
             'Message' => '',
             'GameInfo' => $gameInfo

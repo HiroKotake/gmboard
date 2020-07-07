@@ -1,5 +1,7 @@
 <?php
 
+use teleios\gmboard\dao\test\AttachGame;
+
 /********************************************************
  * ユーザ関連３   lib: AttachGame
  * GamePlayerテーブルへ情報を書き込むことができるか確認する。
@@ -15,8 +17,8 @@ class TestAttachGame extends MY_Controller
             'Message' => '',
             'UserId' => $userId
         );
-        $this->load->model('test/AttachGame', 'testAttachGame');
-        $data['GameInfos'] = $this->testAttachGame->formAttachGame();
+        $testAttachGame = new AttachGame();
+        $data['GameInfos'] = $testAttachGame->formAttachGame();
         $this->smarty->testView('AttachGame/formAttachGame', $data);
     }
 
@@ -38,8 +40,8 @@ class TestAttachGame extends MY_Controller
             'Message' => '',
             'GamePlayer' => null
         );
-        $this->load->model('test/AttachGame', 'testAttachGame');
-        $data['GamePlayer'] = $this->testAttachGame->addAttachGame((int)$userId, (int)$gameId, (int)$playerId, $nickname);
+        $testAttachGame = new AttachGame();
+        $data['GamePlayer'] = $testAttachGame->addAttachGame((int)$userId, (int)$gameId, (int)$playerId, $nickname);
         $this->smarty->testView('AttachGame/showAttachGame', $data);
     }
 
@@ -53,8 +55,8 @@ class TestAttachGame extends MY_Controller
             'Message' => '',
             'Infos' => null
         );
-        $this->load->model('test/AttachGame', 'testAttachGame');
-        $data['Infos'] = $this->testAttachGame->showAttachGame((int)$gameId, (int)$groupId);
+        $testAttachGame = new AttachGame();
+        $data['Infos'] = $testAttachGame->showAttachGame((int)$gameId, (int)$groupId);
         /*
         var_dump($data);
         echo '<br /><hr />';

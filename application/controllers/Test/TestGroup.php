@@ -1,5 +1,7 @@
 <?php
 
+use teleios\gmboard\dao\test\Group;
+
 /********************************************************
  * グループ関連   lib: Group
  ********************************************************/
@@ -9,8 +11,8 @@ class TestGroup extends MY_Controller
     public function formGroup()
     {
         // ゲーム一覧取得
-        $this->load->model('test/Group', 'testGroup');
-        $games = $this->testGroup->formGroup();
+        $testGroup = new Group();
+        $games = $testGroup->formGroup();
         // データ作成
         $data = array(
             'Message' => '',
@@ -24,6 +26,7 @@ class TestGroup extends MY_Controller
             'Message' => ''
         );
         // 入力値チェック
+        $testGroup = new Group();
         $gameId      = $this->input->post('TRGT');
         $groupName   = $this->input->post('GNAME');
         $description = $this->input->post('DESCRIP');
@@ -34,15 +37,13 @@ class TestGroup extends MY_Controller
             $data['Message'] .= '説明が入力されていません。<br />';
         }
         if (mb_strlen($data['Message']) > 0) {
-            $this->load->model('test/Group', 'testGroup');
-            $games = $this->testGroup->formGroup();
+            $games = $testGroup->formGroup();
             $data['Games'] = $games;
             $this->smarty->testView('Group/formGroup', $data);
             return;
         }
         // グループ登録
-        $this->load->model('test/Group', 'testGroup');
-        $groupInfo = $this->testGroup->addGroup((int)$gameId, $groupName, $description);
+        $groupInfo = $testGroup->addGroup((int)$gameId, $groupName, $description);
         if (count($groupInfo) == 0) {
             echo '登録に失敗しました<br /><a href="./">戻る</a>';
             return;
@@ -58,9 +59,9 @@ class TestGroup extends MY_Controller
     public function listGroup()
     {
         $gameId = $this->input->get('GID');
-        $this->load->model('test/Group', 'testGroup');
-        $groupList = $this->testGroup->listGroup((int)$gameId);
-        $games = $this->testGroup->formGroup();
+        $testGroup = new Group();
+        $groupList = $testGroup->listGroup((int)$gameId);
+        $games = $testGroup->formGroup();
         $data = array(
             'Message' => '',
             'GameId' => $gameId,
@@ -77,8 +78,8 @@ class TestGroup extends MY_Controller
     {
         $gameId = $this->input->get('GID');
         $groupId = $this->input->get('GPID');
-        $this->load->model('test/Group', 'testGroup');
-        $groupInfo = $this->testGroup->showGroup((int)$gameId, (int)$groupId);
+        $testGroup = new Group();
+        $groupInfo = $testGroup->showGroup((int)$gameId, (int)$groupId);
         $data = array(
             'Message' => '',
             'GroupInfo' => $groupInfo
