@@ -1,14 +1,26 @@
 <?php
 
-use teleios\gmboard\dao\test\AttachGame;
+use teleios\gmboard\libs\test\AttachGame;
 
-/********************************************************
+/**
+ * テスト環境向ゲーム関連コントローラークラス
+ *
  * ユーザ関連３   lib: AttachGame
  * GamePlayerテーブルへ情報を書き込むことができるか確認する。
  * 本来は直接データの実施はせず、登録予約承認に併せて行う。
- ********************************************************/
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class TestAttachGame extends MY_Controller
 {
+    /**
+     * ゲームを追加するためのフォームを表示
+     * @return [type] [description]
+     */
     public function formAttachGame()
     {
         $userId = $this->input->get('UID');
@@ -22,6 +34,9 @@ class TestAttachGame extends MY_Controller
         $this->smarty->testView('AttachGame/formAttachGame', $data);
     }
 
+    /**
+     * ゲームを追加
+     */
     public function addAttachGame()
     {
         $userId = $this->input->post('UID');
@@ -45,6 +60,10 @@ class TestAttachGame extends MY_Controller
         $this->smarty->testView('AttachGame/showAttachGame', $data);
     }
 
+    /**
+     * 登録したゲーム一覧を表示
+     * @return [type] [description]
+     */
     public function showAttachGame()
     {
         $gameId = $this->input->get('GMID');

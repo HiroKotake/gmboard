@@ -2,7 +2,21 @@
 namespace teleios\gmboard\libs;
 
 use teleios\utils\StringUtility;
+use teleios\gmboard\dao\PlayerIndex;
+use teleios\gmboard\dao\GameInfos;
+use teleios\gmboard\dao\GamePlayers;
+use teleios\gmboard\dao\Groups;
+use teleios\gmboard\dao\UserBoard;
 
+/**
+ * ユーザページ関連クラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category library
+ * @package teleios\gmboard
+ */
 class UserPage
 {
     private $cIns = null;
@@ -19,8 +33,8 @@ class UserPage
      */
     public function getGameList(int $userId) : array
     {
-        $this->cIns->load->model('dao/PlayerIndex', 'daoPlayerIndex');
-        $games = $this->cIns->daoPlayerIndex->getByUserId($userId);
+        $daoPlayerIndex = new PlayerIndex();
+        $games = $daoPlayerIndex->getByUserId($userId);
         // Get game name from GameInfo Table.
         $gameIds = array();
         foreach ($games as $game) {
@@ -30,8 +44,8 @@ class UserPage
             return $gameIds;
         }
         // ゲーム情報を取得
-        $this->cIns->load->model('dao/GameInfos', 'daoGameInfos');
-        $gameInfos = $this->cIns->daoGameInfos->getByGameIds($gameIds);
+        $daoGameInfos = new GameInfos();
+        $gameInfos = $daoGameInfos->getByGameIds($gameIds);
         return $gameInfos;
     }
 
@@ -47,15 +61,15 @@ class UserPage
         if (count($gameInfos) <= 0) {
             return $groups;
         }
-        $this->cIns->load->model('dao/GamePlayers', 'daoGamePlayer');
-        $this->cIns->load->model('dao/Groups', 'daoGroups');
+        $daoGamePlayer = new GamePlayers();
+        $daoGroups = new Groups();
         foreach ($gameInfos as $game) {
-            $tempData = $this->cIns->daoGamePlayer->getByUserId($game['GameId'], $userId);
+            $tempData = $daoGamePlayer->getByUserId($game['GameId'], $userId);
             if (!empty($tempData) && !empty($tempData['GroupId'])) {
                 // グループの情報を取得
-                $tempGroup = $this->cIns->daoGroups->getByGroupId($game['GameId'], $tempData['GroupId']);
+                $tempGroup = $daoGroups->getByGroupId($game['GameId'], $tempData['GroupId']);
                 if (!empty($tempGroup)) {
-                    $leader = $this->cIns->daoGamePlayer->getByUserId($game['GameId'], $tempGroup['Leader']);
+                    $leader = $daoGamePlayer->getByUserId($game['GameId'], $tempGroup['Leader']);
                     $groups[] = array(
                         'GameName' => $game['Name'],
                         'GroupId' => $tempData['GroupId'],
@@ -72,13 +86,25 @@ class UserPage
         return $groups;
     }
 
+    /**
+     * 個人向けメッセージ取得
+     * @param  int     $userId [description]
+     * @param  integer $page   [description]
+     * @param  integer $number [description]
+     * @param  string  $order  [description]
+     * @return array           [description]
+     */
     public function getPersonalMessage(int $userId, int $page = 0, int $number = 20, string $order = "DESC") : array
     {
         $offset = $page * $number;
-        $this->cIns->load->model('dao/UserBoard', 'daoUserBoard');
-        return $this->cIns->daoUserBoard->get($userId, $number, $offset, $order);
+        $daoUserBoard = new UserBoard();
+        return $daoUserBoard->get($userId, $number, $offset, $order);
     }
 
+    /**
+     * カテゴリ別ゲーム一覧取得
+     * @return array [description]
+     */
     public function getGamelistWithCategory() : array
     {
         $gameListWithCategory = array();
@@ -93,8 +119,8 @@ class UserPage
         // redisにない、もしくはデータが古い場合にデータ作成し、redisへ投入
         if ($fRedisIn) {
             // 全ゲームリスト取得
-            $this->cIns->load->model('dao/GameInfos', 'daoGameInfos');
-            $tempList = $this->cIns->daoGameInfos->getAll(0, 0);
+            $daoGameInfos = new GameInfos();
+            $tempList = $daoGameInfos->getAll(0, 0);
             // カテゴリ別に分類
             $list = array();
             foreach ($tempList as $gameInfo) {
@@ -189,6 +215,14 @@ class UserPage
         return $data;
     }
 
+    /**
+     * ゲームを追加する
+     * @param  int    $userId       [description]
+     * @param  int    $gameId       [description]
+     * @param  string $playerId     [description]
+     * @param  string $gameNickname [description]
+     * @return array                [description]
+     */
     public function attachGame(int $userId, int $gameId, string $playerId, string $gameNickname) : array
     {
         $data = array(

@@ -6,12 +6,47 @@ use teleios\gmboard\libs\SystemNotice;
 use teleios\gmboard\libs\Auth;
 use teleios\gmboard\libs\UserPage;
 
+/**
+ * マイページコントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class MyPage extends MY_Controller
 {
 
     public function __construct()
     {
         parent::__construct();
+    }
+
+    /**
+     * マイページを表示
+     * @return [type] [description]
+     */
+    public function index()
+    {
+        // ユーザページ表示
+        if (empty($this->userId)) {
+            // セッションにUserIdが含まれていない場合はログインページへ遷移
+            $notices = null;
+            $libSystemNotice = new SystemNotice();
+            $notices = $libSystemNotice->getTopNotices();
+        	$data = array(
+                'Notices' => $notices,
+                'Login' => 'login',
+                'Regist' => 'regist'
+            );
+            $this->smarty->view('top', $data);
+            return;
+        }
+        $libUserPage = new UserPage();
+        $data = $libUserPage->getPageData($this->userId);
+        $data['Mode'] = MYPAGE_MODE_PERSONAL;
+        $this->smarty->view('mypage', $data);
     }
 
     /**
@@ -28,15 +63,14 @@ class MyPage extends MY_Controller
         if ($authResult['status'] == AUTH_MATCH_PASSWORD) {
             // セッションにUserIDを放り込む
             $this->setUserId($authResult['userId']);
-            // ユーザページ表示
-            $libUserPage = new UserPage();
-            $data = $libUserPage->getPageData($authResult['userId']);
-            $data['Mode'] = MYPAGE_MODE_PERSONAL;
-            $this->smarty->view('mypage', $data);
-            return;
+            redirect("MyPage");
         }
 
-        $data = array('Message' => '存在しないログインIDです。');
+        $data = array(
+            'Message' => '存在しないログインIDです。',
+            'Login' => 'login',
+            'Regist' => 'regist'
+        );
         if ($authResult == AUTH_UNMATCH_PASSWORD) {
             $data['Message'] = 'パスワードが違います。';
         }
@@ -95,7 +129,13 @@ class MyPage extends MY_Controller
             $notices = null;
             $libSystemNotice = new SystemNotice();
             $notices = $libSystemNotice->getTopNotices();
-            $this->smarty->view('top', ['message' => $message]);
+        	$data = array(
+                'Notices' => $notices,
+                'Message' => $message,
+                'Login' => 'login',
+                'Regist' => 'regist'
+            );
+            $this->smarty->view('top', $data);
             return;
         }
 
@@ -121,6 +161,10 @@ class MyPage extends MY_Controller
         }
     }
 
+    /**
+     * カテゴリ別ゲーム一覧を取得
+     * @return [type] [description]
+     */
     public function getGames()
     {
         $libUserPage = new UserPage();
@@ -131,6 +175,10 @@ class MyPage extends MY_Controller
         echo $data;
     }
 
+    /**
+     * ゲームを追加
+     * @return [type] [description]
+     */
     public function attachGame()
     {
         $targetGameId = $this->input->post("target");

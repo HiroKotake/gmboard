@@ -1,13 +1,26 @@
 <?php
 
-use teleios\gmboard\dao\test\GroupMember;
+use teleios\gmboard\libs\test\GroupMember;
 
 /********************************************************
  * グループメンバー関連   lib: GroupMember
  ********************************************************/
+/**
+ * テスト環境向グループメンバーコントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class TestGroupMember extends MY_Controller
 {
-    // グループメンバー追加１
+    /**
+     * グループメンバー追加のフォームを表示
+     * [formAddGroupMember description]
+     * @return [type] [description]
+     */
     public function formAddGroupMember()
     {
         $groupId = $this->input->get('GPID');
@@ -23,6 +36,10 @@ class TestGroupMember extends MY_Controller
         $data['BookingMembers'] = $members['BookingMembers'];
         $this->smarty->testView('GroupMember/formAddGroupMember', $data);
     }
+
+    /**
+     * グループメンバー追加
+     */
     public function addGroupMember()
     {
         $playerId       = $this->input->post('GPID');
@@ -40,7 +57,11 @@ class TestGroupMember extends MY_Controller
         );
         $this->smarty->testView('GroupMember/addGroupMember', $data);
     }
-    // グループメンバー追加２
+
+    /**
+     * メンバーを検索してグループメンバー追加するフォームを表示
+     * @return [type] [description]
+     */
     public function formSearchGroupMember()
     {
         $groupId = $this->input->get('GPID');
@@ -58,6 +79,11 @@ class TestGroupMember extends MY_Controller
         $data['BookingMembers'] = $members['BookingMembers'];
         $this->smarty->testView('GroupMember/formSearchGroupMember', $data);
     }
+
+    /**
+     * 検索したグループメンバーを表示
+     * @return [type] [description]
+     */
     public function resultSearchGroupMember()
     {
         $playerId = $this->input->post('GPID');
@@ -75,6 +101,10 @@ class TestGroupMember extends MY_Controller
         $data['BookingMembers'] = $members['BookingMembers'];
         $this->smarty->testView('GroupMember/formResultSearchGroupMember', $data);
     }
+
+    /**
+     * 検索したグループメンバーを追加
+     */
     public function addSearchGroupMember()
     {
         $playerId = $this->input->post('PID');
@@ -93,7 +123,11 @@ class TestGroupMember extends MY_Controller
         $data['BookingMembers'] = $members['BookingMembers'];
         $this->smarty->testView('GroupMember/formSearchGroupMember', $data);
     }
-    // グループメンバー一覧表示
+
+    /**
+     * グループメンバー一覧表示
+     * @return [type] [description]
+     */
     public function listGroupMember()
     {
         $groupId = (int)$this->input->get('GID');
@@ -108,7 +142,11 @@ class TestGroupMember extends MY_Controller
         );
         $this->smarty->testView('GroupMember/listGroupMember', $data);
     }
-    // グループメンバー除名
+
+    /**
+     * グループメンバー除名するフォームを表示
+     * @return [type] [description]
+     */
     public function formDelGroupMember()
     {
         $data = array(
@@ -116,6 +154,11 @@ class TestGroupMember extends MY_Controller
         );
         $this->smarty->testView('formDelGroupMember', $data);
     }
+
+    /**
+     * グループメンバー除名
+     * @return [type] [description]
+     */
     public function delGroupMember()
     {
         $data = array(

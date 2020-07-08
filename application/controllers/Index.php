@@ -2,7 +2,17 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 use teleios\gmboard\libs\SystemNotice;
+use teleios\gmboard\dao\TestDao;
 
+/**
+ * サイトトップページコントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class Index extends MY_Controller
 {
     public function __construct()
@@ -35,7 +45,7 @@ class Index extends MY_Controller
     }
 
     /**
-     * [showNotices description]
+     * 告知一覧を表示
      * @return [type] [description]
      */
     public function showNotices()

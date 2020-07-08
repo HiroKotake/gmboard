@@ -2,9 +2,12 @@
 
 class AutoLoader
 {
+    private $alc = null;
 
     public function __construct()
     {
+        require_once APPPATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'AutoLoader.php';
+        $this->alc = $autoLoderClasses;
     }
 
     public function autoLoad()
@@ -26,6 +29,14 @@ class AutoLoader
         $className = ltrim($className, '\\');
         $fileName  = '';
         $namespace = '';
+
+        if (array_key_exists($className, $this->alc)) {
+            if (file_exists($this->alc[$className])) {
+                require $this->alc[$className];
+            }
+            return;
+        }
+
         if ($lastNsPos = strripos($className, '\\')) {
             $targetFiles = array();
             foreach ($libPath as $path) {
@@ -47,5 +58,6 @@ class AutoLoader
         if (file_exists($fileName)) {
             require $fileName;
         }
+echo '[DEBUG]' . $className . '&nbsp;No&nbsp;FILE<br />'; // ToDo: 2020-07-07 - 設定ファイルと組み合わせて、漏れたファイルを追記出来るようにすること！
     }
 }

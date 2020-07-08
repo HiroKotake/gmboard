@@ -1,13 +1,26 @@
 <?php
 
-use teleios\gmboard\dao\test\Group;
+use teleios\gmboard\libs\test\Group;
+use teleios\gmboard\dao\GameInfos;
 
 /********************************************************
  * グループ関連   lib: Group
  ********************************************************/
+/**
+ * テスト環境向グループコントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class TestGroup extends MY_Controller
 {
-    // グループ追加
+    /**
+     * グループ追加するフォームを表示
+     * @return [type] [description]
+     */
     public function formGroup()
     {
         // ゲーム一覧取得
@@ -20,6 +33,10 @@ class TestGroup extends MY_Controller
         );
         $this->smarty->testView('Group/formGroup', $data);
     }
+
+    /**
+     * グループ追加
+     */
     public function addGroup()
     {
         $data = array(
@@ -49,13 +66,17 @@ class TestGroup extends MY_Controller
             return;
         }
         // グループ内容表示
-        $this->load->model('dao/GameInfos', 'daoGameInfos');
-        $gameInfo = $this->daoGameInfos->getByGameId($gameId);
+        $daoGameInfos = new GameInfos();
+        $gameInfo = $daoGameInfos->getByGameId($gameId);
         $data['GroupInfo'] = $groupInfo;
         $data['GameName'] = $gameInfo['Name'];
         $this->smarty->testView('Group/showGroup', $data);
     }
-    // グループ一覧表示
+
+    /**
+     * グループ一覧表示
+     * @return [type] [description]
+     */
     public function listGroup()
     {
         $gameId = $this->input->get('GID');
@@ -73,7 +94,11 @@ class TestGroup extends MY_Controller
         }
         $this->smarty->testView('Group/listGroup', $data);
     }
-    // グループ情報表示
+
+    /**
+     * グループ情報表示
+     * @return [type] [description]
+     */
     public function showGroup()
     {
         $gameId = $this->input->get('GID');

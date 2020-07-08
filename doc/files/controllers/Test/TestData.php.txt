@@ -2,8 +2,20 @@
 
 use teleios\gmboard\libs\admin\CtrlRecords;
 
+/**
+ * テスト環境向データ生成コントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class TestData extends MY_Controller
 {
+    /**
+     * テーブルを生成
+     */
     public function buildTables() : void
     {
         $ctrlRecords = new CtrlRecords();
@@ -15,6 +27,9 @@ class TestData extends MY_Controller
         echo json_encode(["message" => $message]);
     }
 
+    /**
+     * 全テーブルを削除
+     */
     public function destoryTables() : void
     {
         $ctrlRecords = new CtrlRecords();
@@ -26,6 +41,11 @@ class TestData extends MY_Controller
         echo json_encode(["message" => $message]);
     }
 
+    /**
+     * 操作対象のカテゴリを抽出
+     * @param  string $flags [description]
+     * @return array         [description]
+     */
     private function checkTarget(string $flags) : array
     {
         $list = array(
@@ -91,6 +111,10 @@ class TestData extends MY_Controller
         echo json_encode($data);
     }
 
+    /**
+     * データを削除
+     * @return [type] [description]
+     */
     public function removeData()
     {
         $target = $this->input->post("target");

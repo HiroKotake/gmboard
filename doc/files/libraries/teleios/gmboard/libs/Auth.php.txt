@@ -2,14 +2,23 @@
 namespace teleios\gmboard\libs;
 
 use teleios\utils\StringUtility;
+use teleios\gmboard\dao\Users;
+use teleios\gmboard\dao\UserBoard;
+use teleios\gmboard\dao\Registration;
 
+/**
+ * 認証関連クラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category library
+ * @package teleios\gmboard
+ */
 class Auth
 {
-    private $cIns = null;
-
     public function __construct()
     {
-        $this->cIns =& get_instance();
     }
 
     /**
@@ -19,8 +28,8 @@ class Auth
      */
     public function checkDeplicateLid(string $loginId) : bool
     {
-        $this->cIns->load->model('dao/Users', 'daoUsers');
-        $data = $this->cIns->daoUsers->getByLoginId($loginId);
+        $daoUsers = new users();
+        $data = $daoUsers->getByLoginId($loginId);
         if (count($data) == 0) {
             return true;
         }
@@ -45,13 +54,13 @@ class Auth
      */
     public function addRegistration(int $userId, string $regCode) : int
     {
-        $this->cIns->load->model('dao/Registration', 'daoRegist');
+        $daoRegist = new Registration();
         $data = array(
             'UserId' => $userId,
             'Rcode' => $regCode,
             'ExpireDate' => (date('Y-m-d h:i:s', strtotime("+ 6hour")))
         );
-        return $this->cIns->daoRegist->add($data);
+        return $daoRegist->add($data);
     }
 
     /**
@@ -78,8 +87,8 @@ class Auth
      */
     public function checkRegCode(string $regId, string $regCode) : int
     {
-        $this->cIns->load->model('dao/Registration', 'daoRegist');
-        $resultSet = $this->cIns->daoRegist->get($regId);
+        $daoRegist = new Registration();
+        $resultSet = $daoRegist->get($regId);
         // 対象レコードがない
         if (count($resultSet) <= 0) {
             return AUTH_ACTIVATE_NOEXIST;
@@ -95,9 +104,9 @@ class Auth
             return AUTH_ACTIVATE_UNMATCH;
         }
         // 仮登録を正規登録に変更
-        $this->cIns->load->model('dao/Users', 'daoUsers');
-        $this->cIns->daoUsers->mailAuthed($resultSet['UserId']);
-        $this->cIns->daoRegist->set($regId, ['ActivatedDate' => date('Y-m-d H:i:s')]);
+        $daoUsers = new Users();
+        $daoUsers->mailAuthed($resultSet['UserId']);
+        $daoRegist->set($regId, ['ActivatedDate' => date('Y-m-d H:i:s')]);
         return AUTH_ACTIVATE_SUCCESS;
     }
 
@@ -109,8 +118,8 @@ class Auth
      */
     public function checkPassword(string $loginId, string $pwd) : array
     {
-        $this->cIns->load->model('dao/Users', 'daoUsers');
-        $data = $this->cIns->daoUsers->getByLoginId($loginId);
+        $daoUsers = new Users();
+        $data = $daoUsers->getByLoginId($loginId);
         $result = array(
             'status' => null,
             'userId' => null
@@ -143,11 +152,11 @@ class Auth
             'Password'  => StringUtility::getHashedPassword($password),
             'Nickname'  => $nickname
         );
-        $this->cIns->load->model('dao/Users', 'daoUsers');
-        $userId = $this->cIns->daoUsers->add($data);
+        $daoUsers = new Users();
+        $userId = $daoUsers->add($data);
         // ユーザ用掲示板作成
-        $this->cIns->load->model('dao/UserBoard', 'daoUserBoard');
-        $this->cIns->daoUserBoard->createTable($userId);
+        $daoUserBoard = new UserBoard();
+        $daoUserBoard->createTable($userId);
         // ウェルカムメッセージ追加
         $welcomeMessage = array(
             'FromUserId'    => SYSTEM_USER_ID,                // 送信者ユーザID
@@ -156,7 +165,7 @@ class Auth
             'FromGroupName' => SYSTEM_GROUP_NAME,             // 送信者グループ名
             'message'       => 'ようこそ、いらっしゃいました！'    // メッセージテキスト
         );
-        $this->cIns->daoUserBoard->add($userId, $welcomeMessage);
+        $daoUserBoard->add($userId, $welcomeMessage);
 
         return $userId;
     }

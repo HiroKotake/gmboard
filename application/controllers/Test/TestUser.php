@@ -1,14 +1,26 @@
 <?php
 
 use teleios\utils\StringUtility;
-use teleios\gmboard\dao\test\User;
+use teleios\gmboard\libs\test\User;
 
 /********************************************************
  * ユーザ関連１   lib: User
  ********************************************************/
+/**
+ * テスト環境向ユーザコントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class TestUser extends MY_Controller
 {
-    // ユーザ追加
+    /**
+     * ユーザ追加するフォームを表示
+     * @return [type] [description]
+     */
     public function formUser()
     {
         $data = array(
@@ -16,6 +28,11 @@ class TestUser extends MY_Controller
         );
         $this->smarty->testView('User/formUser', $data);
     }
+
+    /**
+     * ユーザ追加する
+     * @return [type] [description]
+     */
     public function addUser()
     {
         $mailAddr   = $this->input->post('MAIL');
@@ -71,7 +88,11 @@ class TestUser extends MY_Controller
 
         $this->smarty->testView('User/showUser', $data);
     }
-    // ユーザ一覧表示
+
+    /**
+     * ユーザ一覧表示
+     * @return [type] [description]
+     */
     public function listUser()
     {
         $testUser = new User();
@@ -86,7 +107,11 @@ class TestUser extends MY_Controller
         );
         $this->smarty->testView('User/listUser', $data);
     }
-    // ユーザ情報表示
+
+    /**
+     * ユーザ情報表示
+     * @return [type] [description]
+     */
     public function showUser()
     {
         $userId = $this->input->get('UserId');
@@ -102,12 +127,20 @@ class TestUser extends MY_Controller
         );
         $this->smarty->testView('User/showUser', $data);
     }
-    // ログイン認証・確認
+
+    /**
+     * ログイン認証・確認のフォームを表示
+     * @return [type] [description]
+     */
     public function checkLogin()
     {
         $this->smarty->testView('User/checkLogin');
     }
 
+    /**
+     * ログイン認証・確認
+     * @return [type] [description]
+     */
     public function doLogin()
     {
         $loginId = $this->input->post('LID');

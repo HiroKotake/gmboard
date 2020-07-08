@@ -23,6 +23,13 @@ class Mypage
         return $data;
     }
 
+    /**
+     * グループの情報を取得する
+     * @param  int   $userId  [description]
+     * @param  int   $gameId  [description]
+     * @param  int   $groupId [description]
+     * @return array          [description]
+     */
     public function getGroupData(int $userId, int $gameId, int $groupId) : array
     {
         $data = array();

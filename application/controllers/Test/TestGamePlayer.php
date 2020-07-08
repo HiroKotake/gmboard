@@ -1,18 +1,33 @@
 <?php
 
-use teleios\gmboard\dao\test\GamePlayer;
+use teleios\gmboard\libs\test\GamePlayer;
 
-/********************************************************
- * ユーザ関連２   lib: GamePlayer
- ********************************************************/
+/**
+ * テスト環境向ゲームプレイヤーコントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class TestGamePlayer extends MY_Controller
 {
+    /**
+     * ゲージ一覧を表示
+     * @return [type] [description]
+     */
     public function formGameList()
     {
         $testGamePlayer = new GamePlayer();
         $data = $testGamePlayer->formGameList();
         $this->smarty->testView('GamePlayer/formGameList', $data);
     }
+
+    /**
+     * ゲームプレイヤーを表示
+     * @return [type] [description]
+     */
     public function formGamePlayer()
     {
         $gameId = $this->input->get('GID');
@@ -27,6 +42,10 @@ class TestGamePlayer extends MY_Controller
         $data = array_merge($data, $result);
         $this->smarty->testView('GamePlayer/formGamePlayer', $data);
     }
+
+    /**
+     * ゲームプレイヤーを追加
+     */
     public function addGamePlayer()
     {
         $gameId = $this->input->post('GID');
@@ -57,12 +76,21 @@ class TestGamePlayer extends MY_Controller
         $this->smarty->testView('GamePlayer/addGamePlayer', $data);
     }
 
+    /**
+     * ゲーム一覧を表示
+     * @return [type] [description]
+     */
     public function listGames()
     {
         $testGamePlayer = new GamePlayer();
         $data = $testGamePlayer->listGames();
         $this->smarty->testView('GamePlayer/listGames', $data);
     }
+
+    /**
+     * グループを指定してプレイヤー一覧を表示
+     * @return [type] [description]
+     */
     public function listGamePlayers()
     {
         $gameId = $this->input->get('GID');
@@ -70,6 +98,11 @@ class TestGamePlayer extends MY_Controller
         $data = $testGamePlayer->listGamePlayers((int)$gameId);
         $this->smarty->testView('GamePlayer/listGamePlayers', $data);
     }
+
+    /**
+     * ゲームプレイヤー情報を表示
+     * @return [type] [description]
+     */
     public function showGamePlayer()
     {
         $data = array(

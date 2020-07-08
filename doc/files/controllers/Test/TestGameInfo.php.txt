@@ -1,7 +1,16 @@
 <?php
 
-use teleios\gmboard\dao\test\GameInfo;
+use teleios\gmboard\libs\test\GameInfo;
 
+/**
+ * テスト環境向ゲーム情報コントローラークラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category controller
+ * @package teleios\gmboard
+ */
 class TestGameInfo extends MY_Controller
 {
     /********************************************************

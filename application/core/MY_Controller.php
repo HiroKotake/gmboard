@@ -1,12 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use teleios\gmboard\dao\SystemCommon;
+
 class MY_Controller extends CI_Controller
 {
     private $browserType = BROWSER_TYPE_FULL;
 
     public $redis = null;
     public $userId = null;
+    public $sysComns = null;
 
     public function __construct()
     {
@@ -17,8 +20,11 @@ class MY_Controller extends CI_Controller
         $this->load->library('user_agent');
         // セッション情報
         $this->load->library('session');
+        // URLヘルパー
+        $this->load->helper('url');
         // システム用DBテーブル
-        $this->load->model('dao/SystemCommon', 'sysComns');
+        //$this->load->model('dao/SystemCommon', 'sysComns');
+        $this->sysComns = new SystemCommon();
         // UserIdの確認
         if (isset($_SESSION['userId'])) {
             // 存在するならば$userIdに入れる
@@ -38,6 +44,7 @@ class MY_Controller extends CI_Controller
     public function setUserId(int $userId)
     {
         $this->session->set_userdata('userId', $userId);
+        $this->session->mark_as_temp('userId', 24 * 60 * 60);
         $this->userId = $userId;
     }
 }
