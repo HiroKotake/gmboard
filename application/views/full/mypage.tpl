@@ -22,7 +22,7 @@
                     <select id="TargetGame" name="Target">
                     {foreach from=$GameList[1] item=GameInfo}
                         {if $GameInfo.Joined == 0}
-                        <option value="{$GameInfo.GameId}">{$GameInfo.Name}</option>
+                        <option value="{$GameInfo.Ub}">{$GameInfo.Name}</option>
                         {/if}
                     {/foreach}
                     </select>

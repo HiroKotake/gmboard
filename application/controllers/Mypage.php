@@ -31,17 +31,8 @@ class MyPage extends MY_Controller
     {
         // ユーザページ表示
         if (empty($this->userId)) {
-            // セッションにUserIdが含まれていない場合はログインページへ遷移
-            $notices = null;
-            $libSystemNotice = new SystemNotice();
-            $notices = $libSystemNotice->getTopNotices();
-        	$data = array(
-                'Notices' => $notices,
-                'Login' => 'login',
-                'Regist' => 'regist'
-            );
-            $this->smarty->view('top', $data);
-            return;
+            // セッションにUserIdが含まれていない場合はトップページへ遷移
+            redirect("/");
         }
         $libUserPage = new UserPage();
         $data = $libUserPage->getPageData($this->userId);

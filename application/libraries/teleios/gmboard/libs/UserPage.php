@@ -128,9 +128,9 @@ class UserPage
                     $list[(int)$gameInfo['Genre']] = array();
                 }
                 $list[$gameInfo['Genre']][$gameInfo['GameId']] = array(
-                    'GameId'        => $gameInfo['GameId'],
+                    'Ub'        => $gameInfo['GameId'],
                     'Name'          => $gameInfo['Name'],
-                    'Description'   => $gameInfo['Description'],
+                    'Desc'   => $gameInfo['Description'],
                     'Joined'        => 0
                 );
             }
@@ -168,7 +168,7 @@ class UserPage
             $data[$genre] = array();
             foreach ($datas as $info) {
                 foreach ($attachedGames as $game) {
-                    if ($info['GameId'] == $game['GameId']) {
+                    if ($info['Ub'] == $game['GameId']) {
                         $info['Joined'] = 1;
                     }
                 }
@@ -230,22 +230,22 @@ class UserPage
             'PlayerIndexId' => null,
             'GamePlayersId' => null
         );
-        $this->cIns->load->model('dao/PlayerIndex', 'daoPlayerIndex');
-        $this->cIns->load->model('dao/GamePlayers', 'daoGamePlayers');
+        $daoPlayerIndex = new PlayerIndex();
+        $daoGamePlayers = new GamePlayers();
         // 登録済み確認
-        $fExist = $this->cIns->daoPlayerIndex->isExist($userId, $playerId);
+        $fExist = $daoPlayerIndex->isExist($userId, $playerId);
         if ($fExist) {
             return $data;
         }
         // PlayerIndexテーブルへ情報を追加
-        $data["PlayerIndexId "] = $this->cIns->daoPlayerIndex->add($userId, $gameId);
+        $data["PlayerIndexId "] = $daoPlayerIndex->add($userId, $gameId);
         // GamePlayers_xxxxxxxxテーブルへ情報を追加
         $gamePlayersData = array(
             'UserId'        => $userId,
             'PlayerId'      => $playerId,
             'GameNickname'  => $gameNickname
         );
-        $data["GamePlsyersId"] = $this->cIns->daoGamePlayers->add($gameId, $gamePlayersData);
+        $data["GamePlsyersId"] = $daoGamePlayers->add($gameId, $gamePlayersData);
         $data["Status"] = DB_STATUS_ADDED;
         return $data;
     }

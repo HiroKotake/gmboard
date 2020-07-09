@@ -12,7 +12,7 @@
             // optionの追加
             for (var game in gameListByGenre[selected]) {
                 if (gameListByGenre[selected][game]["Joined"] == 0) {
-                    gameList.append($("<option>").val(gameListByGenre[selected][game]["GameId"]).text(gameListByGenre[selected][game]["Name"]));
+                    gameList.append($("<option>").val(gameListByGenre[selected][game]["Ub"]).text(gameListByGenre[selected][game]["Name"]));
                 }
             }
             // clear textbox.
@@ -28,7 +28,7 @@
             var joinedGroups = {/literal}{count($GroupInfos)}{literal};
             if (gamesListVar == null | gamesListVar != {/literal}{$GamesListVer}{literal} | currentJoinedGames != joinedGames) {
                 var jsonText = $.ajax({
-                    url: "getGames",
+                    url: "MyPage/getGames",
                     async: false
                 }).responseText;
                 localStorage.setItem("GamesList", jsonText);
@@ -50,7 +50,7 @@
                             var gpid = $("#TargePID").val();
                             var gnn = $("#TargetNickname").val();
                             var newGameInfo = $.ajax({
-                                url: "attachGame",
+                                url: "MyPage/attachGame",
                                 type: "POST",
                                 data: "target=" + target + "&gpid=" + gpid + "&gnn=" + gnn,
                                 async: false

@@ -77,7 +77,7 @@ class PlayerIndex extends \MY_Model
     public function isExist(int $userId, int $gameId) : bool
     {
         $this->calledMethod == __FUNCTION__;
-        return $this->isExisted(array('UserId' => $userId, 'GameId' => $gameId));
+        return $this->isExisted(array('WHERE' => ['UserId' => $userId, 'GameId' => $gameId]));
     }
 
     /**
