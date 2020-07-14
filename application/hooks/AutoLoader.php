@@ -32,7 +32,7 @@ class AutoLoader
 
         if (array_key_exists($className, $this->alc)) {
             if (file_exists($this->alc[$className])) {
-                require $this->alc[$className];
+                require_once $this->alc[$className];
             }
             return;
         }
@@ -48,7 +48,7 @@ class AutoLoader
             }
             foreach ($targetFiles as $target) {
                 if (file_exists($target)) {
-                    require $target;
+                    require_once $target;
                     break;
                 }
             }
@@ -56,8 +56,8 @@ class AutoLoader
         }
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
         if (file_exists($fileName)) {
-            require $fileName;
+            require_once $fileName;
         }
-echo '[DEBUG]' . $className . '&nbsp;No&nbsp;FILE<br />'; // ToDo: 2020-07-07 - 設定ファイルと組み合わせて、漏れたファイルを追記出来るようにすること！
+//echo '[DEBUG]' . $className . '&nbsp;No&nbsp;FILE<br />'; // ToDo: 2020-07-07 - 設定ファイルと組み合わせて、漏れたファイルを追記出来るようにすること！
     }
 }

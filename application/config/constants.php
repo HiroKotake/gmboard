@@ -90,8 +90,17 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 | Special Codes
 |--------------------------------------------------------------------------
 */
+// システム固定値
+defined('EXCLUDE_USER_CHECK')   OR define('EXCLUDE_USER_CHECK', [               // 起動時"UserID"チェック除外"URI"
+    'MyPage/login',
+    'MyPage/regist'
+]);
+defined('LINE_NUMBER_BOARD')    OR define('LINE_NUMBER_BOARD', 100);            // 掲示板の１ページあたりの最大表示数
+defined('LINE_NUMBER_SEARCH')   OR define('LINE_NUMBER_SEARCH', 20);            // 検索結果の１ページあたりの最大表示数
+// ユーザエージェント関連
 defined('BROWSER_TYPE_FULL')    OR define('BROWSER_TYPE_FULL', 'full');         // User's Browser Type is PC browser
 defined('BROWSER_TYPE_SP')      OR define('BROWSER_TYPE_SP', 'sp');             // User's Browser type is Smart Phone
+// DBステータス
 defined('DB_STATUS_NO_EXISTED') OR define('DB_STATUS_NO_EXISTED', 100);         // 対象のレコードが存在しない
 defined('DB_STATUS_EXISTED')    OR define('DB_STATUS_EXISTED', 101);            // 対象のレコードは既に存在する
 defined('DB_STATUS_ADDED')      OR define('DB_STATUS_ADDED', 102);              // レコードの追加が完了
@@ -172,7 +181,8 @@ defined('TABLE_NAME_SYSTEM_COMMON') OR define('TABLE_NAME_SYSTEM_COMMON', 'Syste
 defined('TABLE_NAME_USER_INFOS')    OR define('TABLE_NAME_USER_INFOS', 'UserInfos');
 defined('TABLE_NAME_USERS')         OR define('TABLE_NAME_USERS', 'Users');
 // グループ権限タイプ
-defined('GROUP_AUTHORITY_LEADER')      OR define('GROUP_AUTHORITY_LEADER', 1);
-defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2);
-defined('GROUP_AUTHORITY_MENBER')      OR define('GROUP_AUTHORITY_MENBER', 3);
-defined('GROUP_AUTHORITY_GUEST')       OR define('GROUP_AUTHORITY_GUEST', 4);
+defined('GROUP_AUTHORITY_LEADER')      OR define('GROUP_AUTHORITY_LEADER', 1);      // リーダー： 任命権、招待操作可能、申請操作可能、告知読み書き可能、掲示板読み書き可能
+defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2);  // サブリーダー： 申請操作可能、告知読み書き可能、掲示板読み書き可能
+defined('GROUP_AUTHORITY_MENBER')      OR define('GROUP_AUTHORITY_MENBER', 3);      // 一般メンバー： 告知読み書き可能、掲示板読み書き可能
+defined('GROUP_AUTHORITY_OBSERVER')    OR define('GROUP_AUTHORITY_OBSERVER', 4);    // オブザーバー: 掲示板読み書き可能
+defined('GROUP_AUTHORITY_GUEST')       OR define('GROUP_AUTHORITY_GUEST', 5);       // ゲスト： 掲示板リードオンリー

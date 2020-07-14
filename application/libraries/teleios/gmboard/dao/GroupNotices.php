@@ -32,7 +32,7 @@ class GroupNotices extends \MY_Model
      */
     public function createTable(int $gameId, int $groupId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $query = 'CALL CreateGroupNotice(' . $gameId . ', ' . $groupId . ')';
         $this->writeLog($query);
         return $this->db->simple_query($query);
@@ -52,7 +52,7 @@ class GroupNotices extends \MY_Model
      */
     public function add(int $gameId, int $groupId, array $data) : int
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
             $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                         . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
@@ -77,7 +77,7 @@ class GroupNotices extends \MY_Model
         int $number = 10,
         int $offset = 0
     ) : array {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                     . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
         $now = date("Y-m-d H:i:s");
@@ -101,7 +101,7 @@ class GroupNotices extends \MY_Model
      */
     public function getAllRecords(int $gameId, int $groupId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                 . '_' . $this->stringUtil->lpad($groupId, "0", 12);
         return $this->searchAll(0, 0, true);
@@ -117,7 +117,7 @@ class GroupNotices extends \MY_Model
      */
     public function set(int $gameId, int $groupId, int $noticeId, int $data) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
             $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                         . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
@@ -135,7 +135,7 @@ class GroupNotices extends \MY_Model
      */
     public function showNotice(int $gameId, int $groupId, int $noticeId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array('Showable' => 1);
         return $this->set($gameId, $groupId, $noticeId, $data);
     }
@@ -149,7 +149,7 @@ class GroupNotices extends \MY_Model
      */
     public function hideNotice(int $gameId, int $groupId, int $noticeId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array('Showable' => 0);
         return $this->set($gameId, $groupId, $noticeId, $data);
     }
@@ -170,7 +170,7 @@ class GroupNotices extends \MY_Model
         string $startDateTime,
         string $endDateTime
     ) : bool {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array(
             'ShowStartDateTime' => $startDateTime,
             'ShowEndDateTime' => $endDateTime
@@ -187,7 +187,7 @@ class GroupNotices extends \MY_Model
      */
     public function delete(int $gameId, int $groupId, int $noticeId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array(
             'DeleteDate' => date("Y-m-d H:i:s"),
             'DeleteFlag' => 1
@@ -203,7 +203,7 @@ class GroupNotices extends \MY_Model
      */
     public function clearTable(int $gameId, int $groupId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
                     . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
         return $this->truncate();

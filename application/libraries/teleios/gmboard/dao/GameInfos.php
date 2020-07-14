@@ -28,7 +28,7 @@ class GameInfos extends \MY_Model
      */
     public function add(string $name, string $description)
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array(
             'Name'          => $name,
             'Description'   => $description
@@ -45,7 +45,7 @@ class GameInfos extends \MY_Model
      */
     public function getAll(int $limit = 20 , int $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->searchAll($limit, $offset);
     }
 
@@ -55,7 +55,7 @@ class GameInfos extends \MY_Model
      */
     public function getAllRecords() : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->searchAll(0, 0, true);
     }
 
@@ -66,7 +66,7 @@ class GameInfos extends \MY_Model
      */
     public function getLikeName(string $name, $limit = 10, $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'LIKE' => array('Name' => $name),
             'NUMBER' => array($limit, $offset)
@@ -81,7 +81,7 @@ class GameInfos extends \MY_Model
      */
     public function getByGameId(int $gameId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('GameId' => $gameId),
         );
@@ -99,7 +99,7 @@ class GameInfos extends \MY_Model
      */
     public function getByGameIds(array $gameIds) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('GameId' => $gameIds),
         );
@@ -114,7 +114,7 @@ class GameInfos extends \MY_Model
      */
     public function set(int $gameId, array $data)
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->update($data, array('GamdId' => $gameId));
     }
 
@@ -125,7 +125,7 @@ class GameInfos extends \MY_Model
      */
     public function delete(int $gameId)
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->logicalDelete(array('GamdId' => $gameId));
     }
 
@@ -135,7 +135,7 @@ class GameInfos extends \MY_Model
      */
     public function clearTable() : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->truncate();
     }
 }

@@ -20,6 +20,22 @@
             $("#TargetNickname").val("");
         }
 
+        function changeGroupGameGenre() {
+            var gameList = $("select[name=GTarget]");
+            var selected = $("select[name=GGenre]").val();
+            // optionの削除
+            while (0 < gameList.children('option').length) {
+               gameList.children('option:first-child').remove();
+            }
+            // optionの追加
+            for (var game in gameListByGenre[selected]) {
+                gameList.append($("<option>").val(gameListByGenre[selected][game]["Ub"]).text(gameListByGenre[selected][game]["Name"]));
+            }
+            // clear textbox.
+            $("#TargePID").val("");
+            $("#TargetNickname").val("");
+        }
+
         $(function(){
             // localStorage
             var gamesListVar = localStorage.getItem("GamesListVer");
@@ -37,9 +53,9 @@
             }
             gameListByGenre = JSON.parse(localStorage.getItem("GamesList"));
             // ゲームの追加
-            $("#MyPageDialogAddGame").dialog({
+            $("#DialogAddGame").dialog({
                 autoOpen: false,
-                width: 500,
+                width: 550,
                 modal: true,
                 buttons: [
                     {
@@ -69,13 +85,16 @@
                                 joinedGames += 1;
                                 localStorage.setItem("JoinedGames", joinedGames);
                                 changeGameGenre();
+                            } else {
+                                $("#DialogAddGame").dialog("close");
+                                windows.alert();
                             }
                         }
                     }
                 ]
             });
-            $("#MyPageBtnAddGame").click(function(){
-                $("#MyPageDialogAddGame").dialog("open");
+            $("#BtnAddGame").click(function(){
+                $("#DialogAddGame").dialog("open");
             });
             // ゲームカテゴリの変更
             $("#GameGenre").change(function(){
@@ -86,9 +105,28 @@
                 alert("check"); // sample
             });
             // グループの追加
-            $("#MyPageDialogAddGroup").dialog({autoOpen:false});
-            $("#MyPageBtnAddGroup").click(function(){
-                $("#MyPageDialogAddGroup").dialog("open");
+            $("#DialogAddGroup").dialog({
+                autoOpen:false,
+                width: 550,
+                modal: true,
+                buttons: [
+                    {
+                        text: '検索',
+                        click: function(){
+                            var game = $("#G_TargetGame option:selected").val();
+                            var gameGroup = $("#TargetGrouName").val();
+                            window.location.href = "./Group/search?gpid=" + game + "&tgn=" + gameGroup + "&pg=1";
+                            $("#DialogAddGroup").dialog("close");
+                        }
+                    }
+                ]
+            });
+            // ゲームカテゴリの変更
+            $("#G_GameGenre").change(function(){
+               changeGroupGameGenre();
+            });
+            $("#BtnAddGroup").click(function(){
+                $("#DialogAddGroup").dialog("open");
             });
         })
 {/literal}

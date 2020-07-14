@@ -32,10 +32,20 @@ class Groups extends \MY_Model
      */
     public function createTable(int $gameId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $query = 'CALL CreateGroup(' . $gameId . ')';
         $this->writeLog($query);
         return $this->db->simple_query($query);
+    }
+
+    /**
+     * テーブル名を生成する
+     * @param  int    $gameId [description]
+     * @return string         [description]
+     */
+    public function getTableName(int $gameId) : string
+    {
+        return self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
     }
 
     /**
@@ -45,8 +55,8 @@ class Groups extends \MY_Model
      */
     public function getAll(int $gameId) : array
     {
-        $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($gameId);
         return $this->searchAll();
     }
 
@@ -57,8 +67,8 @@ class Groups extends \MY_Model
      */
     public function getAllRecords(int $gameId) : array
     {
-        $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
         return $this->searchAll(0, 0, true);
     }
 
@@ -70,9 +80,9 @@ class Groups extends \MY_Model
      */
     public function add(int $gameId, array $data) : int
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
-            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+            $this->setTableName($gameId);
             return $this->attach($data);
         }
         return false;
@@ -89,14 +99,28 @@ class Groups extends \MY_Model
      */
     public function getByGroupName(int $gameId, string $groupName, int $limit = 10, int $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
         $cond = array(
             'LIKE' => array('GroupName' => $groupName),
             'LIMIT' => array($limit, $offset),
             'ORDER_BY' => array('GroupId' => 'ASC')
         );
         return $this->search($cond);
+    }
+
+    /**
+     * グループ名に適合する検索件数を取得する
+     * @param  int    $gameId    [description]
+     * @param  string $groupName [description]
+     * @return int               [description]
+     */
+    public function countByGroupName(int $gameId, string $groupName) : int
+    {
+        $query = "SELECT COUNT(*) AS 'rnum' FROM " . $this->getTableName($gameId) . " WHERE `GroupName` LIKE '%$groupName%'";
+        $resultSet = $this->execQuery($query);
+        $record = $resultSet->result_array();
+        return $record[0]["rnum"];
     }
 
     // グループID検索
@@ -108,8 +132,8 @@ class Groups extends \MY_Model
      */
     public function getByGroupId(int $gameId, int $groupId) : array
     {
-        $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
         $cond = array(
             'WHERE' => array('GroupId' => $groupId)
         );
@@ -126,9 +150,9 @@ class Groups extends \MY_Model
      */
     public function set(int $gameId, int $groupId, array $data) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
-            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+            $this->setTableName($this->getTableName($gameId));
             return $this->update($data, array('GroupId' => $groupId));
         }
         return false;
@@ -143,7 +167,7 @@ class Groups extends \MY_Model
      */
     public function updateGroupName(int $gameId, int $groupId, string $groupName) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array('GroupName' => $groupName);
         return $this->set($gameId, $groupId, $data);
     }
@@ -157,7 +181,7 @@ class Groups extends \MY_Model
      */
     public function updateLeader(int $gameId, int $groupId, int $userId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array('Leader' => $userId);
         return $this->set($gameId, $groupId, $data);
     }
@@ -171,7 +195,7 @@ class Groups extends \MY_Model
      */
     public function updateDescription(int $gameId, int $groupId, string $description) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array('Description' => $description);
         return $this->set($gameId, $groupId, $data);
     }
@@ -184,8 +208,8 @@ class Groups extends \MY_Model
      */
     public function delete(int $gameId, int $groupId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
         return $this->logicalDelete(array('GroupId' => $groupId));
     }
 
@@ -196,8 +220,8 @@ class Groups extends \MY_Model
      */
     public function clearTable(int $gameId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
         return $this->truncate();
     }
 }

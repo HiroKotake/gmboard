@@ -23,12 +23,18 @@ class MY_Controller extends CI_Controller
         // URLヘルパー
         $this->load->helper('url');
         // システム用DBテーブル
-        //$this->load->model('dao/SystemCommon', 'sysComns');
         $this->sysComns = new SystemCommon();
         // UserIdの確認
         if (isset($_SESSION['userId'])) {
             // 存在するならば$userIdに入れる
             $this->userId = $_SESSION['userId'];
+        }
+        // ログイン状態にない場合はトップ画面へ遷移
+        $uri = uri_string();
+        if (!in_array($uri, EXCLUDE_USER_CHECK)) {
+            if (empty($this->userId) && !empty(mb_strlen($uri))) {
+                redirect("");
+            }
         }
         // redis
         $this->redis = new \Redis();
