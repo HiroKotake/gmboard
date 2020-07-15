@@ -100,14 +100,20 @@ defined('LINE_NUMBER_SEARCH')   OR define('LINE_NUMBER_SEARCH', 20);            
 // ユーザエージェント関連
 defined('BROWSER_TYPE_FULL')    OR define('BROWSER_TYPE_FULL', 'full');         // User's Browser Type is PC browser
 defined('BROWSER_TYPE_SP')      OR define('BROWSER_TYPE_SP', 'sp');             // User's Browser type is Smart Phone
+// セッション関連
+defined('SESSION_USER_ID')      OR define('SESSION_USER_ID', 'userId');         // UserID
+defined('SESSION_INFO_GAME')    OR define('SESSION_INFO_GAME', 'games');        // 登録ゲーム
+defined('SESSION_INFO_GROUP')   OR define('SESSION_INFO_GROUP', 'groups');      // 登録グループ
+defined('SESSION_LIST_GENRE')   OR define('SESSION_LIST_GENRE', 'genreList');   // ドロップダウンメニュー用ユーザ個別ゲームカテゴリリスト
+defined('SESSION_LIST_GAME')    OR define('SESSION_LIST_GAME', 'gameList');     // ドロップダウンメニュー用ユーザ個別ゲームリスト
+// システム固有キー名
+defined('SYSTEM_KEY_GAMELIST_VER') OR define('SYSTEM_KEY_GAMELIST_VER', 'GamesListVer'); // 設定ゲームのリストのバージョンを示すキー名
 // DBステータス
 defined('DB_STATUS_NO_EXISTED') OR define('DB_STATUS_NO_EXISTED', 100);         // 対象のレコードが存在しない
 defined('DB_STATUS_EXISTED')    OR define('DB_STATUS_EXISTED', 101);            // 対象のレコードは既に存在する
 defined('DB_STATUS_ADDED')      OR define('DB_STATUS_ADDED', 102);              // レコードの追加が完了
 defined('DB_STATUS_UPDATED')    OR define('DB_STATUS_UPDATED', 103);            // レコードの更新が完了
 defined('DB_STATUS_FALIED')     OR define('DB_STATUS_FALIED', 190);             // DB操作に失敗
-// システム固有キー名
-defined('SYSTEM_KEY_GAMELIST_VER') OR define('SYSTEM_KEY_GAMELIST_VER', 'GamesListVer'); // 設定ゲームのリストのバージョンを示すキー名
 // 運営のID
 defined('SYSTEM_USER_ID')       OR define('SYSTEM_USER_ID', '999999999999');    // System UserId
 defined('SYSTEM_USER_NAME')     OR define('SYSTEM_USER_NAME', '運営');           // System User名
@@ -173,6 +179,7 @@ defined('TABLE_PREFIX_GROUP')          OR define('TABLE_PREFIX_GROUP', 'Groups_'
 defined('TABLE_PREFIX_REGIST_BOOKING') OR define('TABLE_PREFIX_REGIST_BOOKING', 'RegistBooking_');
 defined('TABLE_PREFIX_USER_BOARD')     OR define('TABLE_PREFIX_USER_BOARD', 'UBoard_');
 // テーブル名
+defined('TABLE_NAME_CI_SESSIONS')   OR define('TABLE_NAME_CI_SESSIONS', 'CiSessions');
 defined('TABLE_NAME_GAME_INFOS')    OR define('TABLE_NAME_GAME_INFOS', 'GameInfos');
 defined('TABLE_NAME_NOTICES')       OR define('TABLE_NAME_NOTICES', 'Notices');
 defined('TABLE_NAME_PLAYER_INDEX')  OR define('TABLE_NAME_PLAYER_INDEX', 'PlayerIndex');

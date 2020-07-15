@@ -15,6 +15,7 @@
     <!-- メニュー -->
     <div>
         メニュー
+        {include file="./includes/menu.tpl"}
     </div>
     <!-- メインエリア -->
     <div>
@@ -28,7 +29,7 @@
         <div>
         {if $Type == GroupSearch}
             <!-- 検索結果表示 -->
-            {include file="./individual/groupSearch.tpl" list=$List total=$TotalNumber cpage=$CurrentPage maxLineNumber=$MaxLineNumber}
+            {include file="./individual/groupSearch.tpl" list=$List total=$TotalNumber cpage=$CurrentPage maxLineNumber=$MaxLineNumber totalPage=$TotalPage}
         {else}
         {/if}
         </div>

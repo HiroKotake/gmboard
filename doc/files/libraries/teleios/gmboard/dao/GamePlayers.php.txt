@@ -21,7 +21,7 @@ class GamePlayers extends \MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
-        $this->calledClass == __CLASS__;
+        $this->calledClass = __CLASS__;
     }
 
     /**
@@ -32,7 +32,7 @@ class GamePlayers extends \MY_Model
      */
     public function createTable(int $gameId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $query = 'CALL CreateGamePlayers(' . $gameId . ')';
         $this->writeLog($query);
         return $this->db->simple_query($query);
@@ -47,7 +47,7 @@ class GamePlayers extends \MY_Model
      */
     public function getAll(int $gameId, int $limit = 20, int $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->searchAll($limit, $offset);
     }
@@ -59,7 +59,7 @@ class GamePlayers extends \MY_Model
      */
     public function getAllRecords(int $gameId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->searchAll(0, 0, true);
     }
@@ -72,7 +72,7 @@ class GamePlayers extends \MY_Model
      */
     public function getByGamePlayerId(int $gameId, int $gamePlayerId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array('GamePlayerId' => $gamePlayerId),
@@ -90,13 +90,23 @@ class GamePlayers extends \MY_Model
      */
     public function getByUserId(int $gameId, int $userId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
         $resultSet = $this->search($cond);
         return $this->getMonoResult($resultSet);
+    }
+
+    public function getByLeaders(int $gameId, array $leaders) : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $cond = array(
+            'WHERE' => array('UserId' => $leaders)
+        );
+        return $this->search($cond);
     }
 
     /**
@@ -109,7 +119,7 @@ class GamePlayers extends \MY_Model
      */
     public function getByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array('GroupId' => $groupId),
@@ -127,7 +137,7 @@ class GamePlayers extends \MY_Model
      */
     public function getByPlayerId(int $gameId, int $playerId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
             'WHERE' => array(
@@ -146,10 +156,10 @@ class GamePlayers extends \MY_Model
      */
     public function getLikeNickname(int $gameId, string $nickname) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $cond = array(
-            'LIKE' => array('GameNickname' => $nickname)
+            'LIKE' => array('GameNickname' => "%$nickname%")
         );
         return $this->search($cond);
     }
@@ -162,7 +172,7 @@ class GamePlayers extends \MY_Model
      */
     public function add(int $gameId, array $data) : int
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->attach($data);
     }
@@ -176,7 +186,7 @@ class GamePlayers extends \MY_Model
      */
     public function set(int $gameId, int $userId, array $data) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->update($data, array('UserId' => $userId));
     }
@@ -190,7 +200,7 @@ class GamePlayers extends \MY_Model
      */
     public function setByGamePlayerId(int $gameId, int $gamePlayerId, array $data) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->update($data, array('GamePlayerId' => $gamePlayerId));
     }
@@ -203,7 +213,7 @@ class GamePlayers extends \MY_Model
      */
     public function deleteByUserId(int $gameId, int $userId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->logicalDelete(array('UserId' => $userId));
     }
@@ -216,7 +226,7 @@ class GamePlayers extends \MY_Model
      */
     public function deleteByGamePlayerId(int $gameId, int $playerId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->logicalDelete(array('PlayerId' => $playerId));
     }
@@ -228,7 +238,7 @@ class GamePlayers extends \MY_Model
      */
     public function clearTable(int $gameId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->truncate();
     }

@@ -87,12 +87,7 @@ class Group extends Personal
         $groupGameList = $this->getGamelistWithCategory();
         $gameList = $this->getGameListsModifedByPersonal($groupGameList, $gameInfos);
         // カテゴリリスト作成
-        $categorys = array();
-        foreach(array_keys($gameList) as $key) {
-            if (!empty($key)) {
-                $categorys[$key] = GAME_CATEGORY_RB[$key];
-            }
-        }
+        $categorys = $this->makeExistGenre($gameList);
         $data = array(
             'GameInfos' => $gameInfos,
             'GroupInfos' => $groupInfos,

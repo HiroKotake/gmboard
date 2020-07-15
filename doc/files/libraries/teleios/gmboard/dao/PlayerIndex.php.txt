@@ -28,7 +28,7 @@ class PlayerIndex extends \MY_Model
      */
     public function add(int $userId, int $gameId) : int
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->attach(['UserId' => $userId, 'GameId' => $gameId]);
     }
 
@@ -40,7 +40,7 @@ class PlayerIndex extends \MY_Model
      */
     public function getAll(int $limit = 20, int $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->searchAll($limit, $offset);
     }
 
@@ -50,7 +50,7 @@ class PlayerIndex extends \MY_Model
      */
     public function getAllRecords() : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->searchAll(0, 0, true);
     }
 
@@ -61,7 +61,7 @@ class PlayerIndex extends \MY_Model
      */
     public function getByUserId(int $userId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('UserId' => $userId)
         );
@@ -76,8 +76,8 @@ class PlayerIndex extends \MY_Model
      */
     public function isExist(int $userId, int $gameId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
-        return $this->isExisted(array('UserId' => $userId, 'GameId' => $gameId));
+        $this->calledMethod = __FUNCTION__;
+        return $this->isExisted(array('WHERE' => ['UserId' => $userId, 'GameId' => $gameId]));
     }
 
     /**
@@ -87,7 +87,7 @@ class PlayerIndex extends \MY_Model
      */
     public function delete(int $playerIndexId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->logicalDelete(array('PlayerIndexId' => $playerIndexId));
     }
 
@@ -97,7 +97,7 @@ class PlayerIndex extends \MY_Model
      */
     public function clearTable() : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         return $this->truncate();
     }
 }

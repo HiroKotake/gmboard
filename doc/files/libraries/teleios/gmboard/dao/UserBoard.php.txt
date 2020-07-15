@@ -31,7 +31,7 @@ class UserBoard extends \MY_Model
      */
     public function createTable(int $userId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $query = 'CALL CreateUserBoard(' . $userId . ')';
         $this->writeLog($query);
         return $this->db->simple_query($query);
@@ -46,7 +46,7 @@ class UserBoard extends \MY_Model
      */
     public function get(int $userId, int $lineNumber = 100, int $offset = 0, $order = "DESC") : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         $cond = array(
 //            'WHERE' => array('UserId' => $userId),
@@ -63,7 +63,7 @@ class UserBoard extends \MY_Model
      */
     public function getAllRecords(int $userId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         return $this->searchAll(0, 0, true);
     }
@@ -76,7 +76,7 @@ class UserBoard extends \MY_Model
      */
     public function add(int $userId, array $data) : int
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         return $this->attach($data);
     }
@@ -89,7 +89,7 @@ class UserBoard extends \MY_Model
      */
     public function set(int $userId, int $messageId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         $data = array(
             'AlreadyRead'   => 1,
@@ -105,7 +105,7 @@ class UserBoard extends \MY_Model
      */
     public function delete(int $userId, array $messageIds) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         if (count($messageIds) > 0) {
             $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
             return $this->logicalDelete(array('MessageId' => $messageIds));
@@ -120,7 +120,7 @@ class UserBoard extends \MY_Model
      */
     public function clearTable(int $userId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         return $this->truncate();
     }

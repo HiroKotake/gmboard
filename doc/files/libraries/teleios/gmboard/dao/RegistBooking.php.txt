@@ -31,7 +31,7 @@ class RegistBooking extends \MY_Model
      */
     public function createTable(int $gameId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $query = 'CALL CreateRBooking(' . $gameId . ')';
         $this->writeLog($query);
         return $this->db->simple_query($query);
@@ -53,7 +53,7 @@ class RegistBooking extends \MY_Model
         string $nickname,
         string $authCode
     ) : int {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         $data = array(
             'GroupId'       => $groupId,
@@ -71,7 +71,7 @@ class RegistBooking extends \MY_Model
      */
     public function getAllRecords(int $gameId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->searchAll(0, 0, true);
     }
@@ -84,7 +84,7 @@ class RegistBooking extends \MY_Model
      */
     public function get(int $gameId, array $condition) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->search($condition);
     }
@@ -97,7 +97,7 @@ class RegistBooking extends \MY_Model
      */
     public function getByRegistBookingId(int $gameId, int $registBookingId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('RegistBookingId' => $registBookingId)
         );
@@ -117,7 +117,7 @@ class RegistBooking extends \MY_Model
      */
     public function getByGameId(int $gameId, int $limit = 20, int $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'NUMBER' => array($limit, $offset)
         );
@@ -132,7 +132,7 @@ class RegistBooking extends \MY_Model
      */
     public function getByPlayerId(int $gameId, string $playerId) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('PlayerId' => $playerId)
         );
@@ -147,7 +147,7 @@ class RegistBooking extends \MY_Model
      */
     public function getByNickname(int $gameId, string $gameNickname) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('GameNickname' => $gameNickname)
         );
@@ -165,7 +165,7 @@ class RegistBooking extends \MY_Model
      */
     public function getByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('GroupId' => $groupId),
             'LIMIT' => array($limit, $offset)
@@ -183,7 +183,7 @@ class RegistBooking extends \MY_Model
      */
     public function getByUserId(int $gameId, int $userId, int $limit, int $offset) : array
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $cond = array(
             'WHERE' => array('UserId' => $userId),
             'LIMIT' => array($limit, $offset)
@@ -200,7 +200,7 @@ class RegistBooking extends \MY_Model
      */
     public function set(int $gameId, int $registBookingId, array $data) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->update($data, array('RegistBookingId' => $registBookingId));
     }
@@ -213,7 +213,7 @@ class RegistBooking extends \MY_Model
      */
     public function registed(int $gameId, int $registBookingId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array(
             'Registed'      => 1,
         );
@@ -229,7 +229,7 @@ class RegistBooking extends \MY_Model
      */
     public function approve(int $gameId, int $registBookingId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $data = array(
             'Approved'      => 1,
         );
@@ -244,7 +244,7 @@ class RegistBooking extends \MY_Model
      */
     public function delete(int $gameId, int $registBookingId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->logicalDelete(array('RegistBookingId' => $registBookingId));
     }
@@ -256,7 +256,7 @@ class RegistBooking extends \MY_Model
      */
     public function clearTable(int $gameId) : bool
     {
-        $this->calledMethod == __FUNCTION__;
+        $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
         return $this->truncate();
     }

@@ -6,14 +6,17 @@ use teleios\gmboard\dao\PlayerIndex;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\GamePlayers;
 use teleios\gmboard\dao\Groups;
+use teleios\gmboard\dao\CiSessions;
 
 class Personal
 {
     protected $cIns = null;
+    protected $ciSession = null;
 
     public function __construct()
     {
         $this->cIns =& get_instance();
+        $this->ciSession = new Cisessions;
     }
 
     /**
@@ -23,6 +26,10 @@ class Personal
      */
     public function getGameList(int $userId) : array
     {
+        if ($this->ciSession->isSet(SESSION_INFO_GAME)) {
+            // セッションを確認し、格納済みならば、そこから値を取得し返す
+            return unserialize($this->ciSession->getSessionData(SESSION_INFO_GAME));
+        }
         $daoPlayerIndex = new PlayerIndex();
         $games = $daoPlayerIndex->getByUserId($userId);
         // Get game name from GameInfo Table.
@@ -36,6 +43,8 @@ class Personal
         // ゲーム情報を取得
         $daoGameInfos = new GameInfos();
         $gameInfos = $daoGameInfos->getByGameIds($gameIds);
+        // セッションに格納
+        $this->ciSession->setSessionData(SESSION_INFO_GAME, serialize($gameInfos));
         return $gameInfos;
     }
 
@@ -47,6 +56,9 @@ class Personal
      */
     protected function getGroups(int $userId, array $gameInfos) : array
     {
+        if ($this->ciSession->isSet(SESSION_INFO_GROUP)) {
+            return unserialize($this->ciSession->getSessionData(SESSION_INFO_GROUP));
+        }
         $groups = array();
         if (count($gameInfos) <= 0) {
             return $groups;
@@ -73,6 +85,8 @@ class Personal
                 }
             }
         }
+        // セッションにデータを格納
+        $this->ciSession->setSessionData(SESSION_INFO_GROUP, serialize($groups));
         return $groups;
     }
 
@@ -84,7 +98,11 @@ class Personal
     {
         $gameListWithCategory = array();
         // redisからデータ取得
-        $currentVer = $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER);
+        $currentVer = $this->cIns->redis->get(SYSTEM_KEY_GAMELIST_VER);
+        if (empty($currentVer)) {
+            $currentVer = $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER);
+            $this->cIns->redis->set(SYSTEM_KEY_GAMELIST_VER, $currentVer);
+        }
         $gameListWithCategory = unserialize($this->cIns->redis->get(KEY_GAME_CATEGORY));
         // キャッシュの存在確認と存在した場合の保持データのバージョン確認
         $fRedisIn = empty($gameListWithCategory);
@@ -135,7 +153,11 @@ class Personal
      */
     public function getGameListsModifedByPersonal(array $gameList, array $attachedGames) : array
     {
+        if ($this->ciSession->isSet(SESSION_LIST_GAME)) {
+            return unserialize($this->ciSession->getSessionData(SESSION_LIST_GAME));
+        }
         if (count($attachedGames) == 0) {
+            $this->ciSession->setSessionData(SESSION_LIST_GAME, serialize($gameList));
             return $gameList;
         }
         $data = array();
@@ -150,7 +172,25 @@ class Personal
                 $data[$genre][] = $info;
             }
         }
+        // セッションへ格納
+        $this->ciSession->setSessionData(SESSION_LIST_GAME, serialize($data));
         return $data;
+    }
+
+    /**
+     * ゲームが登録されていないジャンルを除外した配列を作成する
+     * @param  array $gameList [description]
+     * @return array           [description]
+     */
+    public function makeExistGenre(array $gameList): array
+    {
+        $categorys = array();
+        foreach(array_keys($gameList) as $key) {
+            if (!empty($key)) {
+                $categorys[$key] = GAME_CATEGORY_RB[$key];
+            }
+        }
+        return $categorys;
     }
 
     /**
@@ -188,4 +228,8 @@ class Personal
         return $data;
     }
 
+    public function logout()
+    {
+        $this->ciSession->deleteSession(session_id());
+    }
 }

@@ -183,4 +183,15 @@ class MyPage extends MY_Controller
         );
         echo json_encode($data);
     }
+
+    /**
+     * ログアウトする
+     * @return [type] [description]
+     */
+    public function logout()
+    {
+        $libUserPage = new UserPage();
+        $libUserPage->logout();
+        redirect("");
+    }
 }

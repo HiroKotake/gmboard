@@ -8,4 +8,4 @@
         </li>
         {/foreach}
     </ul>
-    {$cpage}:{$total}[MaxLine{$maxLineNumber}]
+    {$cpage}/{$totalPage}:{$total}[MaxLine{$maxLineNumber}]

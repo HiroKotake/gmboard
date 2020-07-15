@@ -57,6 +57,12 @@ class Group extends MY_Controller
         $data['MaxLineNumber'] = LINE_NUMBER_SEARCH;
         $data['TotalNumber'] = $searchResult['TotalNumber'];
         $data['CurrentPage'] = $currentPageNumber;
+        $totalPageSub = $searchResult['TotalNumber'] % LINE_NUMBER_SEARCH;
+        $totalPage = ($searchResult['TotalNumber'] - $totalPageSub) / LINE_NUMBER_SEARCH;
+        if ($totalPageSub > 0) {
+            $totalPage += 1;
+        }
+        $data['TotalPage'] = $totalPage;
         $this->smarty->view('group', $data);
     }
 

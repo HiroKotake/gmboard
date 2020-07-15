@@ -16,6 +16,7 @@
     <!-- メニュー -->
     <div>
         メニュー
+        {include file="./includes/menu.tpl"}
     </div>
     <!-- メインエリア -->
     <div>

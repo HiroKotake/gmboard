@@ -17,11 +17,24 @@ class MY_Model extends CI_Model
         $this->logWriter = new LogWriter();
     }
 
+    /**
+     * 操作するテーブルを設定する
+     * 基本的には継承先クラスのコンストラクタ中で'$tableName'にて設定を実施するが、
+     * なんらかの理由により対象テーブルを変更したい場合や、継承先クラスの呼び出し元で
+     * 設定したといった場合に使用する。
+     *
+     * @param string $tableName [description]
+     */
     public function setTableName(string $tableName) : void
     {
         $this->tableName = $tableName;
     }
 
+    /**
+     * クエリーを実行する
+     * @param  string $query [description]
+     * @return [type]        [description]
+     */
     protected function execQuery(string $query)
     {
         if (ENVIRONMENT != 'production') {
@@ -30,6 +43,11 @@ class MY_Model extends CI_Model
         return $this->db->query($query);
     }
 
+    /**
+     * ログを書き出す
+     * @param  string $log [description]
+     * @return [type]      [description]
+     */
     protected function writeLog(string $log)
     {
         if (ENVIRONMENT != 'production') {
@@ -37,6 +55,10 @@ class MY_Model extends CI_Model
         }
     }
 
+    /**
+     * SELECTクエリを取得する
+     * @return string [description]
+     */
     protected function getQuerySelect() : string
     {
         $query = $this->db->get_compiled_select($this->tableName);
@@ -47,6 +69,11 @@ class MY_Model extends CI_Model
         return $query;
     }
 
+    /**
+     * INSERTクエリを取得する
+     * @param  array  $data [description]
+     * @return string       [description]
+     */
     protected function getQueryInsert(array $data) : string
     {
         $query = $this->db->set($data)->get_compiled_insert($this->tableName);
@@ -57,6 +84,11 @@ class MY_Model extends CI_Model
         return $query;
     }
 
+    /**
+     * UPDATEクエリを取得する
+     * @param  array  $data [description]
+     * @return string       [description]
+     */
     protected function getQueryUpdate(array $data) : string
     {
         $query = $this->db->set($data)->get_compiled_update($this->tableName);
@@ -67,6 +99,33 @@ class MY_Model extends CI_Model
         return $query;
     }
 
+    /**
+     * 対象のテーブルの全レコード数を取得する
+     * @param  boolean $withDeleted 論理削除済みレコードもカウントに含める
+     * @return int                  レコード数
+     */
+    public function countAll(bool $withDeleted = false) : int
+    {
+        $query = "SELECT COUNT(*) AS 'rnum' FROM " . $this->tableName;
+        if (!$withDeleted) {
+            $query .= " WHERE 'DeleteFlag' = 0";
+        }
+        $this->logWriter("[$this->calledClass::$this->calledMethod] $query");
+        $resultSet = $this->execQuery($query);
+        if (empty($resultSet)) {
+            return 0;
+        }
+        $records = $resultSet->result_array();
+        return $records[0]['rnum'];
+    }
+
+    /**
+     * 対象のテーブルのレコードを全取得する
+     * @param  integer $limit   [description]
+     * @param  integer $offset  [description]
+     * @param  boolean $deleted [description]
+     * @return array            [description]
+     */
     protected function searchAll(int $limit = 0, int $offset = 0, bool $deleted = false) : array
     {
         if (empty($this->calledMethod)) {
@@ -270,6 +329,10 @@ class MY_Model extends CI_Model
         return $this->db->simple_query($query);
     }
 
+    /**
+     * 対象のテーブルを初期化する
+     * @return bool [description]
+     */
     protected function truncate() : bool
     {
         if (empty($this->calledMethod)) {
@@ -283,6 +346,10 @@ class MY_Model extends CI_Model
         return false;
     }
 
+    /**
+     * 対象のテーブルを削除する
+     * @return bool [description]
+     */
     protected function drop() : bool
     {
         if (empty($this->calledMethod)) {
