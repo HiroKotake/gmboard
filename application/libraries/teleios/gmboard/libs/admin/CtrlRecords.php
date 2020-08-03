@@ -239,6 +239,7 @@ class CtrlRecords
         foreach ($records as $player) {
            $data = array(
                "GroupId" => $player["GroupId"],
+               "AliasId" => $player["AliasId"],
                "GroupName" => $player["GroupName"],
                "Leader" => $player["Leader"],
                "Description" => $player["Description"]
@@ -307,18 +308,20 @@ class CtrlRecords
         foreach ($records as $member) {
             $data = array(
                 "GroupId" => $member["GroupId"],
-                "Authority" => $member["Authority"]
+                "Authority" => $member["Authority"],
+                "AliasId" => $member["GamePlayersAliasId"]
             );
             $daoGamePlayers->set($member["GameId"], $member["UserId"], $data);
             // ユーザ新規参加メッセージ追加
             $line = $daoGamePlayers->getByUserId($member["GameId"], $member["UserId"]);
             if (!empty($line)) {
                 $message = array(
+                    "AliasId" => $member["GBoardAliasId"],
                     'UserId' => $member["UserId"],
                     "GamePlayerId" => SYSTEM_NOTICE_ID,
                     "GameNickname" => SYSTEM_NOTICE_NAME,
                     "Idiom" => 1,
-                    "Message" => $line["GameNickname"]
+                    "Message" => $line->GameNickname
                 );
                 $daoGroupBoard->add($member["GameId"], $member["GroupId"], $message);
             }

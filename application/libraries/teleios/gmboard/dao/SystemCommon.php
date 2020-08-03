@@ -61,10 +61,10 @@ class SystemCommon extends \MY_Model
         );
         $result = $this->search($cond);
         $temp = $this->getMonoResult($result);
-        if (empty($temp)) {
+        if ($temp->isEmpty()) {
             return null;
         }
-        return unserialize($temp['Value']);
+        return unserialize($temp->Value);
     }
 
     /**

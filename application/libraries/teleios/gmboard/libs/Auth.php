@@ -31,7 +31,7 @@ class Auth
     {
         $daoUsers = new users();
         $data = $daoUsers->getByLoginId($loginId);
-        if (count($data) == 0) {
+        if ($data->isEmpty()) {
             return true;
         }
         return false;
@@ -91,22 +91,22 @@ class Auth
         $daoRegist = new Registration();
         $resultSet = $daoRegist->get($regId);
         // 対象レコードがない
-        if (count($resultSet) <= 0) {
+        if ($resultSet->isEmpty()) {
             return AUTH_ACTIVATE_NOEXIST;
         }
         // 期限切れチェック
         $current = time();
-        if (strtotime($resultSet['ExpireDate']) < $current) {
+        if (strtotime($resultSet->ExpireDate) < $current) {
             // 期限切れ
             return AUTH_ACTIVATE_EXPIRE;
         }
         // アクティベーションコードチェック
-        if ($regCode != $resultSet['Rcode']) {
+        if ($regCode != $resultSet->Rcode) {
             return AUTH_ACTIVATE_UNMATCH;
         }
         // 仮登録を正規登録に変更
         $daoUsers = new Users();
-        $daoUsers->mailAuthed($resultSet['UserId']);
+        $daoUsers->mailAuthed($resultSet->UserId);
         $daoRegist->set($regId, ['ActivatedDate' => date('Y-m-d H:i:s')]);
         return AUTH_ACTIVATE_SUCCESS;
     }
@@ -125,7 +125,7 @@ class Auth
             'status' => null,
             'userId' => null
         );
-        if (count($data) == 0) {
+        if ($data->isEmpty()) {
             $result['status'] = AUTH_NO_EXIST_USER;
             return $result;
         }

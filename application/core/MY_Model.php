@@ -211,7 +211,7 @@ class MY_Model extends CI_Model
                 }
                 continue;
             }
-            if ($key = "AliasId") {
+            if ($key == "AliasId") {
                 if (mb_strlen($value) >= 16) {
                     $this->db->where($key, Identifier::sftDecode($value));
                 }
@@ -346,12 +346,12 @@ class MY_Model extends CI_Model
      * 検索結果が唯一の検索を実施した場合に、確実に検索結果のみ取り出す。
      * 万一複数の結果が出た場合はエラーとして空の配列にする。
      * @param  array $resultSet searchで得られた結果
-     * @return array
+     * @return Bean   複数のレコードが含まれている場合は最初の値をそのまま返し、空の場合はからのBeanオブジェクトを返す。
      */
     protected function getMonoResult(array $resultSet) : Bean
     {
-        if (count($resultSet) <= 0) {
-            return $resultSet;
+        if (empty($resultSet)) {
+            return new Bean();
         }
         return $resultSet[0];
     }

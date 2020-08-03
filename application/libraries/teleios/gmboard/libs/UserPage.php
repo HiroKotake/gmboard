@@ -64,8 +64,8 @@ class UserPage extends Personal
             'Message' => $personalMessage,
             'GameGenre' => $categorys,
             'GameList' => $gameList,
-            'GroupGenre' => (count($groupDropDown) > 0 ? $groupDropDown->Genre : null),
-            'GroupGame' => (count($groupDropDown) > 0 ? $groupDropDown->GameInfos : null),
+            'GroupGenre' => (count($groupDropDown) > 0 ? $groupDropDown["Genre"] : null),
+            'GroupGame' => (count($groupDropDown) > 0 ? $groupDropDown["GameInfos"] : null),
             'GamesListVer' => $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER),
         );
         return $data;

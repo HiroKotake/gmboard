@@ -49,6 +49,7 @@ class Personal
         foreach ($result as $gInfo) {
             $gameInfos[] = array(
                 "GameId" => $gInfo->GameId,
+                "AliasId" => $gInfo->AliasId,
                 "Genre" => $gInfo->Genre,
                 "Name" => $gInfo->Name,
                 "Description" => $gInfo->Description
@@ -78,14 +79,17 @@ class Personal
         $daoGroups = new Groups();
         foreach ($gameInfos as $game) {
             $tempData = $daoGamePlayer->getByUserId($game['GameId'], $userId);
-            if (!empty($tempData) && !empty($tempData->GroupId)) {
+            //if (!$tempData->isEmpty() && !empty($tempData->GroupId)) {
+            if (!$tempData->isEmpty() && !is_null($tempData->GroupId)) {
                 // グループの情報を取得
-                $tempGroup = $daoGroups->getByGroupId($game->GameId, $tempData->GroupId);
-                if (!empty($tempGroup)) {
-                    $leader = $daoGamePlayer->getByUserId($game->GameId, $tempGroup->Leader);
+                $tempGroup = $daoGroups->getByGroupId($game["GameId"], $tempData->GroupId);
+                if (!$tempGroup->isEmpty()) {
+                    $leader = $daoGamePlayer->getByUserId($game["GameId"], $tempGroup->Leader);
                     $groups[] = array(
-                        'GameName' => $game->Name,
+                        'GameName' => $game["Name"],
+                        'GameId' => $game["AliasId"],
                         'GroupId' => $tempData->GroupId,
+                        'AliasId' => $tempData->AliasId,
                         'GroupName' => $tempGroup->GroupName,
                         'GroupDescription' => $tempGroup->Description,
                         'LeaderId' => $leader->UserId,

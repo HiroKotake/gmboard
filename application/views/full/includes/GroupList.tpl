@@ -5,7 +5,7 @@
 {if count($GroupInfos) > 0}
                 <ul name="GroupList" id="ulGroupList">
     {foreach from=$GroupInfos item=Group name=GroupList}
-                    <li>[{$Group.GameName}]<br />{$Group.GroupName}</li>
+                    <li><a href="?gameId={$Group.GameId}&groupId={$Group.AliasId}">[{$Group.GameName}]<br />{$Group.GroupName}</a></li>
     {/foreach}
                 </ul>
 {else}

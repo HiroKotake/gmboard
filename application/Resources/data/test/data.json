@@ -4,7 +4,7 @@
         "Users": ["UserId", "AliasId", "Mail", "Password", "Nickname"],
         "PlayerIndex": ["UserId", "GameId", "PlayerId", "GameNickname"],
         "Group": ["GroupId", "GameId", "AliasId", "GroupName", "Leader", "Description"],
-        "GroupMember": ["GameId", "GroupId", "UserId", "Authority", "AliasId"],
+        "GroupMember": ["GameId", "GroupId", "UserId", "Authority", "GamePlayersAliasId", "GBoardAliasId"],
         "RegistBooking": ["GameId", "GroupId", "PlayerId", "AuthCode", "GameNickname", "UserId"]
     },
     "Data": {
@@ -98,20 +98,20 @@
             [        1,       26, "ASBHQCS5NNPPSP5S", "テストグループ05",     27,  "テストグループ05"]
         ],
         "GroupMember": [
-            ["GameId", "GroupId", "UserId", "Authority", "AliasId"],
-            [       1,         1,       1,            1, "QDSLJVK5NNPRKNZN"],
-            [       1,         1,       2,            3, "XC2W3M4UKD66CV76"],
-            [       1,         1,       3,            3, "YYNXQUW4KD66CV76"],
-            [       2,         1,       1,            3, "3MRQ5NGFKD66CV76"],
-            [       2,         1,       2,            1, "MY0NCDE5NNPRKNZP"],
-            [       2,         1,       3,            3, "NSD0Z1L5NNPRWVOR"],
-            [       3,         1,       1,            3, "DPUEYY85NNPRWVOS"],
-            [       3,         1,       2,            3, "MWY07LI5NNPRWVOS"],
-            [       3,         1,       3,            1, "8FDGN9H5NNPRWVOS"],
-            [      11,         1,      24,            1, "YWM2OUK5NNPRWVOS"],
-            [      16,         1,      25,            1, "SR3R0SR5NNPSEPZN"],
-            [      21,         1,      26,            1, "GOKSW3Y5NNPSEPZO"],
-            [      26,         1,      27,            1, "98U8IOA5NNPSEPZO"]
+            ["GameId", "GroupId", "UserId", "Authority", "GamePlayersAliasId", "GBoardAliasId"],
+            [       1,         1,       1,            1, "QDSLJVK5NNPRKNZN",   "MTPZ9BD5NQ27G50U"],
+            [       1,         1,       2,            3, "XC2W3M4UKD66CV76",   "MNYJVUT5NQ27G50U"],
+            [       1,         1,       3,            3, "YYNXQUW4KD66CV76",   "MICHGUD5NQ27G50U"],
+            [       2,         1,       1,            3, "3MRQ5NGFKD66CV76",   "S856QY35NQ27G50U"],
+            [       2,         1,       2,            1, "MY0NCDE5NNPRKNZP",   "2RN6SND5NQ27G50V"],
+            [       2,         1,       3,            3, "NSD0Z1L5NNPRWVOR",   "UQ3WGQY5NQ27G50V"],
+            [       3,         1,       1,            3, "DPUEYY85NNPRWVOS",   "MPO0BK65NQ27G50V"],
+            [       3,         1,       2,            3, "MWY07LI5NNPRWVOS",   "NGMAZL05NQ27ZUI2"],
+            [       3,         1,       3,            1, "8FDGN9H5NNPRWVOS",   "V32M76U5NQ27ZUI3"],
+            [      11,         1,      24,            1, "YWM2OUK5NNPRWVOS",   "JFIIOKI5NQ27ZUI3"],
+            [      16,         1,      25,            1, "SR3R0SR5NNPSEPZN",   "8TM430I5NQ27ZUI3"],
+            [      21,         1,      26,            1, "GOKSW3Y5NNPSEPZO",   "4IZW7Q75NQ27ZUI3"],
+            [      26,         1,      27,            1, "98U8IOA5NNPSEPZO",   "JV482P8UKDEMEDUM"]
         ]
     }
 }

@@ -74,7 +74,7 @@ class Users extends \MY_Model
      * @param  string $mail [description]
      * @return array        [description]
      */
-    public function getByLoginId(string $mail) : array
+    public function getByLoginId(string $mail) : Bean
     {
         $this->calledMethod = __FUNCTION__;
         $cond = array(

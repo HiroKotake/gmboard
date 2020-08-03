@@ -36,7 +36,7 @@
             <hr />
     {/if}
             <div>
-                    [{$msg.FromUserName}]{$msg.Message}<br />
+                    [{$msg->FromUserName}]{$msg->Message}<br />
                 </div>
 {/foreach}
             </div>

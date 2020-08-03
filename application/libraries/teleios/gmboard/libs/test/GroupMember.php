@@ -1,6 +1,7 @@
 <?php
 namespace teleios\gmboard\libs\test;
 
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\Groups;
 use teleios\gmboard\dao\RegistBooking;
 use teleios\gmboard\dao\GamePlayers;
@@ -32,41 +33,41 @@ class GroupMember
      * @param  int   $groupId [description]
      * @return array          [description]
      */
-    public function getRegistMember(int $groupId) : array
+    public function getRegistMember(int $gameId, int $groupId) : Bean
     {
-        return $this->daoRegistBooking->getByGroupId($groupId);
+        return $this->daoRegistBooking->getByGroupId($gameId, $groupId);
 
     }
 
 
-    public function getBookingMember(int $groupId) : array
+    public function getBookingMember(int $gameId, int $groupId) : Bean
     {
-        return $this->daoGamePlayers->getByGroupId($groupId);
+        return $this->daoGamePlayers->getByGroupId($gameId, $groupId);
     }
 
-    private function getRagistedBookingMember(int $groupId) : array
+    private function getRagistedBookingMember(int $gameId, int $groupId) : array
     {
         $data = array(
             'RegistedMembers' => null,
             'BookingMembers' => null
         );
         // 現在予約中のメンバーリスト取得
-        $data['BookingMembers'] = $this->getBookingMember($groupId);
+        $data['BookingMembers'] = $this->getBookingMember($gameId, $groupId);
         // 登録済みのメンバーリスト取得
-        $data['RegistedMembers'] = $this->getRegistMember($groupId);
+        $data['RegistedMembers'] = $this->getRegistMember($gameId, $groupId);
         return $data;
     }
-    public function formAddGroupMember(int $groupId) : array
+    public function formAddGroupMember(int $gameId, int $groupId) : array
     {
-        return $this->getRagistedBookingMember($groupId);
+        return $this->getRagistedBookingMember($gameId, $groupId);
     }
-    public function addGroupMember(int $groupId, string $playerId, string $authCoce, string $gameNickName) : array
+    public function addGroupMember(int $gameId, int $groupId, string $playerId, string $authCoce, string $gameNickName) : array
     {
-        $data = $this->getRagistedBookingMember($groupId);
+        $data = $this->getRagistedBookingMember($gameId, $groupId);
         // 登録
-        $newId = $this->daoRegistBooking->add($groupId, $playerId, $gameNickName, $authCoce);
+        $newId = $this->daoRegistBooking->add($gameId, $groupId, $playerId, $gameNickName, $authCoce);
         // データ再取得
-        $bookingMember = $this->daoRegistBooking->getByRegistBookingId($newId);
+        $bookingMember = $this->daoRegistBooking->getByRegistBookingId($gameId, $newId);
         $data['BookingMember'] = array();
         $data['Message'] = '登録に失敗しました。';
         if (count($bookingMember) > 0) {
@@ -85,34 +86,34 @@ class GroupMember
         return null;
     }
 
-    public function formSearchGroupMember(int $groupId) : array
+    public function formSearchGroupMember(int $gameId, int $groupId) : array
     {
-        $data = $this->getRagistedBookingMember($groupId);
+        $data = $this->getRagistedBookingMember($gameId, $groupId);
         $data['GroupInfo'] = null;
-        $groupInfo = $this->daoGroups->getByGroupId($groupId);
+        $groupInfo = $this->daoGroups->getByGroupId($gameId, $groupId);
         if (count($groupInfo) > 0) {
             $data['GroupInfo'] = $groupInfo[0];
         }
         return $data;
     }
 
-    public function resultSearchGroupMember(int $groupId, string $playerId) : array
+    public function resultSearchGroupMember(int $gameId, int $groupId, string $playerId) : array
     {
-        $data = $this->getRagistedBookingMember($groupId);
+        $data = $this->getRagistedBookingMember($gameId, $groupId);
         $data['GroupInfo'] = null;
-        $groupInfo = $this->daoGroups->getByGroupId($groupId);
+        $groupInfo = $this->daoGroups->getByGroupId($gameId, $groupId);
         if (count($groupInfo) > 0) {
             $data['GroupInfo'] = $groupInfo[0];
         }
         $data['PlayerInfo'] = $this->searchRegistBookingPlayer($data['GroupInfo']['GameId'], $playerId);
         return $data;
     }
-    public function addSearchGroupMember(int $groupId, int $gameId, string $playerId) : array
+    public function addSearchGroupMember(int $gameId, int $groupId, string $playerId) : array
     {
         // グループへ編入
-        $this->daoRegistBooking->add($groupId, $gameId, $playerId);
+        $this->daoRegistBooking->add($gameId, $groupId, $playerId);
         // 新データ取得
-        return $this->formAddGroupMember($groupId);
+        return $this->formAddGroupMember($gameId, $groupId);
     }
 
     public function listGroupMember(int $gameId, int $groupId) : array

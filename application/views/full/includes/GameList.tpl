@@ -5,7 +5,7 @@
 {if count($GameInfos) > 0}
                 <ul name="GameList" id="ulGameList">
     {foreach from=$GameInfos item=Game name=GameInfoList}
-                    <li>{$Game.Name}</li>
+                    <li><a href="?gameId={$Game.AliasId}">{$Game.Name}</a></li>
     {/foreach}
                 </ul>
 {else}
