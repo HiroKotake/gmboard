@@ -2,6 +2,7 @@
 namespace teleios\gmboard\libs\common;
 
 use teleios\utils\StringUtility;
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\PlayerIndex;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\GamePlayers;
@@ -35,14 +36,24 @@ class Personal
         // Get game name from GameInfo Table.
         $gameIds = array();
         foreach ($games as $game) {
-            $gameIds[] = $game['GameId'];
+            $gameIds[] = $game->GameId;
         }
         if (empty($gameIds)) {
             return $gameIds;
         }
         // ゲーム情報を取得
         $daoGameInfos = new GameInfos();
-        $gameInfos = $daoGameInfos->getByGameIds($gameIds);
+        $result = $daoGameInfos->getByGameIds($gameIds);
+        // データの縮小
+        $gameInfos = array();
+        foreach ($result as $gInfo) {
+            $gameInfos[] = array(
+                "GameId" => $gInfo->GameId,
+                "Genre" => $gInfo->Genre,
+                "Name" => $gInfo->Name,
+                "Description" => $gInfo->Description
+            );
+        }
         // セッションに格納
         $this->ciSession->setSessionData(SESSION_INFO_GAME, serialize($gameInfos));
         return $gameInfos;
@@ -67,20 +78,20 @@ class Personal
         $daoGroups = new Groups();
         foreach ($gameInfos as $game) {
             $tempData = $daoGamePlayer->getByUserId($game['GameId'], $userId);
-            if (!empty($tempData) && !empty($tempData['GroupId'])) {
+            if (!empty($tempData) && !empty($tempData->GroupId)) {
                 // グループの情報を取得
-                $tempGroup = $daoGroups->getByGroupId($game['GameId'], $tempData['GroupId']);
+                $tempGroup = $daoGroups->getByGroupId($game->GameId, $tempData->GroupId);
                 if (!empty($tempGroup)) {
-                    $leader = $daoGamePlayer->getByUserId($game['GameId'], $tempGroup['Leader']);
+                    $leader = $daoGamePlayer->getByUserId($game->GameId, $tempGroup->Leader);
                     $groups[] = array(
-                        'GameName' => $game['Name'],
-                        'GroupId' => $tempData['GroupId'],
-                        'GroupName' => $tempGroup['GroupName'],
-                        'GroupDescription' => $tempGroup['Description'],
-                        'LeaderId' => $leader['UserId'],
-                        'LeaderNickname' => $leader['GameNickname'],
-                        'PlayerId' => $tempData['PlayerId'],
-                        'GameNickname' => $tempData['GameNickname'],
+                        'GameName' => $game->Name,
+                        'GroupId' => $tempData->GroupId,
+                        'GroupName' => $tempGroup->GroupName,
+                        'GroupDescription' => $tempGroup->Description,
+                        'LeaderId' => $leader->UserId,
+                        'LeaderNickname' => $leader->GameNickname,
+                        'PlayerId' => $tempData->PlayerId,
+                        'GameNickname' => $tempData->GameNickname,
                     );
                 }
             }
@@ -117,13 +128,13 @@ class Personal
             // カテゴリ別に分類
             $list = array();
             foreach ($tempList as $gameInfo) {
-                if (!array_key_exists($gameInfo['Genre'], $list)) {
-                    $list[(int)$gameInfo['Genre']] = array();
+                if (!array_key_exists($gameInfo->Genre, $list)) {
+                    $list[(int)$gameInfo->Genre] = array();
                 }
-                $list[$gameInfo['Genre']][$gameInfo['GameId']] = array(
-                    'Ub'        => $gameInfo['GameId'],
-                    'Name'          => $gameInfo['Name'],
-                    'Desc'   => $gameInfo['Description'],
+                $list[$gameInfo->Genre][$gameInfo->GameId] = array(
+                    'Ub'        => $gameInfo->GameId,
+                    'Name'          => $gameInfo->Name,
+                    'Desc'   => $gameInfo->Description,
                     'Joined'        => 0
                 );
             }
@@ -143,6 +154,31 @@ class Personal
             $this->cIns->redis->set(KEY_GAME_CATEGORY, serialize($gameListWithCategory));
         }
         return $gameListWithCategory["GameListWithCategory"];
+    }
+
+    /**
+     * 個人の登録ゲームリストからグループ検索用の対象のジャンルリストと、ゲームリスト用データを生成する
+     * @param  array $gameList [description]
+     * @return array           [description]
+     */
+    public function getGroupGamelistWithCategory(array $gameList) : array
+    {
+        $list = array();
+        if (count($gameList) <= 0) {
+            return $list;
+        }
+        $genre = array();
+        $games = array();
+        foreach ($gameList as $game) {
+            $genre[$game['Genre']] = GAME_CATEGORY_RB[$game['Genre']];
+            $games[$game["Genre"]][] = array(
+                "Ub" => $game["GameId"],
+                "Name" => $game["Name"]
+            );
+        }
+        $list["Genre"] = $genre;
+        $list["GameInfos"] = $games;
+        return $list;
     }
 
     /**
@@ -169,7 +205,7 @@ class Personal
                         $info['Joined'] = 1;
                     }
                 }
-                $data[$genre][] = $info;
+                $data[$genre][$info['Ub']] = $info;
             }
         }
         // セッションへ格納
@@ -224,6 +260,10 @@ class Personal
             'GameNickname'  => $gameNickname
         );
         $data["GamePlsyersId"] = $daoGamePlayers->add($gameId, $gamePlayersData);
+        // セッションのゲームリストに関する部分をクリア
+        $this->ciSession->delSessionData(SESSION_INFO_GAME);
+        $this->ciSession->delSessionData(SESSION_LIST_GENRE);
+        $this->ciSession->delSessionData(SESSION_LIST_GAME);
         $data["Status"] = DB_STATUS_ADDED;
         return $data;
     }

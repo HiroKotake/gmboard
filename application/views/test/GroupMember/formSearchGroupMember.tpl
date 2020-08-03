@@ -10,8 +10,8 @@
         </tr>
         {foreach from=$RegistedMembers item=RMember}
         <tr>
-            <td>{$RMember.GameNickname}</td>
-            <td>{$RMember.PlayerId}</td>
+            <td>{$RMember->GameNickname}</td>
+            <td>{$RMember->PlayerId}</td>
         </tr>
         {/foreach}
     </table>
@@ -29,9 +29,9 @@
         </tr>
         {foreach from=$BookingMembers item=BMember}
         <tr>
-            <td>{$BMember.GameNickname}</td>
-            <td>{$BMember.PlayerId}</td>
-            <td>{$BMember.AuthCode}</td>
+            <td>{$BMember->GameNickname}</td>
+            <td>{$BMember->PlayerId}</td>
+            <td>{$BMember->AuthCode}</td>
         </tr>
         {/foreach}
     </table>
@@ -42,7 +42,7 @@
     <h3>メンバー検索</h3>
     <form action="resultSearchGroupMember" method="post">
         ゲーム側ユーザID：<input type="text" name="GPID" /><br />
-        <input type="hidden" name="GID" value="{$GroupInfo.GroupId}" />
+        <input type="hidden" name="GID" value="{$GroupInfo->GroupId}" />
         <input type="submit" value="検索" />
     </form>
 {/if}

@@ -67,7 +67,7 @@ class TestGameInfo extends MY_Controller
             'Message' => '',
             'GameInfo' => $gameInfo
         );
-        if (count($gameInfo) == 0) {
+        if ($gameInfo->isEmpty()) {
             $data['Message'] = 'No DATA';
         }
         $this->smarty->testView('GameInfo/showGameInfo', $data);

@@ -54,6 +54,8 @@ class UserPage extends Personal
         // ゲームリスト(カテゴリ別)取得 (個人別にカスタマイズしたもの)
         $groupGameList = $this->getGamelistWithCategory();
         $gameList = $this->getGameListsModifedByPersonal($groupGameList, $gameInfos);
+        // グループ申請用ジャンル・ゲームリスト生成
+        $groupDropDown = $this->getGroupGamelistWithCategory($gameInfos);
         // カテゴリリスト作成
         $categorys = $this->makeExistGenre($gameList);
         $data = array(
@@ -62,7 +64,8 @@ class UserPage extends Personal
             'Message' => $personalMessage,
             'GameGenre' => $categorys,
             'GameList' => $gameList,
-            'GroupGame' => $groupGameList,
+            'GroupGenre' => (count($groupDropDown) > 0 ? $groupDropDown->Genre : null),
+            'GroupGame' => (count($groupDropDown) > 0 ? $groupDropDown->GameInfos : null),
             'GamesListVer' => $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER),
         );
         return $data;

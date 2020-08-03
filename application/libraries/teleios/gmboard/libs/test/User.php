@@ -2,6 +2,7 @@
 namespace teleios\gmboard\libs\test;
 
 use teleios\utils\StringUtility;
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\Users;
 
 /**
@@ -87,7 +88,7 @@ class User
      * @param  int   $userId [description]
      * @return array         [description]
      */
-    public function showUser(int $userId) : array
+    public function showUser(int $userId) : Bean
     {
         $result = $this->daoUsers->get($userId);
         if (!$result) {

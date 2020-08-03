@@ -10,6 +10,7 @@ BEGIN
     'CREATE TABLE Groups_', @TableNumber,
     '(
         `GroupId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'グループ管理ID\',
+        `AliasId` CHAR(16) NOT NULL COMMENT \'IDエリアス\',
         `GroupName` VARCHAR(60) COMMENT \'グループ名\',
         `Leader` BIGINT(12) UNSIGNED COMMENT \'リーダーのユーザID\',
         `Description` TEXT COMMENT \'説明\',
@@ -17,7 +18,8 @@ BEGIN
         `UpdateDate` DATETIME COMMENT \'レコード更新日\',
         `DeleteDate` DATETIME COMMENT \'レコード無効日\',
         `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコード無効フラグ(0:有効, 1:無効)\',
-        PRIMARY KEY (`GroupId`)
+        PRIMARY KEY (`GroupId`),
+        INDEX `IdxAliasId` (`AliasId`)
     ) ENGINE=InnoDB COMMENT \'グループ情報\''
     );
     PREPARE stmt FROM @query;

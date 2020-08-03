@@ -8,6 +8,12 @@
             "auto_increment": true,
             "comment": "ゲーム管理"
         },
+        "AliasId": {
+            "type": "CHAR",
+            "constraint": 16,
+            "null": false,
+            "comment": "IDエリアス"
+        },
         "Genre": {
             "type": "TINYINT",
             "constraint": 3,
@@ -24,7 +30,9 @@
         }
     },
     "PrimaryKey": "GameId",
-    "Index": [],
+    "Index": [
+        ["AliasId"]
+    ],
     "Attribute": {
         "ENGINE": "InnoDB",
         "COMMENT": "'ゲーム情報'"

@@ -10,6 +10,7 @@ BEGIN
     'CREATE TABLE RegistBooking_', @TableNumber,
     '(
         `RegistBookingId` BIGINT(12) UNSIGNED AUTO_INCREMENT COMMENT \'管理ID\',
+        `AliasId` CHAR(16) NOT NULL COMMENT \'IDエリアス\',
         `GroupId` BIGINT(12) UNSIGNED COMMENT \'グループ管理ID\',
         `PlayerId` VARCHAR(30) NOT NULL COMMENT \'ゲーム側ユーザID\',
         `AuthCode` VARCHAR(30) NOT NULL COMMENT \'認証確認用コード\',
@@ -23,7 +24,8 @@ BEGIN
         `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコード無効フラグ(0:有効, 1:無効)\',
         PRIMARY KEY (`RegistBookingId`),
         INDEX `IdxPlayer` (`PlayerId`),
-        INDEX `IdxGroupId` (`GroupId`)
+        INDEX `IdxGroupId` (`GroupId`),
+        INDEX `IdxAliasId` (`AliasId`)
     ) ENGINE=InnoDB COMMENT \'登録予約情報\''
     );
     PREPARE stmt FROM @query;

@@ -31,11 +31,19 @@ class MY_Controller extends CI_Controller
         }
         // ログイン状態にない場合はトップ画面へ遷移
         $uri = uri_string();
-        if (!in_array($uri, EXCLUDE_USER_CHECK)) {
-            if (empty($this->userId) && !empty(mb_strlen($uri))) {
-                redirect("");
+        if (ENVIRONMENT == 'production') {
+            if (!in_array($uri, EXCLUDE_USER_CHECK)) {
+                if (empty($this->userId) && !empty(mb_strlen($uri))) {
+                    redirect("");
+                }
             }
-        }
+        }/* else {
+            if (!in_array($uri, EXCLUDE_USER_CHECK_NON_PRD)) {
+                if (empty($this->userId) && !empty(mb_strlen($uri))) {
+                    redirect("");
+                }
+            }
+        }*/
         // redis
         $this->redis = new \Redis();
         $this->config->load('redis', true);

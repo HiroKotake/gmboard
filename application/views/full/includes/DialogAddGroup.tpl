@@ -1,4 +1,4 @@
-    <div id="DialogAddGroup">グループの追加
+    <div id="DialogAddGroup">
         <form action="AttachGroup" method="post">
             <ul style="list-style-type: none">
             <!-- グループ追加 -->
@@ -6,15 +6,15 @@
             <!-- カテゴリ -->
                 <li>
                     <select id="G_GameGenre" name="GGenre">
-                    {foreach from=$GameGenre key=GenreId item=Genre}
+{foreach from=$GroupGenre key=GenreId item=Genre}
                         <option value="{$GenreId}">{$Genre}</option>
-                    {/foreach}
-                </select>
+{/foreach}
+                    </select>
             <!-- ゲーム -->
                     <select id="G_TargetGame" name="GTarget">
-                    {foreach from=$GroupGame[1] item=GameInfo}
+{foreach from=$GroupGame[1] item=GameInfo}
                         <option value="{$GameInfo.Ub}">{$GameInfo.Name}</option>
-                    {/foreach}
+{/foreach}
                     </select>
                 </li>
             <!-- 名称検索 -->

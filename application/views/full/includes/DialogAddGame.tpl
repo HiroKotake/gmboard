@@ -5,17 +5,17 @@
             <!-- カテゴリ -->
                 <li>
                     <select id="GameGenre" name="Genre">
-                    {foreach from=$GameGenre key=GenreId item=Genre}
+{foreach from=$GameGenre key=GenreId item=Genre}
                         <option value="{$GenreId}">{$Genre}</option>
-                    {/foreach}
+{/foreach}
                 </select>
             <!-- ゲーム -->
                     <select id="TargetGame" name="Target">
-                    {foreach from=$GameList[1] item=GameInfo}
-                        {if $GameInfo.Joined == 0}
+{foreach from=$GameList[1] item=GameInfo}
+    {if $GameInfo.Joined == 0}
                         <option value="{$GameInfo.Ub}">{$GameInfo.Name}</option>
-                        {/if}
-                    {/foreach}
+    {/if}
+{/foreach}
                     </select>
                 </li>
             <!-- ゲーム側のプレイヤーID -->

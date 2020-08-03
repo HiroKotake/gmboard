@@ -18,10 +18,10 @@
 {$Message}<br />
 {else}
     <h3>メンバー予約</h3>
-    ゲーム側ユーザID：{$BookingMember.PlayerId}<br />
-    認証確認用コード：{$BookingMember.AuthCode}<br />
-    ゲーム側ニックネーム：{$BookingMember.GameNickName}<br />
-    登録日：{$BookingMember.CreateDate}<br />
+    ゲーム側ユーザID：{$BookingMember->PlayerId}<br />
+    認証確認用コード：{$BookingMember->AuthCode}<br />
+    ゲーム側ニックネーム：{$BookingMember->GameNickName}<br />
+    登録日：{$BookingMember->CreateDate}<br />
 {/if}
 <hr />
 <a href="../top">戻る</a>

@@ -82,7 +82,7 @@ class Groups extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
-            $this->setTableName($gameId);
+            $this->setTableName($this->getTableName($gameId));
             return $this->attach($data);
         }
         return false;
@@ -130,7 +130,7 @@ class Groups extends \MY_Model
      * @param  int   $groupId [description]
      * @return array          [description]
      */
-    public function getByGroupId(int $gameId, int $groupId) : array
+    public function getByGroupId(int $gameId, int $groupId) : Bean
     {
         $this->calledMethod = __FUNCTION__;
         $this->setTableName($this->getTableName($gameId));

@@ -1,6 +1,7 @@
 <?php
 namespace teleios\gmboard\libs\test;
 
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\GamePlayers;
 use teleios\gmboard\dao\RegistBooking;
@@ -72,7 +73,7 @@ class GameInfo
      * @param  int   $gameId [description]
      * @return array         [description]
      */
-    public function showGameInfo(int $gameId) : array
+    public function showGameInfo(int $gameId) : Bean
     {
         return $this->daoGameInfos->getByGameId($gameId);
     }

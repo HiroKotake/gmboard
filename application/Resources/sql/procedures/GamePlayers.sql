@@ -10,6 +10,7 @@ BEGIN
     'CREATE TABLE GamePlayers_', @TableNumber,
     '(
         `GamePlayerId` BIGINT(12) UNSIGNED AUTO_INCREMENT COMMENT \'管理ID\',
+        `AliasId` CHAR(16) NOT NULL COMMENT \'IDエリアス\',
         `UserId` BIGINT(12) UNSIGNED COMMENT \'ユーザ管理ID\',
         `PlayerId` VARCHAR(30) NOT NULL COMMENT \'ゲーム側ユーザID\',
         `GameNickname` VARCHAR(30) NOT NULL COMMENT \'ゲーム側ニックネーム\',
@@ -21,7 +22,8 @@ BEGIN
         `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコード無効フラグ(0:有効, 1:無効)\',
         PRIMARY KEY (`GamePlayerId`),
         INDEX `IdxUserId` (`UserId`),
-        INDEX `IdxGroupId` (`GroupId`)
+        INDEX `IdxGroupId` (`GroupId`),
+        INDEX `IdxAliasId` (`AliasId`)
     ) ENGINE=InnoDB COMMENT \'ゲームプレイヤー\';'
     );
     PREPARE stmt FROM @query;

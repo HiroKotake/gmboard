@@ -95,17 +95,24 @@ defined('EXCLUDE_USER_CHECK')   OR define('EXCLUDE_USER_CHECK', [               
     'MyPage/login',
     'MyPage/regist'
 ]);
+defined('EXCLUDE_USER_CHECK_NON_PRD')OR define('EXCLUDE_USER_CHECK_NON_PRD', [  // 起動時"UserID"チェック除外"URI"
+    'MyPage/login',
+    'MyPage/regist',
+    'Test/Top/index'
+]);
 defined('LINE_NUMBER_BOARD')    OR define('LINE_NUMBER_BOARD', 100);            // 掲示板の１ページあたりの最大表示数
 defined('LINE_NUMBER_SEARCH')   OR define('LINE_NUMBER_SEARCH', 20);            // 検索結果の１ページあたりの最大表示数
 // ユーザエージェント関連
 defined('BROWSER_TYPE_FULL')    OR define('BROWSER_TYPE_FULL', 'full');         // User's Browser Type is PC browser
 defined('BROWSER_TYPE_SP')      OR define('BROWSER_TYPE_SP', 'sp');             // User's Browser type is Smart Phone
 // セッション関連
-defined('SESSION_USER_ID')      OR define('SESSION_USER_ID', 'userId');         // UserID
-defined('SESSION_INFO_GAME')    OR define('SESSION_INFO_GAME', 'games');        // 登録ゲーム
-defined('SESSION_INFO_GROUP')   OR define('SESSION_INFO_GROUP', 'groups');      // 登録グループ
-defined('SESSION_LIST_GENRE')   OR define('SESSION_LIST_GENRE', 'genreList');   // ドロップダウンメニュー用ユーザ個別ゲームカテゴリリスト
-defined('SESSION_LIST_GAME')    OR define('SESSION_LIST_GAME', 'gameList');     // ドロップダウンメニュー用ユーザ個別ゲームリスト
+defined('SESSION_USER_ID')            OR define('SESSION_USER_ID', 'userId');                // UserID
+defined('SESSION_INFO_GAME')          OR define('SESSION_INFO_GAME', 'games');               // 登録ゲーム
+defined('SESSION_INFO_GROUP')         OR define('SESSION_INFO_GROUP', 'groups');             // 登録グループ
+defined('SESSION_LIST_GENRE')         OR define('SESSION_LIST_GENRE', 'genreList');          // ドロップダウンメニュー用ユーザ個別ゲームカテゴリリスト
+defined('SESSION_LIST_GAME')          OR define('SESSION_LIST_GAME', 'gameList');            // ドロップダウンメニュー用ユーザ個別ゲームリスト
+defined('SESSION_LIST_GROUP_GENRE')   OR define('SESSION_LIST_GROUP_GENRE', 'gGenreList');   // ドロップダウンメニュー用ユーザ個別ゲームカテゴリリスト
+defined('SESSION_LIST_GROUP_GAME')    OR define('SESSION_LIST_GROUP_GAME', 'gGameList');     // ドロップダウンメニュー用ユーザ個別ゲームリスト
 // システム固有キー名
 defined('SYSTEM_KEY_GAMELIST_VER') OR define('SYSTEM_KEY_GAMELIST_VER', 'GamesListVer'); // 設定ゲームのリストのバージョンを示すキー名
 // DBステータス
@@ -179,14 +186,18 @@ defined('TABLE_PREFIX_GROUP')          OR define('TABLE_PREFIX_GROUP', 'Groups_'
 defined('TABLE_PREFIX_REGIST_BOOKING') OR define('TABLE_PREFIX_REGIST_BOOKING', 'RegistBooking_');
 defined('TABLE_PREFIX_USER_BOARD')     OR define('TABLE_PREFIX_USER_BOARD', 'UBoard_');
 // テーブル名
-defined('TABLE_NAME_CI_SESSIONS')   OR define('TABLE_NAME_CI_SESSIONS', 'CiSessions');
-defined('TABLE_NAME_GAME_INFOS')    OR define('TABLE_NAME_GAME_INFOS', 'GameInfos');
-defined('TABLE_NAME_NOTICES')       OR define('TABLE_NAME_NOTICES', 'Notices');
-defined('TABLE_NAME_PLAYER_INDEX')  OR define('TABLE_NAME_PLAYER_INDEX', 'PlayerIndex');
-defined('TABLE_NAME_REGISTRATION')  OR define('TABLE_NAME_REGISTRATION', 'Registration');
-defined('TABLE_NAME_SYSTEM_COMMON') OR define('TABLE_NAME_SYSTEM_COMMON', 'SystemCommon');
-defined('TABLE_NAME_USER_INFOS')    OR define('TABLE_NAME_USER_INFOS', 'UserInfos');
-defined('TABLE_NAME_USERS')         OR define('TABLE_NAME_USERS', 'Users');
+defined('TABLE_NAME_CI_SESSIONS')         OR define('TABLE_NAME_CI_SESSIONS', 'CiSessions');
+defined('TABLE_NAME_GAME_INFOS')          OR define('TABLE_NAME_GAME_INFOS', 'GameInfos');
+defined('TABLE_NAME_GAME_PLAYERS_ALIAS')  OR define('TABLE_NAME_GAME_PLAYERS_ALIAS', 'GamePlayersAlias');
+defined('TABLE_NAME_GROUP_ALIAS')         OR define('TABLE_NAME_GROUP_ALIAS', 'GroupAlias');
+defined('TABLE_NAME_GROUP_BOARD_ALIAS')   OR define('TABLE_NAME_GROUP_BOARD_ALIAS', 'GroupBoardAlias');
+defined('TABLE_NAME_GROUP_NOTICES_ALIAS') OR define('TABLE_NAME_GROUP_NOTICES_ALIAS', 'GroupNoticesAlias');
+defined('TABLE_NAME_NOTICES')             OR define('TABLE_NAME_NOTICES', 'Notices');
+defined('TABLE_NAME_PLAYER_INDEX')        OR define('TABLE_NAME_PLAYER_INDEX', 'PlayerIndex');
+defined('TABLE_NAME_REGISTRATION')        OR define('TABLE_NAME_REGISTRATION', 'Registration');
+defined('TABLE_NAME_SYSTEM_COMMON')       OR define('TABLE_NAME_SYSTEM_COMMON', 'SystemCommon');
+defined('TABLE_NAME_USER_INFOS')          OR define('TABLE_NAME_USER_INFOS', 'UserInfos');
+defined('TABLE_NAME_USERS')               OR define('TABLE_NAME_USERS', 'Users');
 // グループ権限タイプ
 defined('GROUP_AUTHORITY_LEADER')      OR define('GROUP_AUTHORITY_LEADER', 1);      // リーダー： 任命権、招待操作可能、申請操作可能、告知読み書き可能、掲示板読み書き可能
 defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2);  // サブリーダー： 申請操作可能、告知読み書き可能、掲示板読み書き可能

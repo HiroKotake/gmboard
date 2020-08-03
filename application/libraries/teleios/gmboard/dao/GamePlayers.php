@@ -70,7 +70,7 @@ class GamePlayers extends \MY_Model
      * @param  int   $gamePlayerId [description]
      * @return array               [description]
      */
-    public function getByGamePlayerId(int $gameId, int $gamePlayerId) : array
+    public function getByGamePlayerId(int $gameId, int $gamePlayerId) : Bean
     {
         $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
@@ -88,7 +88,7 @@ class GamePlayers extends \MY_Model
      * @param  string  $order  [description]
      * @return array           [description]
      */
-    public function getByUserId(int $gameId, int $userId) : array
+    public function getByUserId(int $gameId, int $userId) : Bean
     {
         $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);

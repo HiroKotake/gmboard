@@ -110,8 +110,8 @@ class GamePlayer
         if (count($playerInfo) != 0) {
             $groupInfo = $this->daoGroups->getByGroupId($gameId, $playerInfo['GroupId']);
             $gameInfo = $this->daoGameInfos->getByGameId($gameId);
-            $playerInfo['GameName'] = $gameInfo['Name'];
-            $playerInfo['GroupName'] = $groupInfo['GroupName'];
+            $playerInfo['GameName'] = $gameInfo->Name;
+            $playerInfo['GroupName'] = $groupInfo->GroupName;
             return $playerInfo;
         }
         return array();

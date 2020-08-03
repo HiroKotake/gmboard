@@ -1,6 +1,7 @@
 <?php
 namespace teleios\gmboard\libs\test;
 
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\Groups;
 use teleios\gmboard\dao\GroupBoard;
 use teleios\gmboard\dao\GroupNotices;
@@ -82,19 +83,19 @@ class Group
      * @param  int   $groupId [description]
      * @return array          [description]
      */
-    public function showGroup(int $gameId, int $groupId) : array
+    public function showGroup(int $gameId, int $groupId) : Bean
     {
         $group = $this->daoGroups->getByGroupId($gameId, $groupId);
-        if (count($group) == 0) {
+        if ($group->isEmpty()) {
             return array();
         }
         $daoGameInfos = new GameInfos();
         $gameInfo = $daoGameInfos->getByGameId($gameId);
-        if (count($gameInfo) == 0) {
+        if ($gameInfo->isEmpty()) {
             $group['GameName'] = '未登録ゲーム';
             return $group;
         }
-        $group['GameName'] = $gameInfo['Name'];
+        $group->GameName = $gameInfo->Name;
         return $group;
     }
 }

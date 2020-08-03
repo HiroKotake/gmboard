@@ -3,7 +3,7 @@
 <form action="addGamePlayer" method="post">
     予約対象のグループ：<select name="GPID">
     {foreach from=$Groups item=Group}
-        <option value="{$Group.GroupId}"{if $Group.GroupId == $GroupId} selected{/if}>{$Group.GroupName}</option>
+        <option value="{$Group->GroupId}"{if $Group->GroupId == $GroupId} selected{/if}>{$Group->GroupName}</option>
     {/foreach}
     </select><br />
     ゲーム側ユーザID：<input type="text" name="PID" /><br />

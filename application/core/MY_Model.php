@@ -3,6 +3,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 use teleios\utils\LogWriter;
+use teleios\utils\Identifier;
+use teleios\gmboard\dao\Bean;
 
 class MY_Model extends CI_Model
 {
@@ -120,6 +122,49 @@ class MY_Model extends CI_Model
     }
 
     /**
+     * レコードの内容をBeanへ転記する
+     * @param  array $data レコードの情報を含んだ連想配列
+     * @return Bean        レコードの内容を含んだオブジェクト
+     */
+    private function setBeanFromArray(array $data) : Bean
+    {
+        $bean = new Bean();
+        $excludes = array(
+            "CreateDate",
+            "UpdateDate",
+            "DeleteDate",
+            "DeleteFlag"
+        );
+        foreach ($data as $key => $value) {
+            if (in_array($key, $excludes)) {
+                continue;
+            }
+            $bean->$key = $value;
+        }
+        return $bean;
+    }
+
+    /**
+     * 複数のレコード情報を含んだ配列をBeanオブジェクトの配列へ転記する
+     * @param  array $data [description]
+     * @return array       [description]
+     */
+    private function setBeans(array $data) : array
+    {
+        $result = array();
+        if (empty($data) || !is_array($data)) {
+            return array();
+        }
+        if (!is_array($data[0])) {
+            return $result[] = $this->setBeanFromArray($data);
+        }
+        foreach ($data as $rec) {
+            $result[] = $this->setBeanFromArray($rec);
+        }
+        return $result;
+    }
+
+    /**
      * 対象のテーブルのレコードを全取得する
      * @param  integer $limit   [description]
      * @param  integer $offset  [description]
@@ -129,7 +174,7 @@ class MY_Model extends CI_Model
     protected function searchAll(int $limit = 0, int $offset = 0, bool $deleted = false) : array
     {
         if (empty($this->calledMethod)) {
-            $this->calledMethod = __METHOD__;
+            $this->calledMethod = __FUNCTION__;
         }
         // クエリービルド
         if ($limit !== 0) {
@@ -146,7 +191,34 @@ class MY_Model extends CI_Model
         }
         // クエリー実行
         $resultSet = $this->db->query($query);
-        return $resultSet->result_array();
+        return $this->setBeans($resultSet->result_array());
+    }
+
+    private function setWhere(array $cond) : void
+    {
+        foreach ($cond as $key => $value) {
+            if (is_array($value)) {
+                if (!empty($value)) {
+                    if ($key == "AliasId") {
+                        $aliases = array();
+                        foreach($value as $alias) {
+                            $aliases[] = Identifier::sftDecode($alias);
+                        }
+                        $this->db->where_in($key, $aliases);
+                        continue;
+                    }
+                    $this->db->where_in($key, $value);
+                }
+                continue;
+            }
+            if ($key = "AliasId") {
+                if (mb_strlen($value) >= 16) {
+                    $this->db->where($key, Identifier::sftDecode($value));
+                }
+                continue;
+            }
+            $this->db->where($key, $value);
+        }
     }
 
     /**
@@ -162,23 +234,14 @@ class MY_Model extends CI_Model
     protected function search(array $condition) : array
     {
         if (empty($this->calledMethod)) {
-            $this->calledMethod = __METHOD__;
+            $this->calledMethod = __FUNCTION__;
         }
         // クエリービルド
         if (array_key_exists('SELECT', $condition) && !empty($condition['SELECT'])) {
             $this->db->select($condition['SELECT']);
         }
         if (array_key_exists('WHERE', $condition) && !empty($condition['WHERE'])) {
-            foreach ($condition['WHERE'] as $key => $value) {
-                if (is_array($value)) {
-                    if (!empty($value)) {
-                        // 空の配列でなければ処理に入る 2020-06-15
-                        $this->db->where_in($key, $value);
-                    }
-                } else {
-                    $this->db->where($key, $value);
-                }
-            }
+            $this->setWhere($condition['WHERE']);
         }
         $this->db->where('DeleteFlag', 0);  // 削除されたレコードは無視する
         if (array_key_exists('LIKE', $condition) && !empty($condition['LIKE'])) {
@@ -201,7 +264,7 @@ class MY_Model extends CI_Model
         if (count($records) == 0) {
             return array();
         }
-        return $records;
+        return $this->setBeans($records);
     }
 
     /**
@@ -212,23 +275,14 @@ class MY_Model extends CI_Model
     protected function isExisted(array $condition) : bool
     {
         if (empty($this->calledMethod)) {
-            $this->calledMethod = __METHOD__;
+            $this->calledMethod = __FUNCTION__;
         }
         // クエリービルド
         if (array_key_exists('SELECT', $condition) && !empty($condition['SELECT'])) {
             $this->db->select($condition['SELECT']);
         }
         if (array_key_exists('WHERE', $condition) && !empty($condition['WHERE'])) {
-            foreach ($condition['WHERE'] as $key => $value) {
-                if (is_array($value)) {
-                    if (!empty($value)) {
-                        // 空の配列でなければ処理に入る 2020-06-15
-                        $this->db->where_in($key, $value);
-                    }
-                } else {
-                    $this->db->where($key, $value);
-                }
-            }
+            $this->setWhere($condition['WHERE']);
         }
         $query = $this->getQuerySelect();
         // クエリー実行
@@ -238,12 +292,63 @@ class MY_Model extends CI_Model
     }
 
     /**
+     * エイリアスでレコード取得する
+     * @param  string $alias エイリアスID
+     * @return array         [description]
+     */
+    public function getByAlias(string $alias) : array
+    {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __FUNCTION__;
+        }
+        $cond = array(
+            'WHERE' => array('AliasId' => Identifier::sftDecode($alias))
+        );
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
+    }
+
+    /**
+     * 指定したエイリアスが使用されているか確認する
+     * @param  string $alias [description]
+     * @return bool 使用されていない場合はTrueを返し、使用されている場合はFalseを返す
+     */
+    public function isNotExistAlias(string $alias) : bool
+    {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __FUNCTION__;
+        }
+        $cond = array(
+            'WHERE' => array('AliasId' => $alias)
+        );
+        $resultSet = $this->search($cond);
+        return (count($resultSet) == 0);
+    }
+
+    /**
+     * 指定したエイリアスIDで検索し、レコードを取得する
+     * @param  string $aliasId エイリアスID文字列
+     * @return array         検索結果を含んだ配列
+     */
+    public function getByAliasId(string $aliasId) : array
+    {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __FUNCTION__;
+        }
+        $cond = array(
+            'WHERE' => array('AliasId' => $aliasId)
+        );
+        $resultSet = $this->search($cond);
+        return $resultSet;
+    }
+
+    /**
      * 検索結果が唯一の検索を実施した場合に、確実に検索結果のみ取り出す。
      * 万一複数の結果が出た場合はエラーとして空の配列にする。
      * @param  array $resultSet searchで得られた結果
      * @return array
      */
-    protected function getMonoResult(array $resultSet) : array
+    protected function getMonoResult(array $resultSet) : Bean
     {
         if (count($resultSet) <= 0) {
             return $resultSet;
@@ -259,7 +364,7 @@ class MY_Model extends CI_Model
     public function attach(array $data) : int
     {
         if (empty($this->calledMethod)) {
-            $this->calledMethod = __METHOD__;
+            $this->calledMethod = __FUNCTION__;
         }
         // クエリービルド
         if (count($data) > 0) {
@@ -286,7 +391,7 @@ class MY_Model extends CI_Model
             return false;
         }
         if (empty($this->calledMethod)) {
-            $this->calledMethod = __METHOD__;
+            $this->calledMethod = __FUNCTION__;
         }
         // クエリービルド
         foreach ($where as $key => $value) {
@@ -336,7 +441,7 @@ class MY_Model extends CI_Model
     protected function truncate() : bool
     {
         if (empty($this->calledMethod)) {
-            $this->calledMethod = __METHOD__;
+            $this->calledMethod = __FUNCTION__;
         }
         $query = "TRUNCATE TABLE " . $this->tableName;
         if (ENVIRONMENT != 'production') {
@@ -353,7 +458,7 @@ class MY_Model extends CI_Model
     protected function drop() : bool
     {
         if (empty($this->calledMethod)) {
-            $this->calledMethod = __METHOD__;
+            $this->calledMethod = __FUNCTION__;
         }
         $query = "DROP TABLE " . $this->tableName;
         if (ENVIRONMENT != 'production') {

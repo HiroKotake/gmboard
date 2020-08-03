@@ -109,10 +109,10 @@ class TestGroup extends MY_Controller
             'Message' => '',
             'GroupInfo' => $groupInfo
         );
-        if (count($groupInfo) == 0) {
+        if ($groupInfo->isEmpty()) {
             $data['Message'] = '該当するグループはありません！';
         }
-        $data['GameName'] = $groupInfo['GameName'];
+        $data['GameName'] = $groupInfo->GameName;
         $this->smarty->testView('Group/showGroup', $data);
     }
 }

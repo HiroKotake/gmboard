@@ -1,6 +1,8 @@
 <?php
 namespace teleios\gmboard\dao;
 
+use teleios\gmboard\dao\Bean;
+
 /**
  * ゲーム情報テーブル管理テーブル
  *
@@ -79,7 +81,7 @@ class GameInfos extends \MY_Model
      * @param  int   $gameId ゲームID
      * @return array         対象が存在した場合にはゲーム情報を含む連想を配列を返し、ない場合には空の配列を返す
      */
-    public function getByGameId(int $gameId) : array
+    public function getByGameId(int $gameId) : Bean
     {
         $this->calledMethod = __FUNCTION__;
         $cond = array(

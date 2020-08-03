@@ -1,51 +1,53 @@
+<!doctype html>
 <html>
 <head>
-    <!-- test -->
-    <title>ユーザページ</title>
-    {include file="./includes/head.tpl"}
-    {include file="./js/mypage.js"}
+    <title>マイページ</title>
+{include file="./includes/head.tpl"}
+{include file="./js/mypage.js"}
 </head>
+
 <body>
     <!-- 隠しウィンドウ(ダイアログ代替) -->
-    {include file="./includes/DialogAddGame.tpl" GameGenre=$GameGenre GameList=$GameList}
-    {include file="./includes/DialogAddGroup.tpl" GameGenre=$GameGenre GroupGame=$GroupGame}
-    <!-- ヘッダー -->
-    <div>
-        ヘッダー
-    </div>
-    <!-- メニュー -->
-    <div>
-        メニュー
-        {include file="./includes/menu.tpl"}
-    </div>
-    <!-- メインエリア -->
-    <div>
-    <!-- メインエリア（左：ゲーム・グループリスト表示) -->
-    {include file="./includes/GameList.tpl" GameInfos=$GameInfos}
-    {include file="./includes/GroupList.tpl" GroupInfos=$GroupInfos}
-    <!-- メインエリア（右：データ表示） -->
-        <div>データ表示
-            <!-- メッセージ表示 -->
+{include file="./includes/DialogAddGame.tpl" GameGenre=$GameGenre GameList=$GameList}
+{include file="./includes/DialogAddGroup.tpl" GameGenre=$GameGenre GroupGame=$GroupGame}
+{include file="./includes/dialogWarning.tpl"}
+    <div class="BaseContainer">
+        <!-- Header -->
+        <div class="header">
+{include file="./includes/menu.tpl"}
+        </div>
+        <!-- Left Sidemenu -->
+        <div class="sidemenu">
+{include file="./includes/GameList.tpl" GameInfos=$GameInfos}
+            <br />
+{include file="./includes/GroupList.tpl" GroupInfos=$GroupInfos}
+        </div>
+        <div class="WorkContainer">
+            <!-- Right CM Area -->
+            <div class="cmarea">
+                cm
+            </div>
+            <!-- Right Main -->
+            <div class="mainwork">
+                <!-- メッセージ表示 -->
+                <h2>メッセージボード</h2>
+{foreach from=$Message item=msg name=MessageList}
+    {if $smarty.foreach.MessageList.first}
+            <hr />
+    {/if}
             <div>
-            <h2>メッセージボード</h2>
-            {foreach from=$Message item=msg name=MessageList}
-                {if $smarty.foreach.MessageList.first}
-                <hr />
-                {/if}
-                <div>
-                [{$msg.FromUserName}]{$msg.Message}<br />
+                    [{$msg.FromUserName}]{$msg.Message}<br />
                 </div>
-            {/foreach}
+{/foreach}
             </div>
-            <!-- メッセージ書き込み(For Group Chat) -->
-            {if $Mode == "Group"}
-            <div>
-                （メッセージ書き込み）
+            <div class="funcarea">
+                <button class="btnBlue_32x180">メッセージ作成</button>
             </div>
-            {/if}
+        </div>
+        <!-- Footer -->
+        <div class="footer">
+            footer
         </div>
     </div>
-    <!-- フッター -->
-    <div>
-    </div>
+</body>
 </html>

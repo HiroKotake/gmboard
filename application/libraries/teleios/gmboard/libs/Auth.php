@@ -2,6 +2,7 @@
 namespace teleios\gmboard\libs;
 
 use teleios\utils\StringUtility;
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\Users;
 use teleios\gmboard\dao\UserBoard;
 use teleios\gmboard\dao\Registration;
@@ -128,12 +129,12 @@ class Auth
             $result['status'] = AUTH_NO_EXIST_USER;
             return $result;
         }
-        if (!password_verify($pwd, $data['Password'])) {
+        if (!password_verify($pwd, $data->Password)) {
             $result['status'] = AUTH_UNMATCH_PASSWORD;
             return $result;
         }
         $result['status'] = AUTH_MATCH_PASSWORD;
-        $result['userId'] = $data['UserId'];
+        $result['userId'] = $data->UserId;
         return $result;
     }
 

@@ -8,6 +8,12 @@
             "auto_increment": true,
             "comment": "管理ID"
         },
+        "AliasId": {
+            "type": "CHAR",
+            "constraint": 16,
+            "null": false,
+            "comment": "IDエリアス"
+        },
         "Mail": {
             "type": "VARCHAR",
             "constraint": 256,
@@ -43,7 +49,8 @@
     },
     "PrimaryKey": "UserId",
     "Index": [
-        ["Mail"]
+        ["Mail"],
+        ["AliasId"]
     ],
     "Attribute": {
         "ENGINE": "InnoDB",

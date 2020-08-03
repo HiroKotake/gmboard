@@ -1,14 +1,15 @@
-        <!-- 登録グループ -->
-            <div name="AreaGroupList">グループリスト表示<br />
-                <ul name="GroupList" id="ulGroupList" style="list-style-type: none">
-                {if count($GroupInfos) > 0}
-                <!-- グループリスト -->
-                    {foreach from=$GroupInfos item=Group name=GroupList}
-                    <li>[{$Group.GameName}]&nbsp;{$Group.GroupName}</li>
-                    {/foreach}
-                {else}
-                <li>登録されているグループはありません。</li>
-                {/if}
+            <!-- 登録グループ -->
+            <fieldset class="smGrouping">
+                <legend>グループリスト表示</legend>
+                    <!-- グループリスト -->
+{if count($GroupInfos) > 0}
+                <ul name="GroupList" id="ulGroupList">
+    {foreach from=$GroupInfos item=Group name=GroupList}
+                    <li>[{$Group.GameName}]<br />{$Group.GroupName}</li>
+    {/foreach}
                 </ul>
-                <br /><button id="BtnAddGroup">グループ追加</button>
-            </div>
+{else}
+                    <p>登録されているグループはありません。</p>
+{/if}
+                <br /><button id="BtnAddGroup" class="btnBlue_32x180">グループ追加</button>
+            </fieldset>

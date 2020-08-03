@@ -9,9 +9,9 @@
     </tr>
     {foreach from=$GamePlayers item=Players}
     <tr>
-        <td>{$Players.GameNickname}</td>
-        <td>{$Players.PlayerId}</td>
-        <td>{$Players.AuthCode}</td>
+        <td>{$Players->GameNickname}</td>
+        <td>{$Players->PlayerId}</td>
+        <td>{$Players->AuthCode}</td>
     </tr>
     {/foreach}
 </table>

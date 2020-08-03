@@ -178,8 +178,11 @@ class MyPage extends MY_Controller
         // PlayerIndexテーブルとGamePlayers_xxxxxxxxテーブルへ情報を追加
         $libUserPage = new UserPage();
         $result = $libUserPage->attachGame($this->userId, (int)$targetGameId, $gamePlayerId, $gameNickname);
+        // グループ用ジャンル・ゲームリストを更新する
+        $groupDropDown = $libUserPage->getGroupGamelistWithCategory($libUserPage->getGameList($this->userId));
         $data = array(
-            "Status" => $result["Status"]
+            "Status" => $result["Status"],
+            "GpDrDw" => $groupDropDown
         );
         echo json_encode($data);
     }

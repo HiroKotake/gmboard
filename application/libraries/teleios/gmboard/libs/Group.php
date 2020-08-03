@@ -2,6 +2,7 @@
 namespace teleios\gmboard\libs;
 
 use teleios\gmboard\libs\common\Personal;
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\Groups;
 use teleios\gmboard\dao\RegistBooking;
@@ -48,18 +49,18 @@ class Group extends Personal
         $leaderIds = array();
         if (count($listGroups) > 0) {
             foreach ($listGroups as $group) {
-                $leaderIds[] = $group["Leader"];
-                $data[$group["GroupId"]] = array(
-                    "GroupId" => $group["GroupId"],
-                    "GroupName" => $group["GroupName"],
+                $leaderIds[] = $group->Leader;
+                $data[$group->GroupId] = array(
+                    "GroupId" => $group->GroupId,
+                    "GroupName" => $group->GroupName,
                     "Leader" => "",
-                    "Joined" => ($group["GroupId"] == $userInfo["GroupId"] ? 1 : 0)
+                    "Joined" => ($group->GroupId == $userInfo->GroupId ? 1 : 0)
                 );
             }
             // リーダーのニックネームを取得し、データに追記
             $leaders = $daoGamePlayers->getByLeaders($gameId, $leaderIds);
             foreach ($leaders as $ld) {
-                $data[$ld["GroupId"]]["Leader"] = $ld["GameNickname"];
+                $data[$ld->GroupId]["Leader"] = $ld->GameNickname;
             }
         }
         $result = array(
@@ -88,12 +89,15 @@ class Group extends Personal
         $gameList = $this->getGameListsModifedByPersonal($groupGameList, $gameInfos);
         // カテゴリリスト作成
         $categorys = $this->makeExistGenre($gameList);
+        // グループ申請用ジャンル・ゲームリスト生成
+        $groupDropDown = $this->getGroupGamelistWithCategory($gameInfos);
         $data = array(
             'GameInfos' => $gameInfos,
             'GroupInfos' => $groupInfos,
             'GameGenre' => $categorys,
             'GameList' => $gameList,
-            'GroupGame' => $groupGameList,
+            'GroupGenre' => $groupDropDown->Genre,
+            'GroupGame' => $groupDropDown->GameInfos,
             'GamesListVer' => $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER),
         );
         return $data;

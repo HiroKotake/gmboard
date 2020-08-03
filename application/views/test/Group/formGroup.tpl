@@ -2,7 +2,7 @@
 <form action="addGroup" method="post">
     対象ゲーム：<select name="TRGT">
         {foreach from=$Games item=game}
-        <option value="{$game.GameId}">{$game.Name}</option>
+        <option value="{$game->GameId}">{$game->Name}</option>
         {/foreach}
     </select><br />
     グループ名：<input type="text" name="GNAME" /><br />

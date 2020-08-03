@@ -1,14 +1,15 @@
-        <!-- 登録ゲーム -->
-            <div name="AreaGameList">ゲームリスト表示<br />
-                <ul name="GameList" id="ulGameList" style="list-style-type: none">
-                {if count($GameInfos) > 0}
+            <!-- 登録ゲーム -->
+            <fieldset class="smGrouping">
+                <legend>ゲームリスト表示</legend>
                 <!-- ゲームリスト -->
-                    {foreach from=$GameInfos item=Game name=GameInfoList}
+{if count($GameInfos) > 0}
+                <ul name="GameList" id="ulGameList">
+    {foreach from=$GameInfos item=Game name=GameInfoList}
                     <li>{$Game.Name}</li>
-                    {/foreach}
-                {else}
-                    <li>登録されているゲームはありません。</li>
-                {/if}
+    {/foreach}
                 </ul>
-                <br /><button id="BtnAddGame">ゲーム追加</button>
-            </div>
+{else}
+                <p>登録されているゲームはありません。</p>
+{/if}
+	            <br /><button id="BtnAddGame" class="btnBlue_32x180">ゲーム追加</button>
+            </fieldset>

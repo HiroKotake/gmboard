@@ -1,0 +1,156 @@
+body {
+	background-color: #ABE9F3;
+}
+
+/* Top Page*/
+div.TopBase {
+	position: relative;
+	height: 95vh;
+}
+div.TopContainer {
+	position: absolute;
+	width: 60%;
+	height: 200px;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%,-50%);
+	transform: translate(-50%,-50%);
+	display: grid;
+	grid-template-rows: auto 30px;
+	grid-template-columns: 60% auto;
+	grid-column-gap: 2px;
+	grid-template-areas:
+		"notice login"
+		"morenotice regist";
+}
+div.TopNotice {
+	grid-area: notice;
+	padding-top: 5px;
+	padding-left: 30px;
+	background: #F0F0F0;
+	overflow: scroll;
+}
+div.TopNotice > ul {
+	list-style-type:square;
+}
+div.TopNotice > ul > li {
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin-bottom: 2px;
+	margin-left: -40px;
+}
+
+div.TopMoreNotice {
+	grid-area: morenotice;
+	padding-left: 15px;
+	background: #F0F0F0;
+}
+div.TopLogin {
+	grid-area: login;
+	background: #F0F0F0;
+}
+div.TopLogin > form {
+	margin-top: 30px;
+	margin-left: 15px;
+}
+div.TopLogin > form > ul > li {
+	padding-bottom: 15px;
+}
+div.TopNewRegist {
+	grid-area: regist;
+	text-align: right;
+	padding-right: 30px;
+	background: #F0F0F0;
+}
+
+/* MyPage */
+div.BaseContainer {
+	display: grid;
+	grid-template-rows: 25px auto 25px;
+	grid-template-columns: 250px auto;
+	grid-template-areas:
+		"header header"
+		"sidemenu WorkContainer"
+		"footer footer";
+	height: calc(100vh - 15px);
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+div.header {
+	grid-area: header;
+	display: table-cell;
+	background-color: #89DFF2;
+	vertical-align: middle;
+	margin: 0 0 0 auto;
+}
+div.sidemenu {
+	grid-area: sidemenu;
+	background-color: #ABE9F3;
+	overflow: scroll;
+}
+div.workcontainer {
+	grid-area: WorkContainter;
+	display: grid;
+	grid-template-rows: auto auto auto;
+	grid-template-columns: auto;
+	grid-template-areas:
+		"cmarea"
+		"mainwork"
+		"funcarea";
+}
+div.cmarea {
+	background-color: #C0D8D5;
+	grid-area: cmare;
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+div.mainwork {
+	background-color: #E0E5E5;
+	grid-area: mainwork;
+	height: calc(100vh - 150px);
+	overflow: scroll;
+}
+div.funcarea {
+	background-color: #E0E5E5;
+	grid-area: funcarea;
+	height: 30px;
+	text-align: right;
+}
+div.footer {
+	grid-area: footer;
+	background-color: #89DFF2;
+}
+/* Header Menu */
+.ddmenu {
+	display: flex;
+}
+.menu {
+	width: 200px;
+	text-align: center;
+}
+.mtitle {
+	background: #4366F3;
+	color: #ffffff;
+}
+.smenu {
+	display: none;
+	background:#68D1EC;
+	position: relative;
+}
+.smenu > ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 200px;
+}
+.smenu > ul > li:hover {
+	background: #F790ED;
+}
+.smenu > ul > li > a {
+	text-decoration: none;
+	color: #ffffff;
+}
+.menu:hover .smenu {
+  display: inline-block;
+}

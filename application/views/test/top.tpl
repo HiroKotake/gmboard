@@ -183,5 +183,10 @@
         <li><a href="TestUserMessage/formUserMessage">ユーザ掲示板へメッセージ追加</a></li>
         <li><a href="TestUserMessage/showUserMessage">ユーザ掲示板表示</a></li>
     </ul>
+    <h3>その他</h3>
+    <ul>
+        <li><a href="TestIdentifier">ID生成</a></li>
+        <li><a href="TestIdentifier/rcode?len=128">ランダムコード生成</a></li>
+    </ul>
 </body>
 </html>

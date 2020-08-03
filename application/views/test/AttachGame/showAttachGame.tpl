@@ -3,8 +3,8 @@
 {else}
 対象
 <hr>
-ゲーム：{$Infos.GameInfo.Name}<br />
-グループ：{$Infos.GroupInfo.GroupName}
+ゲーム：{$Infos.GameInfo->Name}<br />
+グループ：{$Infos.GroupInfo->GroupName}
 <hr />
 {$SubTitle}
 <table>
@@ -14,8 +14,8 @@
     </tr>
     {foreach from=$Infos.GamePlayers item=$Player}
     <tr>
-        <td>{$Player.PlayerId}</td>
-        <td>{$Player.GameNickname}</td>
+        <td>{$Player->PlayerId}</td>
+        <td>{$Player->GameNickname}</td>
     </tr>
     {/foreach}
 </table>

@@ -59,7 +59,7 @@ class Users extends \MY_Model
      * @param  int   $userId [description]
      * @return array         [description]
      */
-    public function get(int $userId) : array
+    public function get(int $userId) : Bean
     {
         $this->calledMethod = __FUNCTION__;
         $cond = array(

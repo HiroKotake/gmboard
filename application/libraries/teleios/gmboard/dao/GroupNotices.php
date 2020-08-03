@@ -25,6 +25,19 @@ class GroupNotices extends \MY_Model
     }
 
     /**
+     * テーブル名を生成する
+     * @param  int    $gameId  ゲーム管理ID
+     * @param  int    $groupId グループ管理ID
+     * @return string          テーブル名
+     */
+    private function buildTableName(int $gameId, int $groupId) : string
+    {
+        $tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
+                . '_' . $this->stringUtil->lpad($groupId, "0", 8);
+        return $tableName;
+    }
+
+    /**
      * テーブル作成
      * @param  int  $gameId  ゲーム管理ID
      * @param  int  $groupId グループ管理ID
@@ -54,8 +67,7 @@ class GroupNotices extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
-            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
-                        . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+            $this->tableName = $this->buildTableName($gameId, $groupId);
             return $this->attach($data);
         }
         return false;
@@ -78,8 +90,7 @@ class GroupNotices extends \MY_Model
         int $offset = 0
     ) : array {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
-                    . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+        $this->tableName = $this->buildTableName($gameId, $groupId);
         $now = date("Y-m-d H:i:s");
         $cond = array(
             'WHERE' => array(
@@ -102,8 +113,7 @@ class GroupNotices extends \MY_Model
     public function getAllRecords(int $gameId, int $groupId) : array
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
-                . '_' . $this->stringUtil->lpad($groupId, "0", 12);
+        $this->tableName = $this->buildTableName($gameId, $groupId);
         return $this->searchAll(0, 0, true);
     }
 
@@ -119,8 +129,7 @@ class GroupNotices extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
-            $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
-                        . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+            $this->tableName = $this->buildTableName($gameId, $groupId);
             return $this->update($data, array('NoticeId' => $noticeId));
         }
         return false;
@@ -204,8 +213,7 @@ class GroupNotices extends \MY_Model
     public function clearTable(int $gameId, int $groupId) : bool
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8)
-                    . '_' . str_pad($groupId, 12, "0", STR_PAD_LEFT);
+        $this->tableName = $this->buildTableName($gameId, $groupId);
         return $this->truncate();
     }
 }

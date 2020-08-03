@@ -118,7 +118,7 @@ class TestUser extends MY_Controller
         $testUser = new User();
         $userInfo = $testUser->showUser($userId);
         $message = '';
-        if (count($userInfo) == 0) {
+        if ($userInfo->isEmpty()) {
             $message = '該当するユーザは存在しません。';
         }
         $data = array(

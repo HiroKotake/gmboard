@@ -1,4 +1,4 @@
-<h1>{$GroupInfo.GroupId}：{$GroupInfo.GroupName}</h1>
+<h1>{$GroupInfo->GroupId}：{$GroupInfo->GroupName}</h1>
 <hr />
 {if mb_strlen($Message) > 0}
 {$Message}<br />
@@ -12,8 +12,8 @@
     </tr>
     {foreach from=$MemberList item=Member}
     <tr>
-        <td>{$Member.PlayerId}</td>
-        <td>{$Member.GameNickname}</td>
+        <td>{$Member->PlayerId}</td>
+        <td>{$Member->GameNickname}</td>
     </tr>
     {/foreach}
 </table>
@@ -31,9 +31,9 @@
     </tr>
     {foreach from=$BookingList item=Booking}
     <tr>
-        <td>{$Booking.PlayerId}</td>
-        <td>{$Booking.GameNickname}</td>
-        <td>{$Booking.AuthCode}</td>
+        <td>{$Booking->PlayerId}</td>
+        <td>{$Booking->GameNickname}</td>
+        <td>{$Booking->AuthCode}</td>
     </tr>
     {/foreach}
 </table>

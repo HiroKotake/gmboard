@@ -1,7 +1,7 @@
 <form action="addAttachGame" method="post">
     <select name="GID">
     {foreach from=$GameInfos item=game}
-        <option value="{$game.GameId}">{$game.Name}</option>
+        <option value="{$game->GameId}">{$game->Name}</option>
     {/foreach}
     </select>
     <br />

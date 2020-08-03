@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `Users`;
 CREATE TABLE `Users`
 (
     `UserId` BIGINT(12) UNSIGNED AUTO_INCREMENT COMMENT '管理ID',
+    `AliasId` CHAR(16) NOT NULL COMMENT 'IDエリアス',
     `Mail` VARCHAR(256) COMMENT 'ログイン用メールアドレス',
     `Password` CHAR(60) NOT NULL COMMENT 'ハッシュ済みパスワード',
     `Nickname` VARCHAR(30) COMMENT 'ニックネーム',
@@ -16,5 +17,6 @@ CREATE TABLE `Users`
     `DeleteDate` DATETIME COMMENT 'レコード無効日',
     `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT 'レコード無効フラグ(0:有効, 1:無効)',
     PRIMARY KEY (`UserId`),
-    INDEX `MailIDX`(`Mail`)
+    INDEX `IdxMail`(`Mail`),
+    INDEX `IdxAliasId` (`AliasId`)
 ) ENGINE=InnoDB COMMENT 'ユーザ';

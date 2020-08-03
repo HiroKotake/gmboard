@@ -7,8 +7,8 @@
     </tr>
     {foreach from=$GameInfos item=Game}
     <tr>
-        <td>{$Game.Name}</td>
-        <td><a href="listGamePlayers?GID={$Game.GameId}">表示</a></td>
+        <td>{$Game->Name}</td>
+        <td><a href="listGamePlayers?GID={$Game->GameId}">表示</a></td>
     </tr>
     {/foreach}
 </table>

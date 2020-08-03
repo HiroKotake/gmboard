@@ -20,6 +20,29 @@
             $("#TargetNickname").val("");
         }
 
+        function changeGroupDropDown(data) {
+            var genreList = $("#G_GameGenre");
+            var gameList = $("#G_TargetGame");
+            // optionの削除
+            while (0 < genreList.children('option').length) {
+                genreList.children('option:first-child').remove();
+            }
+            while (0 < gameList.children('option').length) {
+                gameList.children('option:first-child').remove();
+            }
+            // optionの追加
+            for (let genre in data["Genre"]) {
+                genreList.append($("<option>").val(genre).text(data["Genre"][genre]));
+            }
+            for (let idx in data["GameInfos"]) {
+                for (let games in data["GameInfos"][idx]) {
+                    gameList.append($("<option>").val(data["GameInfos"][idx][games]["Ub"]).text(data["GameInfos"][idx][games]["Name"]));
+                }
+                // 多重配列の最初のループを回して終了
+                break;
+            }
+        }
+
         function changeGroupGameGenre() {
             var gameList = $("select[name=GTarget]");
             var selected = $("select[name=GGenre]").val();
@@ -29,7 +52,9 @@
             }
             // optionの追加
             for (var game in gameListByGenre[selected]) {
-                gameList.append($("<option>").val(gameListByGenre[selected][game]["Ub"]).text(gameListByGenre[selected][game]["Name"]));
+                if (gameListByGenre[selected][game]["Joined"] == 1) {
+                    gameList.append($("<option>").val(gameListByGenre[selected][game]["Ub"]).text(gameListByGenre[selected][game]["Name"]));
+                }
             }
             // clear textbox.
             $("#TargePID").val("");
@@ -57,6 +82,7 @@
                 autoOpen: false,
                 width: 550,
                 modal: true,
+                title: "ゲームの追加",
                 buttons: [
                     {
                         text: '追加',
@@ -85,6 +111,7 @@
                                 joinedGames += 1;
                                 localStorage.setItem("JoinedGames", joinedGames);
                                 changeGameGenre();
+                                changeGroupDropDown(result["GpDrDw"]);
                             } else {
                                 $("#DialogAddGame").dialog("close");
                                 windows.alert();
@@ -109,6 +136,7 @@
                 autoOpen:false,
                 width: 550,
                 modal: true,
+                title: "グループの追加",
                 buttons: [
                     {
                         text: '検索',
@@ -125,8 +153,29 @@
             $("#G_GameGenre").change(function(){
                changeGroupGameGenre();
             });
+            // グループの検索ダイアログオープン
             $("#BtnAddGroup").click(function(){
-                $("#DialogAddGroup").dialog("open");
+                if ($("#G_GameGenre option").length > 0) {
+                    $("#DialogAddGroup").dialog("open");
+                } else {
+                    $("#dialogWarning p").text("グループの追加をする前に、ゲームを追加してください。");
+                    $("#dialogWarning").dialog("open");
+                }
+            });
+            // WARNING ダイアログ
+            $("#dialogWarning").dialog({
+                autoOpen: false,
+                width: 500,
+                modal: true,
+                title: "WARNING",
+                buttons: [
+                    {
+                        text: "閉じる",
+                        click: function(){
+                            $("#dialogWarning").dialog("close");
+                        }
+                    }
+                ]
             });
         })
 {/literal}

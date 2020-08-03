@@ -3,6 +3,7 @@ namespace teleios\gmboard\libs\admin;
 
 use teleios\utils\DBUtility;
 use teleios\utils\StringUtility;
+use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\TableCtl;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\GamePlayers;
@@ -37,6 +38,7 @@ class CtrlRecords
         $hFile = fopen($this->filename, "r");
         $jsonText = fread($hFile, filesize($this->filename));
         $this->data = json_decode($jsonText, true);
+        fclose($hFile);
     }
 
     /**

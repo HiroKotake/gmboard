@@ -2,9 +2,10 @@
 <p>{$Message}</p>
 {else}
 <ul>
-    <li>ログインID(メールアドレス)：{$UserInfo.Mail}</li>
+    <li>ログインID(メールアドレス)：{$UserInfo->Mail}</li>
+    <li>エイリアスID：{$UserInfo->AliasId}</li>
     <li>パスワード：＜未公開＞</li>
-    <li>ニックネーム：{$UserInfo.Nickname}</li>
+    <li>ニックネーム：{$UserInfo->Nickname}</li>
 </ul>
 {/if}
 <hr />
