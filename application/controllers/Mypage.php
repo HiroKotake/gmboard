@@ -162,6 +162,11 @@ class MyPage extends MY_Controller
         $games = $libUserPage->getGamelistWithCategory();
         $joins = $libUserPage->getGameList($this->userId);
         $gamesList = $libUserPage->getGameListsModifedByPersonal($games, $joins);
+        $gamesList = $libUserPage->eraseUb($gamesList);
+        $data = array(
+            "ListState" => 0,
+            "List" => $gamesList
+        );
         $data = json_encode($gamesList);
         echo $data;
     }
@@ -177,11 +182,20 @@ class MyPage extends MY_Controller
         $gameNickname = $this->input->post("gnn");
         // PlayerIndexテーブルとGamePlayers_xxxxxxxxテーブルへ情報を追加
         $libUserPage = new UserPage();
-        $result = $libUserPage->attachGame($this->userId, (int)$targetGameId, $gamePlayerId, $gameNickname);
+        $gameId = $libUserPage->trnasAliasToGameId($targetGameId);
+        $result = $libUserPage->attachGame($this->userId, (int)$gameId, $gamePlayerId, $gameNickname);
         // グループ用ジャンル・ゲームリストを更新する
         $groupDropDown = $libUserPage->getGroupGamelistWithCategory($libUserPage->getGameList($this->userId));
+        //
+        $games = $libUserPage->getGamelistWithCategory();
+        $joins = $libUserPage->getGameList($this->userId);
+        $gamesList = $libUserPage->getGameListsModifedByPersonal($games, $joins);
+        $gamesList = $libUserPage->eraseUb($gamesList);
         $data = array(
             "Status" => $result["Status"],
+            "ListState" => 1,
+            "GameInfo" => $result["GameInfo"],
+            "GameList" => $gamesList,
             "GpDrDw" => $groupDropDown
         );
         echo json_encode($data);

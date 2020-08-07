@@ -27,7 +27,7 @@
 
         function showConfirmTable(target) {
             var targetUrl = "./TestData/" + target;
-            var ope = target == "buildTables" ? "作成" : "削除";
+            var ope = target == "buildTables" ? "作成" : (target == "destoryTables" ? "削除" : "DB環境リセット");
             $("#showDialog").html("この操作を実行すると元に戻せませんが、<br />" + ope + "を実行しますか？");
             $("#showDialog").dialog({
                 width: 350,
@@ -36,6 +36,9 @@
                 buttons: {
                     "OK": function(){
                         $(this).dialog("close");
+                        if (target == "dataReset") {
+                            localStorage.clear();
+                        }
                         var result = $.ajax({
                             url: targetUrl,
                             type: "GET",
@@ -100,6 +103,9 @@
             $("#btnDestroyTable").click(function(){
                 showConfirmTable("destoryTables");
             });
+            $("#btnReset").click(function(){
+                showConfirmTable("dataReset");
+            });
         });
     </script>
 </head>
@@ -111,6 +117,7 @@
     <ul style="list-style-type: none">
         <li><button id="btnBuildTable">DBテーブル作成</button></li>
         <li><button id="btnDestroyTable">DBテーブル全削除</button></li>
+        <li><button id="btnReset">DB環境リセット</button></li>
         <br />
         <li>データ生成
         <form id="addData">
@@ -187,6 +194,7 @@
     <ul>
         <li><a href="TestIdentifier">ID生成</a></li>
         <li><a href="TestIdentifier/rcode?len=128">ランダムコード生成</a></li>
+        <li><a href="TestIdentifier/showCache">AliasIDキャッシュ表示</a></li>
     </ul>
 </body>
 </html>

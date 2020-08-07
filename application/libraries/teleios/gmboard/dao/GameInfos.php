@@ -88,10 +88,7 @@ class GameInfos extends \MY_Model
             'WHERE' => array('GameId' => $gameId),
         );
         $result = $this->search($cond);
-        if (count($result) > 0) {
-            return $result[0];
-        }
-        return array();
+        return $this->getMonoResult($result);
     }
 
     /**

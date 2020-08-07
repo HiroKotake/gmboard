@@ -13,7 +13,7 @@
             <!-- ゲーム -->
                     <select id="G_TargetGame" name="GTarget">
 {foreach from=$GroupGame[1] item=GameInfo}
-                        <option value="{$GameInfo.Ub}">{$GameInfo.Name}</option>
+                        <option value="{$GameInfo.Ad}">{$GameInfo.Name}</option>
 {/foreach}
                     </select>
                 </li>

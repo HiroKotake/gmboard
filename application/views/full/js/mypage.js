@@ -2,65 +2,6 @@
 {literal}
         var gameListByGenre;
 
-        function changeGameGenre() {
-            var gameList = $("select[name=Target]");
-            var selected = $("select[name=Genre]").val();
-            // optionの削除
-            while (0 < gameList.children('option').length) {
-               gameList.children('option:first-child').remove();
-            }
-            // optionの追加
-            for (var game in gameListByGenre[selected]) {
-                if (gameListByGenre[selected][game]["Joined"] == 0) {
-                    gameList.append($("<option>").val(gameListByGenre[selected][game]["Ub"]).text(gameListByGenre[selected][game]["Name"]));
-                }
-            }
-            // clear textbox.
-            $("#TargePID").val("");
-            $("#TargetNickname").val("");
-        }
-
-        function changeGroupDropDown(data) {
-            var genreList = $("#G_GameGenre");
-            var gameList = $("#G_TargetGame");
-            // optionの削除
-            while (0 < genreList.children('option').length) {
-                genreList.children('option:first-child').remove();
-            }
-            while (0 < gameList.children('option').length) {
-                gameList.children('option:first-child').remove();
-            }
-            // optionの追加
-            for (let genre in data["Genre"]) {
-                genreList.append($("<option>").val(genre).text(data["Genre"][genre]));
-            }
-            for (let idx in data["GameInfos"]) {
-                for (let games in data["GameInfos"][idx]) {
-                    gameList.append($("<option>").val(data["GameInfos"][idx][games]["Ub"]).text(data["GameInfos"][idx][games]["Name"]));
-                }
-                // 多重配列の最初のループを回して終了
-                break;
-            }
-        }
-
-        function changeGroupGameGenre() {
-            var gameList = $("select[name=GTarget]");
-            var selected = $("select[name=GGenre]").val();
-            // optionの削除
-            while (0 < gameList.children('option').length) {
-               gameList.children('option:first-child').remove();
-            }
-            // optionの追加
-            for (var game in gameListByGenre[selected]) {
-                if (gameListByGenre[selected][game]["Joined"] == 1) {
-                    gameList.append($("<option>").val(gameListByGenre[selected][game]["Ub"]).text(gameListByGenre[selected][game]["Name"]));
-                }
-            }
-            // clear textbox.
-            $("#TargePID").val("");
-            $("#TargetNickname").val("");
-        }
-
         $(function(){
             // localStorage
             var gamesListVar = localStorage.getItem("GamesListVer");
@@ -100,14 +41,17 @@
                             var result = JSON.parse(newGameInfo);
                             if (result["Status"] == {/literal}{$smarty.const.DB_STATUS_ADDED}{literal}) {
                                 // update WebStrage's GameList
-                                gameListByGenre[genre][target]["Joined"] = 1;
-                                localStorage.setItem("GamesList", JSON.stringify(gameListByGenre));
+                                gameListByGenre = result["GameList"];
+                                localStorage.setItem("GamesList", JSON.stringify(result["GameList"]));
                                 // update Area GameList
                                 var ulGameList = $("#ulGameList");
                                 if (joinedGames == 0) {
                                     ulGameList.children().remove();
                                 }
-                                ulGameList.append($("<li>" + gameListByGenre[genre][target]["Name"] + "</li>"));
+                                ulGameList.append($("<li></li>"));
+                                ulGameListLast = $("#ulGameList > li:last");
+                                var targetUrl = "<button class=\"perple_40x280\" onClick='jmpGame(\"" + result["GameInfo"]["AliasId"] + "\")'>" + result["GameInfo"]["Name"] + "</button>";
+                                ulGameListLast.append(targetUrl);
                                 joinedGames += 1;
                                 localStorage.setItem("JoinedGames", joinedGames);
                                 changeGameGenre();

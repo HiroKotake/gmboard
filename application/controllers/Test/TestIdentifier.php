@@ -34,4 +34,20 @@ class TestIdentifier extends MY_Controller
         echo '<hr>';
         echo '<a href="../top">戻る</a>';
     }
+
+    public function showCache()
+    {
+        $aliasList = unserialize($this->redis->get(KEY_ALIAS_GAME));
+        echo 'エイリアスIDキャッシュ内容表示';
+        echo '<hr>';
+        if (empty($aliasList)) {
+            echo '登録データがありません。<br />';
+        } else {
+            foreach ($aliasList as $aliasId => $gameId) {
+                echo 'AliasId(' . $aliasId . ')&nbsp;=>nbsp;GameId(' . $gameId . ')<br />';
+            }
+        }
+        echo '<hr>';
+        echo '<a href="../top">戻る</a>';
+    }
 }

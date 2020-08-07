@@ -1,7 +1,7 @@
 <?php
 
 use teleios\gmboard\libs\admin\CtrlRecords;
-
+use teleios\gmboard\dao\CiSessions;
 /**
  * テスト環境向データ生成コントローラークラス
  *
@@ -13,10 +13,7 @@ use teleios\gmboard\libs\admin\CtrlRecords;
  */
 class TestData extends MY_Controller
 {
-    /**
-     * テーブルを生成
-     */
-    public function buildTables() : void
+    private function subBuildTables() : string
     {
         $ctrlRecords = new CtrlRecords();
         $data = $ctrlRecords->makeTables();
@@ -24,13 +21,18 @@ class TestData extends MY_Controller
         foreach($data as $tableName => $result) {
             $message .= $tableName . ":" . ($result ? "成功" : "失敗") . "\r\n";
         }
+        return $message;
+    }
+    /**
+     * テーブルを生成
+     */
+    public function buildTables() : void
+    {
+        $message = $this->subBuildTables();
         echo json_encode(["message" => $message]);
     }
 
-    /**
-     * 全テーブルを削除
-     */
-    public function destoryTables() : void
+    private function subDestoryTables() : string
     {
         $ctrlRecords = new CtrlRecords();
         $data = $ctrlRecords->clearDB();
@@ -38,6 +40,15 @@ class TestData extends MY_Controller
         foreach($data as $tableName => $result) {
             $message .= $tableName . ":" . ($result ? "成功" : "失敗") . "\r\n";
         }
+        return $message;
+    }
+
+    /**
+     * 全テーブルを削除
+     */
+    public function destoryTables() : void
+    {
+        $message = $this->subDestoryTables();
         echo json_encode(["message" => $message]);
     }
 
@@ -106,7 +117,7 @@ class TestData extends MY_Controller
             $message .= "グループ予約メンバー登録\r\n";
         }
         $data = array(
-            "Message" => 'テストデータを生成しました:' . $message
+            "message" => 'テストデータを生成しました:' . $message
         );
         echo json_encode($data);
     }
@@ -157,7 +168,26 @@ class TestData extends MY_Controller
             }
         }
         $data = array(
-            "Message" => 'テストデータを削除しました:' . $message
+            "message" => 'テストデータを削除しました:' . $message
+        );
+        echo json_encode($data);
+    }
+
+    public function dataReset() : void
+    {
+        $message = $this->subDestoryTables();
+        $message = $this->subBuildTables();
+        $ctrRecode = new CtrlRecords();
+        $ctrRecode->makeGames();
+        $ctrRecode->makeUsers();
+        $ctrRecode->makePlayerIndex();
+        $ctrRecode->makeGroups();
+        $ctrRecode->makeGroupMember();
+        $ctrRecode->makeRegistBooking();
+        $daoCiSessions = new CiSessions();
+        $daoCiSessions->flushAll();
+        $data = array(
+            "message" => '環境をリセットしました。'
         );
         echo json_encode($data);
     }

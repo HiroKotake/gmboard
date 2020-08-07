@@ -100,6 +100,8 @@ class CtrlRecords
         $daoGamePlayers = new GamePlayers();
         $daoRegistBooking = new RegistBooking();
         $daoGroups = new Groups();
+        $daoGroupBoard = new GroupBoard();
+        $daoGroupNotices = new GroupNotices();
         $datas = $this->makeData("GameInfos");
         foreach ($datas as $record) {
             // ゲーム追加
@@ -110,6 +112,10 @@ class CtrlRecords
             $daoRegistBooking->createTable($record["GameId"]);
             // ゲーム別グループ管理テーブル追加
             $daoGroups->createTable($record["GameId"]);
+            // ゲーム別全体ボード
+            $daoGroupBoard->createTable($record["GameId"], 0);
+            // ゲーム別告知
+            $daoGroupNotices->createTable($record["GameId"], 0);
         }
         // GameListのバージョンを初期化
         $this->cIns->sysComns->set(SYSTEM_KEY_GAMELIST_VER, 1);

@@ -296,13 +296,13 @@ class MY_Model extends CI_Model
      * @param  string $alias エイリアスID
      * @return array         [description]
      */
-    public function getByAlias(string $alias) : array
+    public function getByAlias(string $alias) : Bean
     {
         if (empty($this->calledMethod)) {
             $this->calledMethod = __FUNCTION__;
         }
         $cond = array(
-            'WHERE' => array('AliasId' => Identifier::sftDecode($alias))
+            'WHERE' => array('AliasId' => $alias)
         );
         $resultSet = $this->search($cond);
         return $this->getMonoResult($resultSet);

@@ -5,7 +5,7 @@
 {if count($GroupInfos) > 0}
                 <ul name="GroupList" id="ulGroupList">
     {foreach from=$GroupInfos item=Group name=GroupList}
-                    <li><a href="?gameId={$Group.GameId}&groupId={$Group.AliasId}">[{$Group.GameName}]<br />{$Group.GroupName}</a></li>
+                    <li><button class="perple_50x280" onclick='jmpGroup("{$Group.GameId}", "{$Group.GroupId}")'>[{$Group.GameName}]<br />{$Group.GroupName}</button></li>
     {/foreach}
                 </ul>
 {else}

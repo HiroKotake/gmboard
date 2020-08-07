@@ -113,6 +113,7 @@ defined('SESSION_LIST_GENRE')         OR define('SESSION_LIST_GENRE', 'genreList
 defined('SESSION_LIST_GAME')          OR define('SESSION_LIST_GAME', 'gameList');            // ドロップダウンメニュー用ユーザ個別ゲームリスト
 defined('SESSION_LIST_GROUP_GENRE')   OR define('SESSION_LIST_GROUP_GENRE', 'gGenreList');   // ドロップダウンメニュー用ユーザ個別ゲームカテゴリリスト
 defined('SESSION_LIST_GROUP_GAME')    OR define('SESSION_LIST_GROUP_GAME', 'gGameList');     // ドロップダウンメニュー用ユーザ個別ゲームリスト
+defined('SESSION_LIST_ALIAS')         OR define('SESSION_LIST_ALIAS', 'aliasList');          // セッションIDのリスト
 // システム固有キー名
 defined('SYSTEM_KEY_GAMELIST_VER') OR define('SYSTEM_KEY_GAMELIST_VER', 'GamesListVer'); // 設定ゲームのリストのバージョンを示すキー名
 // DBステータス
@@ -154,6 +155,8 @@ defined('AUTH_ACTIVATE_UNMATCH')    OR define('AUTH_ACTIVATE_UNMATCH', 313);    
 defined('MYPAGE_MODE_PERSONAL')  OR define('MYPAGE_MODE_PERSONAL', 'Personal'); // マイページ画面モード：個人トップ表示
 defined('MYPAGE_MODE_GROUP')     OR define('MYPAGE_MODE_GROUP', 'Group');       // マイページ画面モード：グループ
 
+defined('KEY_ALIAS_GAME')       OR define('KEY_ALIAS_GAME', 'aliasGame');       // ゲームエイリアス
+defined('KEY_ALIAS_GROUP')      OR define('KEY_ALIAS_GROUP', 'aliasGroup_');    // グループエイリアス(ゲーム別)
 defined('KEY_GAME_INFO')        OR define('KEY_GAME_INFO', 'GameInfomation');   // Redisキー名 (ゲーム情報)
 defined('KEY_GAME_CATEGORY')    OR define('KEY_GAME_CATEGORY', 'GameCategory'); // Redisキー名 (カテゴリ別ゲームリスト)
 defined('GAME_CATEGORY')        OR define('GAME_CATEGORY', [                    // ゲームカテゴリ

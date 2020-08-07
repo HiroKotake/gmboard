@@ -36,38 +36,34 @@ class UserPage extends Personal
     }
 
     /**
+     * 配列からシステム内部で使用するGameIdを覗く
+     * @param  array $gameList [description]
+     * @return array           [description]
+     */
+    public function eraseUb(array $gameList) : array
+    {
+        $erasedList = array();
+        foreach ($gameList as $key => $list) {
+            $erasedList[$key] = array();
+            foreach ($list as $game) {
+                unset($game["Ub"]);
+                $erasedList[$key][] = $game;
+            }
+        }
+        return $erasedList;
+    }
+
+    /**
      * ユーザページの初期画面で表示するデータを取得する
      * @param  int   $userId [description]
      * @return array         [description]
      */
     public function getPageData(int $userId) : array
     {
-        // 登録ゲーム一覧取得
-        $gameInfos = $this->getGameList($userId);
-        // 登録グループ取得
-        $groupInfos = array();
-        if (!empty($gameInfos)) {
-            $groupInfos = $this->getGroups($userId, $gameInfos);
-        }
+        // 共通ページデータ取得
+        $data = $this->getPageDataCommon($userId);
         // 個人向けメッセージ取得
-        $personalMessage = $this->getPersonalMessage($userId);
-        // ゲームリスト(カテゴリ別)取得 (個人別にカスタマイズしたもの)
-        $groupGameList = $this->getGamelistWithCategory();
-        $gameList = $this->getGameListsModifedByPersonal($groupGameList, $gameInfos);
-        // グループ申請用ジャンル・ゲームリスト生成
-        $groupDropDown = $this->getGroupGamelistWithCategory($gameInfos);
-        // カテゴリリスト作成
-        $categorys = $this->makeExistGenre($gameList);
-        $data = array(
-            'GameInfos' => $gameInfos,
-            'GroupInfos' => $groupInfos,
-            'Message' => $personalMessage,
-            'GameGenre' => $categorys,
-            'GameList' => $gameList,
-            'GroupGenre' => (count($groupDropDown) > 0 ? $groupDropDown["Genre"] : null),
-            'GroupGame' => (count($groupDropDown) > 0 ? $groupDropDown["GameInfos"] : null),
-            'GamesListVer' => $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER),
-        );
+        $data["Message"] = $this->getPersonalMessage($userId);
         return $data;
     }
 }

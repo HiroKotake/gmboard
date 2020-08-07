@@ -5,13 +5,13 @@ body {
 }
 /* common */
 button.btnBlue_32x180 {
-	width: 180px;
-	height: 32px;
 	background: #79CAD4;
 	border-color: #79CAD4;
 	border-radius: 30px;
 	font-size: 16px;
 	font-weight: 600;
+	height: 32px;
+	width: 180px;
 }
 button.btnBlue_32x180:hover {
 	background: #426CA7;
@@ -19,15 +19,45 @@ button.btnBlue_32x180:hover {
 	color: #F0F0F0;
 }
 button.bunGley_28x100 {
-	width: 120px;
-	height: 28px;
 	background: #fffafa;
 	border-radius: 5px;
 	font-size: 16px;
 	font-weight: 400;
+	height: 28px;
+	width: 120px;
 }
 button.bunGley_28x100:hover {
 	background: #dddada;
+}
+button.perple_40x280 {
+	background: #AEADFF;
+    border-color: #AEADFF;
+	border-radius: 5px;
+    color: #0000FF;
+	font-size: 16px;
+	font-weight: 400;
+    height: 40px;
+    text-align: left;;
+    width: 280px;
+}
+button.perple_40x280:hover {
+	background:#4E4DEF;
+    color: #FFFFFF;
+}
+button.perple_50x280 {
+	background: #AEADFF;
+    border-color: #AEADFF;
+	border-radius: 5px;
+    color: #0000FF;
+	font-size: 16px;
+	font-weight: 400;
+    height: 72px;
+    text-align: left;;
+    width: 280px;
+}
+button.perple_50x280:hover {
+	background:#4E4DEF;
+    color: #FFFFFF;
 }
 /* Top Page*/
 div.TopBase {
@@ -52,43 +82,43 @@ div.TopContainer {
 		"morenotice regist";
 }
 div.TopNotice {
-	grid-area: notice;
-	padding-top: 5px;
-	padding-left: 30px;
 	background: #F0F0F0;
+	grid-area: notice;
 	overflow: scroll;
+	padding-left: 30px;
+	padding-top: 5px;
 }
 div.TopNotice > ul {
 	list-style-type:square;
 }
 div.TopNotice > ul > li {
-	padding-top: 2px;
-	padding-bottom: 2px;
 	margin-bottom: 2px;
 	margin-left: -40px;
+	padding-bottom: 2px;
+	padding-top: 2px;
 }
 
 div.TopMoreNotice {
+	background: #F0F0F0;
 	grid-area: morenotice;
 	padding-left: 15px;
-	background: #F0F0F0;
 }
 div.TopLogin {
-	grid-area: login;
 	background: #F0F0F0;
+	grid-area: login;
 }
 div.TopLogin > form {
-	margin-top: 30px;
 	margin-left: 15px;
+	margin-top: 30px;
 }
 div.TopLogin > form > ul > li {
 	padding-bottom: 15px;
 }
 div.TopNewRegist {
-	grid-area: regist;
-	text-align: right;
-	padding-right: 30px;
 	background: #F0F0F0;
+	grid-area: regist;
+	padding-right: 30px;
+	text-align: right;
 }
 
 /* MyPage */
@@ -105,14 +135,14 @@ div.BaseContainer {
 	padding: 0 0 0 0;
 }
 div.header {
-	grid-area: header;
 	display: table-cell;
+	grid-area: header;
 	background: #000000;
 	margin: 0 0 0 auto;
 }
 div.sidemenu {
-	grid-area: sidemenu;
 	background: #000000;
+	grid-area: sidemenu;
 	overflow: scroll;
 }
 div.workcontainer {
@@ -159,17 +189,14 @@ fieldset.smGrouping > ul {
 	list-style-type: none;
 }
 fieldset.smGrouping > ul > li {
-	background: #AEADFF;
 	border-radius: 3px;
 	font-weight: bold;
-	color: #000000;
-	margin: 0 auto 2px -43px;
+	margin: 0 auto 0 -43px;
 	padding: 3px 5px 3px 5px;
 }
 fieldset.smGrouping > ul > li:hover {
-	background:#4E4DEF;
-	margin: 0 auto 1px -43px;
 	color: #FFFFFF;
+	margin: 0 auto 1px -43px;
 }
 
 /* Header Menu */
@@ -177,16 +204,16 @@ fieldset.smGrouping > ul > li:hover {
 	display: flex;
 }
 .menu {
-	width: 200px;
 	text-align: center;
+	width: 200px;
 }
 .mtitle {
 	background: #4366F3;
 	color: #ffffff;
 }
 .smenu {
-	display: none;
 	background:#68D1EC;
+	display: none;
 	position: relative;
 }
 .smenu > ul {
@@ -200,8 +227,8 @@ fieldset.smGrouping > ul > li:hover {
 }
 
 .smenu > ul > li > a {
-	text-decoration: none;
 	color: #ffffff;
+	text-decoration: none;
 }
 .menu:hover .smenu {
   display: inline-block;

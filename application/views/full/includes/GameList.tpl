@@ -5,7 +5,7 @@
 {if count($GameInfos) > 0}
                 <ul name="GameList" id="ulGameList">
     {foreach from=$GameInfos item=Game name=GameInfoList}
-                    <li><a href="?gameId={$Game.AliasId}">{$Game.Name}</a></li>
+                    <li><button class="perple_40x280" onclick='jmpGame("{$Game.AliasId}")'>{$Game.Name}</button></li>
     {/foreach}
                 </ul>
 {else}
