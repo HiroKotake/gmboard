@@ -207,3 +207,54 @@ defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2
 defined('GROUP_AUTHORITY_MENBER')      OR define('GROUP_AUTHORITY_MENBER', 3);      // 一般メンバー： 告知読み書き可能、掲示板読み書き可能
 defined('GROUP_AUTHORITY_OBSERVER')    OR define('GROUP_AUTHORITY_OBSERVER', 4);    // オブザーバー: 掲示板読み書き可能
 defined('GROUP_AUTHORITY_GUEST')       OR define('GROUP_AUTHORITY_GUEST', 5);       // ゲスト： 掲示板リードオンリー
+// ID種別 (各テーブルのプリマリーキーを記述。teleios/gmboard/dao/Beanと連動させる)
+defined('ID_TYPE_CI_SESSION')       OR define("ID_TYPE_CI_SESSION", "id");                  // idx:0
+defined('ID_TYPE_USER')             OR define("ID_TYPE_USER", "UserId");                    // idx:1
+defined('ID_TYPE_USER_BOARD')       OR define("ID_TYPE_USER_BOARD", "UBoardMsgId");         // idx:2
+defined('ID_TYPE_USER_INFOS')       OR define("ID_TYPE_USER_INFOS", "UserInfoId");          // idx:3
+defined('ID_TYPE_GAME_INFOS')       OR define("ID_TYPE_GAME_INFOS", "GameId");              // idx:4
+defined('ID_TYPE_GAME_PLAYER')      OR define("ID_TYPE_GAME_PLAYER", "GamePlayerId");       // idx:5
+defined('ID_TYPE_GROUP')            OR define("ID_TYPE_GROUP", "GroupId");                  // idx:6
+defined('ID_TYPE_GROUP_BOARD')      OR define("ID_TYPE_GROUP_BOARD", "GBoardMsgId");        // idx:7
+defined('ID_TYPE_GROUP_NOTICE')     OR define("ID_TYPE_GROUP_NOTICE", "GNoticeId");         // idx:8
+defined('ID_TYPE_NOTICE')           OR define("ID_TYPE_NOTICE", "NoticeId");                // idx:9
+defined('ID_TYPE_PLAYER_INDEX')     OR define("ID_TYPE_PLAYER_INDEX", "PlayerIndexId");     // idx:10
+defined('ID_TYPE_REGIST_BOOKING')   OR define("ID_TYPE_REGIST_BOOKING", "RegistBookingId"); // idx:11
+defined('ID_TYPE_REGISTRATION')     OR define("ID_TYPE_REGISTRATION", "RegistrationId");    // idx:12
+defined('ID_TYPE_SYSTEM_COMMON')    OR define("ID_TYPE_SYSTEM_COMMON", "SystemCommonId");   // idx:13
+defined('ID_TYPE_CODE_LIST')        OR define("ID_TYPE_CODE_LIST", [
+    // セッションで保持する
+    ID_TYPE_CI_SESSION      => 0,
+    ID_TYPE_USER            => 1,
+    ID_TYPE_GAME_INFOS      => 2,
+    ID_TYPE_GAME_PLAYER     => 3,
+    ID_TYPE_GROUP           => 4,
+    // セッションで保持しない
+    ID_TYPE_USER_BOARD      => 50,
+    ID_TYPE_USER_INFOS      => 51,
+    ID_TYPE_GROUP_BOARD     => 52,
+    ID_TYPE_GROUP_NOTICE    => 53,
+    ID_TYPE_NOTICE          => 54,
+    ID_TYPE_PLAYER_INDEX    => 55,
+    ID_TYPE_REGIST_BOOKING  => 56,
+    ID_TYPE_REGISTRATION    => 57,
+    ID_TYPE_SYSTEM_COMMON   => 58
+]);
+defined('ID_TYPE_REV_CODE_LIST')    OR define("ID_TYPE_REV_CODE_LIST",[
+    // セッションで保持する
+     0 => ID_TYPE_CI_SESSION,
+     1 => ID_TYPE_USER,
+     2 => ID_TYPE_GAME_INFOS,
+     3 => ID_TYPE_GAME_PLAYER,
+     4 => ID_TYPE_GROUP,
+     5 => ID_TYPE_PLAYER_INDEX,
+    // セッションで保持しない
+    50 => ID_TYPE_USER_BOARD,
+    51 => ID_TYPE_USER_INFOS,
+    52 => ID_TYPE_GROUP_BOARD,
+    53 => ID_TYPE_GROUP_NOTICE,
+    54 => ID_TYPE_NOTICE,
+    55 => ID_TYPE_REGIST_BOOKING,
+    56 => ID_TYPE_REGISTRATION,
+    57 => ID_TYPE_SYSTEM_COMMON
+]);

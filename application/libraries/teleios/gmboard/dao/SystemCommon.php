@@ -18,6 +18,7 @@ class SystemCommon extends \MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->idType = ID_TYPE_SYSTEM_COMMON;
         $this->calledClass = __CLASS__;
     }
 

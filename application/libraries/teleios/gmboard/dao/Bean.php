@@ -4,27 +4,41 @@ namespace teleios\gmboard\dao;
 use teleios\utils\Identifier;
 use teleios\gmboard\dao\CiSessions;
 
+/**
+ * DBレコード保持クラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category dao
+ * @package teleios\gmboard
+ */
 class Bean
 {
     private $attribs;
     private $primaryId;
+    private $idType;
+    private $idTypeCode;
 
-    public function __construct()
+    public function __construct(string $idType = "")
     {
         $this->attribs = array();
+        $this->idTypeCode = ID_TYPE_CODE_LIST[$idType];
+        $this->idType = mb_strtolower($idType);
     }
 
     public function __destruct()
     {
         $aliasId = $this->hasAlias();
-        if (!empty($aliasId)) {
+        if (!empty($aliasId) && $this->idTypeCode < 50) {
             $daoCiSessions = new CiSessions();
             $aliasList = array();
             if ($daoCiSessions->isSet(SESSION_LIST_ALIAS)) {
                 $aliasList = unserialize($daoCiSessions->getSessionData(SESSION_LIST_ALIAS));
             }
-            if (!array_key_exists($aliasId, $aliasList)) {
-                $aliasList[$aliasId] = $this->primaryId;
+            $aliasStr = $aliasId . "_" . $this->idTypeCode . "_" . $this->primaryId;
+            if (!in_array($aliasStr, $aliasList)) {
+                $aliasList[] = $aliasStr;
                 $daoCiSessions->setSessionData(SESSION_LIST_ALIAS, serialize($aliasList));
             }
         }
@@ -37,11 +51,8 @@ class Bean
             $this->attribs[$name] = Identifier::sftEncode($value);
             return;
         }
-        if ($name != "aliasid" && substr($name, -2) == "id") {
-            $this->primaryId = array(
-                "name" => $key,
-                "id" => $value
-            );
+        elseif ($name == $this->idType) {
+            $this->primaryId = $value;
         }
         $this->attribs[$key] = $value;
     }
@@ -100,5 +111,14 @@ class Bean
             $data[$key] = $value;
         }
         return $data;
+    }
+
+    /**
+     * プライマリーIDを取得する
+     * @return int プライマリーID
+     */
+    public function getPrimaryId() : int
+    {
+        return $this->primaryId;
     }
 }

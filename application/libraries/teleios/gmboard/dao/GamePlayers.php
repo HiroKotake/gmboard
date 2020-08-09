@@ -21,6 +21,7 @@ class GamePlayers extends \MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
+        $this->idType = ID_TYPE_GAME_PLAYER;
         $this->calledClass = __CLASS__;
     }
 

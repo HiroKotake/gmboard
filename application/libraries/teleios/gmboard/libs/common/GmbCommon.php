@@ -10,6 +10,15 @@ use teleios\gmboard\dao\GamePlayers;
 use teleios\gmboard\dao\Groups;
 use teleios\gmboard\dao\PlayerIndex;
 
+/**
+ * サイト表示関連基底クラス
+ *
+ * @access public
+ * @author Takahiro Kotake <tkotake@teleios.jp>
+ * @copyright Teleios All Rights Reserved
+ * @category library
+ * @package teleios\gmboard
+ */
 class GmbCommon
 {
     protected $cIns = null;
@@ -45,6 +54,26 @@ class GmbCommon
         $aliasList[$aliasId] = $gameInfo->GameId;
         $this->cIns->redis->set(KEY_ALIAS_GAME, serialize($aliasList));
         return $gameInfo->GameId;
+    }
+
+    /**
+     * セッションからエイリアスIDに対応するプリマリIDを取得する
+     * @param  string $obfuscateId 難読化済エイリアスID
+     * @param  string $type        プライマリIDタイプ
+     * @return int                 存在する場合はプリマリIDを返し、存在しない場合は 0 を返す
+     */
+    public function transAliasToId(string $obfuscateId, string $type) : int
+    {
+        $aliasId = Identifier::sftDecode($obfuscateId);
+        $regstr = '/^' . $aliasId . '_' . ID_TYPE_CODE_LIST[$type] . '_[0-9]+$/';
+        $aliasList = unserialize($this->ciSession->getSessionData(SESSION_LIST_ALIAS));
+        foreach ($aliasList as $alias) {
+            if (preg_match($regstr, $alias)) {
+                list($alias, $type, $id) = explode("_", $alias);
+                return $id;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -117,7 +146,8 @@ class GmbCommon
                         'GameId' => $game["AliasId"],
                         //'GroupId' => $tempData->GroupId,
                         //'AliasId' => $tempData->AliasId,
-                        'GroupId' => $tempData->AliasId,
+                        //'GroupId' => $tempData->AliasId,
+                        'GroupId' => $tempGroup->AliasId,
                         'GroupName' => $tempGroup->GroupName,
                         'GroupDescription' => $tempGroup->Description,
                         //'LeaderId' => $leader->UserId,

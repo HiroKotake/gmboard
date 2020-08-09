@@ -21,6 +21,7 @@ class GroupBoard extends \MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
+        $this->idType = ID_TYPE_GROUP_BOARD;
         $this->calledClass = __CLASS__;
     }
 
@@ -55,21 +56,41 @@ class GroupBoard extends \MY_Model
      * メッセージ取得
      * @param  int     $gameId     ゲーム管理ID
      * @param  int     $groupId    グループ管理ID
-     * @param  string  $order      メッセージIDを対象とした表示順序の指定
      * @param  integer $lineNumber 取得するメッセージ数　0 を指定した場合は全メッセージ、無指定の場合は２０メッセージを取得する
      * @param  integer $offset     取得するメッセージの開始位置
+     * @param  string  $order      メッセージIDを対象とした表示順序の指定
      * @return array               [description]
      */
-    public function get(int $gameId, int $groupId, string $order = 'DESC', int $lineNumber = 20, int $offset = 0) : array
+    public function get(int $gameId, int $groupId, int $lineNumber = 100, int $offset = 0, string $order = 'DESC') : array
     {
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->buildTableName($gameId, $groupId);
         $cond = array(
-            'SELECT' => array('UserId, Message, Showable, CreateDate'),
-            'ORDER_BY' => array('MessageId' => $order),
+            'SELECT' => array('UserId', 'Message', 'Showable', 'CreateDate'),
+            'ORDER_BY' => array('GBoardMsgId' => $order),
             'LIMIT' => array($lineNumber, $offset)
         );
         return $this->search($cond);
+    }
+
+    /**
+     * 指定したエイリアスIDで検索し、レコードを取得する
+     * [基底クラスのgetByAliasIdのオーバーライド]
+     * @param  string $aliasId エイリアスID文字列
+     * @param  int    $gameId  ゲーム管理ID
+     * @param  int    $groupId グループ管理ID
+     * @return Bean            検索結果を含むBeanオブジェクト
+     */
+    public function getByAliasId(string $aliasId, $gameId, $groupId) : Bean
+    {
+        $this->calledMethod = __FUNCTION__;
+
+        $this->tableName = $this->buildTableName($gameId, $groupId);
+        $cond = array(
+            'WHERE' => array('AliasId' => $aliasId)
+        );
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
     }
 
     /**
@@ -120,7 +141,7 @@ class GroupBoard extends \MY_Model
         $data = array(
             'Message'   => $message
         );
-        return $this->update($data, array('MessageId' => $messageId));
+        return $this->update($data, array('GBoardMsgId' => $messageId));
     }
 
     /**
@@ -137,7 +158,7 @@ class GroupBoard extends \MY_Model
         $data = array(
             'Showable'      => 0
         );
-        return $this->update($data, array('MessageId' => $messageId));
+        return $this->update($data, array('GBoardMsgId' => $messageId));
     }
 
     /**
@@ -154,7 +175,7 @@ class GroupBoard extends \MY_Model
         $data = array(
             'Showable'      => 1,
         );
-        return $this->update($data, array('MessageId' => $messageId));
+        return $this->update($data, array('GBoardMsgId' => $messageId));
     }
 
     /**
@@ -168,7 +189,7 @@ class GroupBoard extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->buildTableName($gameId, $groupId);
-        return $this->logicalDelete(array('MessageId' => $messageId));
+        return $this->logicalDelete(array('GBoardMsgId' => $messageId));
     }
 
     /**

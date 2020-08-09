@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-use teleios\gmboard\libs\Group as libGroup;
+use teleios\gmboard\libs\GroupPage as libGroup;
 
 /**
  * グループ関連コントローラー
@@ -27,6 +27,21 @@ class Group extends MY_Controller
      */
     public function index()
     {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $libGroup = new libGroup();
+        $libGroup->gameId = $libGroup->trnasAliasToGameId($obfGameId);
+        $libGroup->groupId = $libGroup->transAliasToId($obfGroupId, ID_TYPE_GROUP);
+        if ($libGroup->groupId == 0) {
+            // セッションからGroupIdを取れなかった場合の保険
+            $libGroup->groupId = $libGroup->getAliasIdtoGroupId($obfGroupId);
+        }
+echo 'GamaId&nbsp;:&nbsp;' . $libGroup->gameId . '<br />';
+echo 'GroupId:&nbsp;' . $libGroup->groupId. '<br />';
+echo '[DEBUG]&nbsp;' . $libGroup->getAliasIdtoGroupId($obfGroupId) . '<br />';
+        $data = $libGroup->getPageData($this->userId);
+echo '<br />';
+var_dump($data);
         // 登録済みゲーム取得
         // グループ告知取得
         // グループメッセージ取得
@@ -48,7 +63,7 @@ class Group extends MY_Controller
         $pageNumber = $currentPageNumber - 1;
         // グループ検索
         $libGroup = new libGroup();
-        $searchResult = $libGroup->searchByName($gameId, $groupName, $this->userId, $pageNumber, LINE_NUMBER_SEARCH);
+        $searchResult = $libGroup->searchByGroupName($gameId, $groupName, $this->userId, $pageNumber, LINE_NUMBER_SEARCH);
         // データ生成
         $data = $libGroup->getPageData($this->userId);
         $data['Type'] = 'GroupSearch';

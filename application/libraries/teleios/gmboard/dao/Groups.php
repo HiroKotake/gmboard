@@ -21,6 +21,7 @@ class Groups extends \MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
+        $this->idType = ID_TYPE_GROUP;
         $this->calledClass = __CLASS__;
     }
 
@@ -136,6 +137,24 @@ class Groups extends \MY_Model
         $this->setTableName($this->getTableName($gameId));
         $cond = array(
             'WHERE' => array('GroupId' => $groupId)
+        );
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
+    }
+
+    /**
+     * 指定したエイリアスIDで検索し、レコードを取得する
+     * [基底クラスのgetByAliasIdのオーバーライド]
+     * @param  string $aliasId エイリアスID文字列
+     * @param  int    $gameId  ゲーム管理ID
+     * @return Bean            検索結果を含むBeanオブジェクト
+     */
+    public function getByAliasId(string $aliasId, $gameId) : Bean
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
+        $cond = array(
+            'WHERE' => array('AliasId' => $aliasId)
         );
         $resultSet = $this->search($cond);
         return $this->getMonoResult($resultSet);

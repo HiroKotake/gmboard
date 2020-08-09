@@ -1,19 +1,18 @@
 <?php
-namespace teleios\gmboard\libs;
-
-use teleios\gmboard\libs\common\Personal;
+namespace teleios\gmboard\libs\common;
 
 /**
- * Game
+ * ゲーム関連基本クラス
  *
  * @access public
- * @author
+ * @author Takahiro Kotake <tkotake@teleios.jp>
  * @copyright Teleios All Rights Reserved
- * @category
+ * @category library
+ * @package teleios\gmboard
  */
-class Game extends Personal
+class Game extends GmbCommon
 {
-    public $pubVar;
+    public $gameid;
 
     /**
      * コンストラクタ

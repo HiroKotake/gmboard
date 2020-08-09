@@ -1,7 +1,6 @@
 <?php
-namespace teleios\gmboard\libs;
+namespace teleios\gmboard\libs\common;
 
-use teleios\gmboard\libs\common\Personal;
 use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\Groups;
@@ -9,7 +8,7 @@ use teleios\gmboard\dao\RegistBooking;
 use teleios\gmboard\dao\GamePlayers;
 
 /**
- * グループ関連クラス
+ * グループ関連基本クラス
  *
  * @access public
  * @author Takahiro Kotake <tkotake@teleios.jp>
@@ -17,14 +16,24 @@ use teleios\gmboard\dao\GamePlayers;
  * @category library
  * @package teleios\gmboard
  */
-class Group extends Personal
+class Group extends GmbCommon
 {
-    private $daoGroups = null;
+    public $gameId;
+    public $groupId;
 
+    /**
+     * コンストラクタ
+     */
     public function __construct()
     {
         parent::__construct();
-        $this->daoGroups = new Groups();
+    }
+
+    /**
+     * デストラクタ
+     */
+    public function __destruct()
+    {
     }
 
     /**
@@ -37,7 +46,7 @@ class Group extends Personal
      * @param  integer $number    [description]
      * @return array              [description]
      */
-    public function searchByName(int $gameId, string $groupName, int $userId, int $page = 0, int $number = 20) : array
+    public function searchByGroupName(int $gameId, string $groupName, int $userId, int $page = 0, int $number = 20) : array
     {
         $data = array();
         // ユーザのグループ登録状況を確認するためにGamePlayerテーブルから対象ユーザを取得
@@ -52,6 +61,7 @@ class Group extends Personal
                 $leaderIds[] = $group->Leader;
                 $data[$group->GroupId] = array(
                     "GroupId" => $group->GroupId,
+                    "AliasId" => $group->AliasId,
                     "GroupName" => $group->GroupName,
                     "Leader" => "",
                     "Joined" => ($group->GroupId == $userInfo->GroupId ? 1 : 0)
@@ -70,36 +80,10 @@ class Group extends Personal
         return $result;
     }
 
-    /**
-     * ユーザページで表示するデータを取得する
-     * @param  int   $userId [description]
-     * @return array         [description]
-     */
-    public function getPageData(int $userId) : array
+    public function getAliasIdtoGroupId(string $obfAliasId) : int
     {
-        // 登録ゲーム一覧取得
-        $gameInfos = $this->getGameList($userId);
-        // 登録グループ取得
-        $groupInfos = array();
-        if (!empty($gameInfos)) {
-            $groupInfos = $this->getGroups($userId, $gameInfos);
-        }
-        // ゲームリスト(カテゴリ別)取得 (個人別にカスタマイズしたもの)
-        $groupGameList = $this->getGamelistWithCategory();
-        $gameList = $this->getGameListsModifedByPersonal($groupGameList, $gameInfos);
-        // カテゴリリスト作成
-        $categorys = $this->makeExistGenre($gameList);
-        // グループ申請用ジャンル・ゲームリスト生成
-        $groupDropDown = $this->getGroupGamelistWithCategory($gameInfos);
-        $data = array(
-            'GameInfos' => $gameInfos,
-            'GroupInfos' => $groupInfos,
-            'GameGenre' => $categorys,
-            'GameList' => $gameList,
-            'GroupGenre' => $groupDropDown->Genre,
-            'GroupGame' => $groupDropDown->GameInfos,
-            'GamesListVer' => $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER),
-        );
-        return $data;
+        $daoGroup = new Groups();
+        $groupInfo = $daoGroup->getByAliasId($obfAliasId, $this->gameId);
+        return $groupInfo->isEmpty() ? 0 : $groupInfo->GroupId;
     }
 }

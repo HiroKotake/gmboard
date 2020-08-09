@@ -10,7 +10,7 @@ BEGIN
     SET @query = CONCAT(
     'CREATE TABLE GBoard_', @GameIndex, '_', @BoardNumber,
     '(
-        `MessageId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'管理ID\',
+        `GBoardMsgId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'管理ID\',
         `AliasId` CHAR(16) NOT NULL COMMENT \'IDエリアス\',
         `UserId` BIGINT(12) NOT NULL COMMENT \'ユーザID\',
         `GamePlayerId` BIGINT(12) UNSIGNED NOT NULL COMMENT \'ゲームユーザ管理ID\',
@@ -24,7 +24,7 @@ BEGIN
         `UpdateDate` DATETIME COMMENT \'レコード更新日\',
         `DeleteDate` DATETIME COMMENT \'レコード無効日\',
         `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコード無効フラグ(0:有効, 1:無効)\',
-        PRIMARY KEY (`MessageId`),
+        PRIMARY KEY (`GBoardMsgId`),
         INDEX `IdxAliasId` (`AliasId`)
     ) ENGINE=InnoDB COMMENT \'グループメッセージボード\''
     );

@@ -18,6 +18,7 @@ class Users extends \MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->idType = ID_TYPE_USER;
         $this->calledClass = __CLASS__;
     }
 

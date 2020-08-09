@@ -18,6 +18,7 @@ class UserInfos extends \MY_Model
     {
         parent::__construct();
         $this->tableName = self::TABLE_NAME;
+        $this->idType = ID_TYPE_USER_INFOS;
         $this->calledClass = __CLASS__;
     }
 
@@ -30,7 +31,7 @@ class UserInfos extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         $cond = array(
-            'WHERE' => array('UserId' => $userId)
+            'WHERE' => array('UserInfoId' => $userId)
         );
         return $this->search($cond);
     }
@@ -55,7 +56,7 @@ class UserInfos extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
-            return $this->updata($data, array('UserId' => $userId));
+            return $this->updata($data, array('UserInfoId' => $userId));
         }
         return false;
     }
@@ -68,7 +69,7 @@ class UserInfos extends \MY_Model
     public function delete(int $userId) : bool
     {
         $this->calledMethod = __FUNCTION__;
-        return $this->logicalDelete(array('UserId' => $userId));
+        return $this->logicalDelete(array('UserInfoId' => $userId));
     }
 
     /**

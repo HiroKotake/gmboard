@@ -21,6 +21,7 @@ class GroupNotices extends \MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
+        $this->idType = ID_TYPE_GROUP_NOTICE;
         $this->calledClass = __CLASS__;
     }
 
@@ -98,7 +99,7 @@ class GroupNotices extends \MY_Model
                 'ShowStartDateTime >=' => $now,
                 'ShowEndDateTime <' => $now
             ),
-            'ORDER_BY' => array('NoticeId' => $order),
+            'ORDER_BY' => array('GNoticeId' => $order),
             'LIMIT' => array($number, $offset)
         );
         return $this->search($cond);
@@ -130,7 +131,7 @@ class GroupNotices extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
             $this->tableName = $this->buildTableName($gameId, $groupId);
-            return $this->update($data, array('NoticeId' => $noticeId));
+            return $this->update($data, array('GNoticeId' => $noticeId));
         }
         return false;
     }

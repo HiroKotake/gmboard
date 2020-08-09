@@ -1,7 +1,7 @@
 {
     "TableName": "SystemCommon",
     "Fields": {
-        "Id": {
+        "SystemCommonId": {
             "type": "INT",
             "constraint": 8,
             "unsigned": true,
@@ -23,7 +23,7 @@
             "comment": "値(文字列化して登録)"
         }
     },
-    "PrimaryKey": "Id",
+    "PrimaryKey": "SystemCommonId",
     "Index": [],
     "Attribute": {
         "ENGINE": "InnoDB",

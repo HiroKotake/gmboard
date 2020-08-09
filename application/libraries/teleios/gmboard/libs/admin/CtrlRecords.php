@@ -167,7 +167,7 @@ class CtrlRecords
                 'message'       => 'ようこそ、いらっしゃいました！'    // メッセージテキスト
             );
             $daoUserBoard->add($user["UserId"], $message);
-            $daoUserInfos->attach(["UserId" => $user["UserId"]]);
+            $daoUserInfos->attach(["UserInfoId" => $user["UserId"]]);
         }
     }
 

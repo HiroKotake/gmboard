@@ -21,6 +21,7 @@ class UserBoard extends \MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
+        $this->idType = ID_TYPE_USER_BOARD;
         $this->calledClass = __CLASS__;
     }
 
@@ -69,6 +70,24 @@ class UserBoard extends \MY_Model
     }
 
     /**
+     * 指定したエイリアスIDで検索し、レコードを取得する
+     * [基底クラスのgetByAliasIdのオーバーライド]
+     * @param  string $aliasId エイリアスID文字列
+     * @param  int    $userId  ユーザ管理ID
+     * @return Bean            検索結果を含むBeanオブジェクト
+     */
+    public function getByAliasId(string $aliasId, $userId) : Bean
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
+        $cond = array(
+            'WHERE' => array('AliasId' => $aliasId)
+        );
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
+    }
+
+    /**
      * メッセージ追加
      * @param  int   $userId [description]
      * @param  array $data   [description]
@@ -94,7 +113,7 @@ class UserBoard extends \MY_Model
         $data = array(
             'AlreadyRead'   => 1,
         );
-        return $this->update($data, array('MessageId' => $messageId));
+        return $this->update($data, array('UBoardMsgId' => $messageId));
     }
 
     /**
@@ -108,7 +127,7 @@ class UserBoard extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         if (count($messageIds) > 0) {
             $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
-            return $this->logicalDelete(array('MessageId' => $messageIds));
+            return $this->logicalDelete(array('UBoardMsgId' => $messageIds));
         }
         return false;
     }

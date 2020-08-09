@@ -33,9 +33,9 @@
                 <h2>メッセージボード</h2>
 {foreach from=$Message item=msg name=MessageList}
     {if $smarty.foreach.MessageList.first}
-            <hr />
+                <hr />
     {/if}
-            <div>
+                <div>
                     [{$msg->FromUserName}]{$msg->Message}<br />
                 </div>
 {/foreach}

@@ -22,6 +22,7 @@ class CiSessions extends \MY_Model
         parent::__construct();
         $this->cIns =& get_instance();
         $this->tableName = self::TABLE_NAME;
+        $this->idType = ID_TYPE_CI_SESSION;
         $this->calledClass = __CLASS__;
         $this->cIns->load->library('session');
     }

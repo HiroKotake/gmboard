@@ -10,6 +10,7 @@ class MY_Model extends CI_Model
 {
     protected $logWriter = null;
     protected $tableName = null;
+    protected $idType = null;
     protected $calledClass = null;
     protected $calledMethod = null;
 
@@ -128,7 +129,7 @@ class MY_Model extends CI_Model
      */
     private function setBeanFromArray(array $data) : Bean
     {
-        $bean = new Bean();
+        $bean = new Bean($this->idType);
         $excludes = array(
             "CreateDate",
             "UpdateDate",
@@ -328,9 +329,11 @@ class MY_Model extends CI_Model
     /**
      * 指定したエイリアスIDで検索し、レコードを取得する
      * @param  string $aliasId エイリアスID文字列
-     * @return array         検索結果を含んだ配列
+     * @param  int    $subId   サブID (本関数では使用しないが、継承先で引数が二つ必要な場合に備えて配置)
+     * @param  int    $subId2  サブID (本関数では使用しないが、継承先で引数が二つ必要な場合に備えて配置)
+     * @return array           検索結果を含んだ配列
      */
-    public function getByAliasId(string $aliasId) : array
+    public function getByAliasId(string $aliasId, $subId = "", $subId2 = "")
     {
         if (empty($this->calledMethod)) {
             $this->calledMethod = __FUNCTION__;
@@ -342,6 +345,16 @@ class MY_Model extends CI_Model
         return $resultSet;
     }
 
+    public function count(string $aliasId, $subId = "", $subId2 = "") : int
+    {
+        if (empty($this->calledMethod)) {
+            $this->calledMethod = __FUNCTION__;
+        }
+        $query = 'SELECT COUNT(*) FROM ' . $this->tableName . ' WHERE `DeleteFlag` = 0';
+        $resultSet = $this->db->simple_query($query);
+        return 0;
+    }
+
     /**
      * 検索結果が唯一の検索を実施した場合に、確実に検索結果のみ取り出す。
      * 万一複数の結果が出た場合はエラーとして空の配列にする。
@@ -351,7 +364,7 @@ class MY_Model extends CI_Model
     protected function getMonoResult(array $resultSet) : Bean
     {
         if (empty($resultSet)) {
-            return new Bean();
+            return new Bean($this->idType);
         }
         return $resultSet[0];
     }

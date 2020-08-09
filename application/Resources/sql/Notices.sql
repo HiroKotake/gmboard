@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS Notices;
 CREATE TABLE Notices
 (
-    `NoticeId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT '管理ID',
+    `NoticesId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT '管理ID',
     `AliasId` CHAR(16) NOT NULL COMMENT 'IDエイリアス',
     `Target` TINYINT(2) UNSIGNED DEFAULT 0 COMMENT '表示タイプ(0:全体告知, 1:メンバー告知, 10:グループ管理者向け告知)',
     `Priority` INT(4) UNSIGNED DEFAULT 100 COMMENT '優先度',

@@ -9,7 +9,7 @@ BEGIN
     SET @query = CONCAT(
     'CREATE TABLE UBoard_', @BoardNumber,
     '(
-        `MessageId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'メッセージ管理ID\',
+        `UBoardMsgId` INT(8) UNSIGNED AUTO_INCREMENT COMMENT \'メッセージ管理ID\',
         `AliasId` CHAR(16) NOT NULL COMMENT \'IDエリアス\',
         `FromUserId` BIGINT(12) NOT NULL COMMENT \'送信者ユーザID\',
         `FromUserName` VARCHAR(30) COMMENT \'送信者ニックネーム\',
@@ -25,7 +25,7 @@ BEGIN
         `UpdateDate` DATETIME COMMENT \'レコード更新日\',
         `DeleteDate` DATETIME COMMENT \'レコード無効日\',
         `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコード無効フラグ(0:有効, 1:無効)\',
-        PRIMARY KEY (`MessageId`),
+        PRIMARY KEY (`UBoardMsgId`),
         INDEX `IdxAliasId` (`AliasId`)
     ) ENGINE=InnoDB COMMENT \'ユーザメッセージボード\''
     );

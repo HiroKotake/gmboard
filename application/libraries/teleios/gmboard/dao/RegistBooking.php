@@ -21,6 +21,7 @@ class RegistBooking extends \MY_Model
     {
         parent::__construct();
         $this->stringUtil = new StringUtility();
+        $this->idType = ID_TYPE_REGIST_BOOKING;
         $this->calledClass = __CLASS__;
     }
 
