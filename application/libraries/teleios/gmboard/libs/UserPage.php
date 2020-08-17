@@ -15,9 +15,11 @@ use teleios\gmboard\dao\UserBoard;
  */
 class UserPage extends Personal
 {
+    private $daoUserBoard;
     public function __construct()
     {
         parent::__construct();
+        $this->daoUserBoard = new UserBoard();
     }
 
     /**
@@ -31,8 +33,16 @@ class UserPage extends Personal
     public function getPersonalMessage(int $userId, int $page = 0, int $number = 20, string $order = "DESC") : array
     {
         $offset = $page * $number;
-        $daoUserBoard = new UserBoard();
-        return $daoUserBoard->get($userId, $number, $offset, $order);
+        return $this->daoUserBoard->get($userId, $number, $offset, $order);
+    }
+
+    /**
+     * メッセージの総数を取得する
+     * @return int メッセージ総数
+     */
+    public function count() : int
+    {
+        return $this->daoUserBoard->count();
     }
 
     /**
@@ -64,6 +74,7 @@ class UserPage extends Personal
         $data = $this->getPageDataCommon($userId);
         // 個人向けメッセージ取得
         $data["Message"] = $this->getPersonalMessage($userId);
+        $data["MsgTotal"] = $this->count();
         return $data;
     }
 }

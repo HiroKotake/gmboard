@@ -16,6 +16,7 @@ BEGIN
         `GameNickname` VARCHAR(30) NOT NULL COMMENT \'ゲーム側ニックネーム\',
         `GroupId` BIGINT(12) UNSIGNED COMMENT \'グループ管理ID\',
         `Authority` INT(3) UNSIGNED DEFAULT 0 COMMENT \'グループ内権限\',
+        `LastReadMsgId` INT(8) UNSIGNED DEFAULT 0 COMMENT \'最新起動ボードID\',
         `CreateDate` DATETIME COMMENT \'レコード登録日\',
         `UpdateDate` DATETIME COMMENT \'レコード更新日\',
         `DeleteDate` DATETIME COMMENT \'レコード無効日\',

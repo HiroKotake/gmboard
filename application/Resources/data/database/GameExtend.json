@@ -1,0 +1,50 @@
+{
+    "TableName": "GameExtend",
+    "Fields": {
+        "GameExtendId": {
+            "type": "INT",
+            "constraint": 10,
+            "unsigned": true,
+            "comment": "ゲーム拡張機能管理ID"
+        },
+        "AliasId": {
+            "type": "CHAR",
+            "constraint": 16,
+            "null": false,
+            "comment": "IDエリアス"
+        },
+        "GameId": {
+            "type": "INT",
+            "constraint": 8,
+            "unsigned": true,
+            "comment": "ゲーム管理ID"
+        },
+        "ExtendName": {
+            "type": "VARCHAR",
+            "constraint": 128,
+            "comment": "機能名"
+        },
+        "ClassName": {
+            "type": "VARCHAR",
+            "constraint": 128,
+            "comment": "クラスファイル"
+        },
+        "Description": {
+            "type": "TEXT",
+            "comment": "説明"
+        },
+        "Priority": {
+            "type": "TINYINT",
+            "constraint": 3,
+            "comment": "表示順位"
+        }
+    },
+    "PrimaryKey": "GameExtendId",
+    "Index": [
+        ["AliasId"]
+    ],
+    "Attribute": {
+        "ENGINE": "InnoDB",
+        "COMMENT": "'ゲーム拡張機能管理'"
+    }
+}

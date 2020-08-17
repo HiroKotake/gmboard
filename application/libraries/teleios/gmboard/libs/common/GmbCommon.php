@@ -103,12 +103,14 @@ class GmbCommon
         // データの縮小
         $gameInfos = array();
         foreach ($result as $gInfo) {
-            $gameInfos[] = array(
+            //$gameInfos[] = array(
+            $gameInfos[$gInfo->GameId] = array(
                 "GameId" => $gInfo->GameId,
                 "AliasId" => $gInfo->AliasId,
                 "Genre" => $gInfo->Genre,
                 "Name" => $gInfo->Name,
-                "Description" => $gInfo->Description
+                "Description" => $gInfo->Description,
+                "GroupTitle" => $gInfo->GroupTitle
             );
         }
         // セッションに格納
@@ -144,13 +146,9 @@ class GmbCommon
                     $groups[] = array(
                         'GameName' => $game["Name"],
                         'GameId' => $game["AliasId"],
-                        //'GroupId' => $tempData->GroupId,
-                        //'AliasId' => $tempData->AliasId,
-                        //'GroupId' => $tempData->AliasId,
                         'GroupId' => $tempGroup->AliasId,
                         'GroupName' => $tempGroup->GroupName,
                         'GroupDescription' => $tempGroup->Description,
-                        //'LeaderId' => $leader->UserId,
                         'LeaderNickname' => $leader->GameNickname,
                         'PlayerId' => $tempData->PlayerId,
                         'GameNickname' => $tempData->GameNickname,

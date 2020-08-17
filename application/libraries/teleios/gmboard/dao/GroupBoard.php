@@ -66,9 +66,51 @@ class GroupBoard extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->buildTableName($gameId, $groupId);
         $cond = array(
-            'SELECT' => array('UserId', 'Message', 'Showable', 'CreateDate'),
+            'SELECT' => array('AliasId', 'UserId', 'GameNickname', 'ParentMsgId', 'Idiom', 'Message', 'Showable', 'CreateDate'),
             'ORDER_BY' => array('GBoardMsgId' => $order),
             'LIMIT' => array($lineNumber, $offset)
+        );
+        return $this->search($cond);
+    }
+
+    /**
+     * 親メッセージ取得
+     * @param  int     $gameId     ゲーム管理ID
+     * @param  int     $groupId    グループ管理ID
+     * @param  integer $lineNumber 取得するメッセージ数　0 を指定した場合は全メッセージ、無指定の場合は２０メッセージを取得する
+     * @param  integer $offset     取得するメッセージの開始位置
+     * @param  string  $order      メッセージIDを対象とした表示順序の指定
+     * @return array               [description]
+     */
+    public function getParentMsg(int $gameId, int $groupId, int $lineNumber = 100, int $offset = 0, string $order = 'DESC') : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = $this->buildTableName($gameId, $groupId);
+        $cond = array(
+            'SELECT' => array('AliasId', 'UserId', 'GameNickname', 'ParentMsgId', 'Idiom', 'Message', 'Showable', 'CreateDate'),
+            'ORDER_BY' => array('GBoardMsgId' => $order),
+            'LIMIT' => array($lineNumber, $offset),
+            'WHERE' => array('ParentMsgId' => 0)
+        );
+        return $this->search($cond);
+    }
+
+    /**
+     * 子メッセージ取得
+     * @param  int    $gameId      ゲーム管理ID
+     * @param  int    $groupId     グループ管理ID
+     * @param  int    $parentMsgId 親メッセージID
+     * @param  string $order       メッセージIDを対象とした表示順序の指定
+     * @return array               [description]
+     */
+    public function getChildMsg(int $gameId, int $groupId, int $parentMsgId, string $order = 'DESC') : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = $this->buildTableName($gameId, $groupId);
+        $cond = array(
+            'SELECT' => array('AliasId', 'UserId', 'GameNickname', 'ParentMsgId', 'Idiom', 'Message', 'Showable', 'CreateDate'),
+            'ORDER_BY' => array('GBoardMsgId' => $order),
+            'WHERE' => array('ParentMsgId' => $parentMsgId)
         );
         return $this->search($cond);
     }
@@ -104,6 +146,49 @@ class GroupBoard extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->buildTableName($gameId, $groupId);
         return $this->searchAll(0, 0, true);
+    }
+
+    /**
+     * メッセージの総数を取得する
+     * @param  int $gameId  ゲームID
+     * @param  int $groupId グループID
+     * @return int          メッセージ総数
+     */
+    public function count(int $gameId, int $groupId) : int
+    {
+        $this->tableName = $this->buildTableName($gameId, $groupId);
+        return parent::count();
+    }
+
+    /**
+     * 親メッセージの数を取得する
+     * @param  int   $gameId  ゲームID
+     * @param  int   $groupId グループID
+     * @return array          メッセージ総数
+     */
+    public function countByParentMsg(int $gameId, int $groupId) : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = $this->buildTableName($gameId, $groupId);
+        $query = 'SELECT COUNT(*) AS "Num" FROM ' . $this->tableName . ' WHERE `DeleteFlag` = 0 AND `ParentMsgId` = 0';
+        $this->writeLog($query);
+        $resultSet = $this->db->query($query);
+        return $this->getMonoResult($this->setBeans($resultSet->result_array()));
+    }
+    /**
+     * 親メッセージ別の子メッセージ数を取得する
+     * @param  int   $gameId  ゲームID
+     * @param  int   $groupId グループID
+     * @return array          メッセージ総数
+     */
+    public function countByChildMsg(int $gameId, int $groupId) : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = $this->buildTableName($gameId, $groupId);
+        $query = 'SELECT `ParentMsgId`, COUNT(*) AS "Num" FROM ' . $this->tableName . ' GROUP BY `ParentMsgId` WHERE `DeleteFlag` = 0';
+        $this->writeLog($query);
+        $resultSet = $this->db->query($query);
+        return $this->setBeans($resultSet->result_array());
     }
 
     /**

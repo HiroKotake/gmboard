@@ -72,7 +72,31 @@ class Bean
      */
     public function getAttribList() : array
     {
-        return array_keys($this->attribs);
+        $list = array_keys($this->attribs);
+        if (in_array("aliasid")) {
+            unset($list["aliasid"]);
+            $list["AliasId"];
+        }
+        return $list;
+    }
+
+    /**
+     * 保持データを初期化する
+     */
+    public function reset() : void
+    {
+        $this->attribs = array();
+        $this->primaryId = null;
+    }
+
+    /**
+     * テーブルのプライマリーキーを設定する
+     * @param string $idType プリマリーキー情報を設定するために、constants.phpで指定されている"ID_TYPE_<テーブル名>"を指定
+     */
+    public function setPrimaryId(string $idType = "") : void
+    {
+        $this->idTypeCode = ID_TYPE_CODE_LIST[$idType];
+        $this->idType = mb_strtolower($idType);
     }
 
     /**

@@ -30,23 +30,54 @@ class Group extends MY_Controller
         $obfGameId = $this->input->get("gmid");
         $obfGroupId = $this->input->get("grid");
         $libGroup = new libGroup();
-        $libGroup->gameId = $libGroup->trnasAliasToGameId($obfGameId);
-        $libGroup->groupId = $libGroup->transAliasToId($obfGroupId, ID_TYPE_GROUP);
-        if ($libGroup->groupId == 0) {
-            // セッションからGroupIdを取れなかった場合の保険
-            $libGroup->groupId = $libGroup->getAliasIdtoGroupId($obfGroupId);
-        }
-echo 'GamaId&nbsp;:&nbsp;' . $libGroup->gameId . '<br />';
-echo 'GroupId:&nbsp;' . $libGroup->groupId. '<br />';
-echo '[DEBUG]&nbsp;' . $libGroup->getAliasIdtoGroupId($obfGroupId) . '<br />';
-        $data = $libGroup->getPageData($this->userId);
-echo '<br />';
-var_dump($data);
-        // 登録済みゲーム取得
-        // グループ告知取得
-        // グループメッセージ取得
+        $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
+        $data['GameId'] = $obfGameId;
+        $data['GroupId'] = $obfGroupId;
+        $data['PageId'] = PAGE_ID_GROUP_MAIN;
         // グループ管理者判定し、メニューを変更
+        $this->smarty->view('group', $data);
+    }
 
+    /**
+     * グループメンバー関連情報表示
+     * @return [type] [description]
+     */
+    public function memberList()
+    {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $libGroup = new libGroup();
+        $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
+        $data['PageId'] = PAGE_ID_GROUP_MEMBER_LIST;
+        $this->smarty->view('group', $data);
+    }
+
+    /**
+     * グループ申請者関連情報表示
+     * @return [type] [description]
+     */
+    public function requestList()
+    {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $libGroup = new libGroup();
+        $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
+        $data['PageId'] = PAGE_ID_GROUP_REQEST_LIST;
+        $this->smarty->view('group', $data);
+    }
+
+    /**
+     * グループ招待関連情報表示
+     * @return [type] [description]
+     */
+    public function inviteList()
+    {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $libGroup = new libGroup();
+        $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
+        $data['PageId'] = PAGE_ID_GROUP_INVITATION;
+        $this->smarty->view('group', $data);
     }
 
     /**

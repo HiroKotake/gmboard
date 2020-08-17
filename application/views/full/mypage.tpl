@@ -13,9 +13,7 @@
 {include file="./includes/dialogWarning.tpl"}
     <div class="BaseContainer">
         <!-- Header -->
-        <div class="header">
 {include file="./includes/menu.tpl"}
-        </div>
         <!-- Left Sidemenu -->
         <div class="sidemenu">
 {include file="./includes/GameList.tpl" GameInfos=$GameInfos}
@@ -41,6 +39,7 @@
 {/foreach}
             </div>
             <div class="funcarea">
+                {$MsgTotal}
                 <button class="btnBlue_32x180">メッセージ作成</button>
             </div>
         </div>

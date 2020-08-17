@@ -150,7 +150,7 @@ class MY_Model extends CI_Model
      * @param  array $data [description]
      * @return array       [description]
      */
-    private function setBeans(array $data) : array
+    protected function setBeans(array $data) : array
     {
         $result = array();
         if (empty($data) || !is_array($data)) {
@@ -330,7 +330,7 @@ class MY_Model extends CI_Model
      * 指定したエイリアスIDで検索し、レコードを取得する
      * @param  string $aliasId エイリアスID文字列
      * @param  int    $subId   サブID (本関数では使用しないが、継承先で引数が二つ必要な場合に備えて配置)
-     * @param  int    $subId2  サブID (本関数では使用しないが、継承先で引数が二つ必要な場合に備えて配置)
+     * @param  int    $subId2  サブID (本関数では使用しないが、継承先で引数が三つ必要な場合に備えて配置)
      * @return array           検索結果を含んだ配列
      */
     public function getByAliasId(string $aliasId, $subId = "", $subId2 = "")
@@ -345,14 +345,26 @@ class MY_Model extends CI_Model
         return $resultSet;
     }
 
-    public function count(string $aliasId, $subId = "", $subId2 = "") : int
+    /**
+     * テーブル内の有効なレコード数を取得する
+     * @param  int    $subId   サブID (本関数では使用しないが、継承先で引数が必要な場合に備えて配置)
+     * @param  int    $subId2  サブID (本関数では使用しないが、継承先で引数が二つ必要な場合に備えて配置)
+     * @param  int    $subId3  サブID (本関数では使用しないが、継承先で引数が三つ必要な場合に備えて配置)
+     * @return int             有効なレコード数。失敗した場合は"-1"を返す
+     */
+    public function count($subId = "", $subId2 = "", $subId3 = "") : int
     {
         if (empty($this->calledMethod)) {
             $this->calledMethod = __FUNCTION__;
         }
-        $query = 'SELECT COUNT(*) FROM ' . $this->tableName . ' WHERE `DeleteFlag` = 0';
-        $resultSet = $this->db->simple_query($query);
-        return 0;
+        $query = 'SELECT COUNT(*) AS "Num" FROM ' . $this->tableName . ' WHERE `DeleteFlag` = 0';
+        $this->writeLog($query);
+        $resultSet = $this->db->query($query);
+        $rec = $resultSet->first_row();
+        if (empty($rec)) {
+            return -1;
+        }
+        return $rec->Num;
     }
 
     /**

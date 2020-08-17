@@ -127,18 +127,22 @@ div.BaseContainer {
 	grid-template-rows: 23px auto 27px;
 	grid-template-columns: 330px auto;
 	grid-template-areas:
-		"header header"
+		"header_l header_r"
 		"sidemenu WorkContainer"
 		"footer footer";
 	height: calc(100vh - 15px);
 	margin: 0 0 0 0;
 	padding: 0 0 0 0;
 }
-div.header {
+div.header_l {
+	grid-area: header_l;
+    text-align: left;
+}
+div.header_r {
 	display: table-cell;
-	grid-area: header;
-	background: #000000;
-	margin: 0 0 0 auto;
+	grid-area: header_r;
+    text-align: right;
+    margin: 0 0 0 auto;
 }
 div.sidemenu {
 	background: #000000;

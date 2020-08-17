@@ -152,8 +152,14 @@ defined('AUTH_ACTIVATE_NOEXIST')    OR define('AUTH_ACTIVATE_NOEXIST', 312);    
 defined('AUTH_ACTIVATE_EXPIRE')     OR define('AUTH_ACTIVATE_EXPIRE', 312);     // アクティベーション期限切れ
 defined('AUTH_ACTIVATE_UNMATCH')    OR define('AUTH_ACTIVATE_UNMATCH', 313);    // アクティベーションコード不一致
 // マイページ関連
-defined('MYPAGE_MODE_PERSONAL')  OR define('MYPAGE_MODE_PERSONAL', 'Personal'); // マイページ画面モード：個人トップ表示
-defined('MYPAGE_MODE_GROUP')     OR define('MYPAGE_MODE_GROUP', 'Group');       // マイページ画面モード：グループ
+defined('PAGE_ID_PERSONAL')          OR define('PAGE_ID_PERSONAL', 1);               // マイページ画面モード：個人トップ表示
+defined('PAGE_ID_GROUP_MAIN')        OR define('PAGE_ID_GROUP_MAIN', 101);           // グループページ：メイン
+defined('PAGE_ID_GROUP_MEMBER_LIST') OR define('PAGE_ID_GROUP_MEMBER_LIST', 102);    // グループページ：メンバーリスト
+defined('PAGE_ID_GROUP_REQEST_LIST') OR define('PAGE_ID_GROUP_REQEST_LIST', 103);    // グループページ：申請者リスト
+defined('PAGE_ID_GROUP_INVITATION')  OR define('PAGE_ID_GROUP_INVITATION', 104);     // グループページ：招待者
+defined('PAGE_ID_GROUP_EXTENTION')   OR define('PAGE_ID_GROUP_INVITATION', 110);     // グループページ：拡張機能用
+defined('PAGE_ID_GAME_MAIN')         OR define('PAGE_ID_GAME_MAIN', 201);            // ゲームページ：メイン
+
 
 defined('KEY_ALIAS_GAME')       OR define('KEY_ALIAS_GAME', 'aliasGame');       // ゲームエイリアス
 defined('KEY_ALIAS_GROUP')      OR define('KEY_ALIAS_GROUP', 'aliasGroup_');    // グループエイリアス(ゲーム別)
@@ -191,6 +197,7 @@ defined('TABLE_PREFIX_USER_BOARD')     OR define('TABLE_PREFIX_USER_BOARD', 'UBo
 // テーブル名
 defined('TABLE_NAME_CI_SESSIONS')         OR define('TABLE_NAME_CI_SESSIONS', 'CiSessions');
 defined('TABLE_NAME_GAME_INFOS')          OR define('TABLE_NAME_GAME_INFOS', 'GameInfos');
+defined('TABLE_NAME_GAME_EXTEND')         OR define('TABLE_NAME_GAME_EXTEND', 'GameExtend');
 defined('TABLE_NAME_GAME_PLAYERS_ALIAS')  OR define('TABLE_NAME_GAME_PLAYERS_ALIAS', 'GamePlayersAlias');
 defined('TABLE_NAME_GROUP_ALIAS')         OR define('TABLE_NAME_GROUP_ALIAS', 'GroupAlias');
 defined('TABLE_NAME_GROUP_BOARD_ALIAS')   OR define('TABLE_NAME_GROUP_BOARD_ALIAS', 'GroupBoardAlias');
@@ -210,25 +217,29 @@ defined('GROUP_AUTHORITY_GUEST')       OR define('GROUP_AUTHORITY_GUEST', 5);   
 // ID種別 (各テーブルのプリマリーキーを記述。teleios/gmboard/dao/Beanと連動させる)
 defined('ID_TYPE_CI_SESSION')       OR define("ID_TYPE_CI_SESSION", "id");                  // idx:0
 defined('ID_TYPE_USER')             OR define("ID_TYPE_USER", "UserId");                    // idx:1
-defined('ID_TYPE_USER_BOARD')       OR define("ID_TYPE_USER_BOARD", "UBoardMsgId");         // idx:2
-defined('ID_TYPE_USER_INFOS')       OR define("ID_TYPE_USER_INFOS", "UserInfoId");          // idx:3
-defined('ID_TYPE_GAME_INFOS')       OR define("ID_TYPE_GAME_INFOS", "GameId");              // idx:4
-defined('ID_TYPE_GAME_PLAYER')      OR define("ID_TYPE_GAME_PLAYER", "GamePlayerId");       // idx:5
-defined('ID_TYPE_GROUP')            OR define("ID_TYPE_GROUP", "GroupId");                  // idx:6
-defined('ID_TYPE_GROUP_BOARD')      OR define("ID_TYPE_GROUP_BOARD", "GBoardMsgId");        // idx:7
-defined('ID_TYPE_GROUP_NOTICE')     OR define("ID_TYPE_GROUP_NOTICE", "GNoticeId");         // idx:8
-defined('ID_TYPE_NOTICE')           OR define("ID_TYPE_NOTICE", "NoticeId");                // idx:9
-defined('ID_TYPE_PLAYER_INDEX')     OR define("ID_TYPE_PLAYER_INDEX", "PlayerIndexId");     // idx:10
-defined('ID_TYPE_REGIST_BOOKING')   OR define("ID_TYPE_REGIST_BOOKING", "RegistBookingId"); // idx:11
-defined('ID_TYPE_REGISTRATION')     OR define("ID_TYPE_REGISTRATION", "RegistrationId");    // idx:12
-defined('ID_TYPE_SYSTEM_COMMON')    OR define("ID_TYPE_SYSTEM_COMMON", "SystemCommonId");   // idx:13
+defined('ID_TYPE_GAME_INFOS')       OR define("ID_TYPE_GAME_INFOS", "GameId");              // idx:2
+defined('ID_TYPE_GAME_EXTEND')      OR define("ID_TYPE_GAME_EXTEND", "GameExtendId");       // idx:3
+defined('ID_TYPE_GAME_PLAYER')      OR define("ID_TYPE_GAME_PLAYER", "GamePlayerId");       // idx:4
+defined('ID_TYPE_GROUP')            OR define("ID_TYPE_GROUP", "GroupId");                  // idx:5
+
+defined('ID_TYPE_USER_BOARD')       OR define("ID_TYPE_USER_BOARD", "UBoardMsgId");         // idx:50
+defined('ID_TYPE_USER_INFOS')       OR define("ID_TYPE_USER_INFOS", "UserInfoId");          // idx:51
+defined('ID_TYPE_GROUP_BOARD')      OR define("ID_TYPE_GROUP_BOARD", "GBoardMsgId");        // idx:52
+defined('ID_TYPE_GROUP_NOTICE')     OR define("ID_TYPE_GROUP_NOTICE", "GNoticeId");         // idx:53
+defined('ID_TYPE_NOTICE')           OR define("ID_TYPE_NOTICE", "NoticeId");                // idx:54
+defined('ID_TYPE_PLAYER_INDEX')     OR define("ID_TYPE_PLAYER_INDEX", "PlayerIndexId");     // idx:55
+defined('ID_TYPE_REGIST_BOOKING')   OR define("ID_TYPE_REGIST_BOOKING", "RegistBookingId"); // idx:56
+defined('ID_TYPE_REGISTRATION')     OR define("ID_TYPE_REGISTRATION", "RegistrationId");    // idx:57
+defined('ID_TYPE_SYSTEM_COMMON')    OR define("ID_TYPE_SYSTEM_COMMON", "SystemCommonId");   // idx:58
+
 defined('ID_TYPE_CODE_LIST')        OR define("ID_TYPE_CODE_LIST", [
     // セッションで保持する
     ID_TYPE_CI_SESSION      => 0,
     ID_TYPE_USER            => 1,
     ID_TYPE_GAME_INFOS      => 2,
-    ID_TYPE_GAME_PLAYER     => 3,
-    ID_TYPE_GROUP           => 4,
+    ID_TYPE_GAME_EXTEND     => 3,
+    ID_TYPE_GAME_PLAYER     => 4,
+    ID_TYPE_GROUP           => 5,
     // セッションで保持しない
     ID_TYPE_USER_BOARD      => 50,
     ID_TYPE_USER_INFOS      => 51,
@@ -245,16 +256,17 @@ defined('ID_TYPE_REV_CODE_LIST')    OR define("ID_TYPE_REV_CODE_LIST",[
      0 => ID_TYPE_CI_SESSION,
      1 => ID_TYPE_USER,
      2 => ID_TYPE_GAME_INFOS,
-     3 => ID_TYPE_GAME_PLAYER,
-     4 => ID_TYPE_GROUP,
-     5 => ID_TYPE_PLAYER_INDEX,
+     3 => ID_TYPE_GAME_EXTEND,
+     4 => ID_TYPE_GAME_PLAYER,
+     5 => ID_TYPE_GROUP,
     // セッションで保持しない
     50 => ID_TYPE_USER_BOARD,
     51 => ID_TYPE_USER_INFOS,
     52 => ID_TYPE_GROUP_BOARD,
     53 => ID_TYPE_GROUP_NOTICE,
     54 => ID_TYPE_NOTICE,
-    55 => ID_TYPE_REGIST_BOOKING,
-    56 => ID_TYPE_REGISTRATION,
-    57 => ID_TYPE_SYSTEM_COMMON
+    55 => ID_TYPE_PLAYER_INDEX,
+    56 => ID_TYPE_REGIST_BOOKING,
+    57 => ID_TYPE_REGISTRATION,
+    58 => ID_TYPE_SYSTEM_COMMON
 ]);

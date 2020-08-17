@@ -15,6 +15,7 @@ BEGIN
         `UserId` BIGINT(12) NOT NULL COMMENT \'ユーザID\',
         `GamePlayerId` BIGINT(12) UNSIGNED NOT NULL COMMENT \'ゲームユーザ管理ID\',
         `GameNickname` VARCHAR(30) COMMENT \'送信者ニックネーム\',
+        `ParentMsgId` INT(8) UNSIGNED DEFAULT 0 COMMENT \'基底ID\',
         `Idiom` INT(6) UNSIGNED COMMENT \'慣用句コード\',
         `Message` TEXT COMMENT \'メッセージテキスト\',
         `Images` TEXT COMMENT \'イメージのファイル名のJSON配列\',
@@ -25,7 +26,8 @@ BEGIN
         `DeleteDate` DATETIME COMMENT \'レコード無効日\',
         `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコード無効フラグ(0:有効, 1:無効)\',
         PRIMARY KEY (`GBoardMsgId`),
-        INDEX `IdxAliasId` (`AliasId`)
+        INDEX `IdxAliasId` (`AliasId`),
+        INDEX `IdxParentMsgId` (`ParentMsgId`)
     ) ENGINE=InnoDB COMMENT \'グループメッセージボード\''
     );
     PREPARE stmt FROM @query;

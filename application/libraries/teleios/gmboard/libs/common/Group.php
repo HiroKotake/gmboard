@@ -4,6 +4,7 @@ namespace teleios\gmboard\libs\common;
 use teleios\gmboard\dao\Bean;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\Groups;
+use teleios\gmboard\dao\GroupBoard;
 use teleios\gmboard\dao\RegistBooking;
 use teleios\gmboard\dao\GamePlayers;
 
@@ -20,6 +21,8 @@ class Group extends GmbCommon
 {
     public $gameId;
     public $groupId;
+    private $daoGroups;
+    private $daoGroupBoard;
 
     /**
      * コンストラクタ
@@ -27,6 +30,8 @@ class Group extends GmbCommon
     public function __construct()
     {
         parent::__construct();
+        $this->daoGroups = new Groups();
+        $this->daoGroupBoard = new GroupBoard();
     }
 
     /**
@@ -82,8 +87,52 @@ class Group extends GmbCommon
 
     public function getAliasIdtoGroupId(string $obfAliasId) : int
     {
-        $daoGroup = new Groups();
-        $groupInfo = $daoGroup->getByAliasId($obfAliasId, $this->gameId);
+        $groupInfo = $this->daoGroups->getByAliasId($obfAliasId, $this->gameId);
         return $groupInfo->isEmpty() ? 0 : $groupInfo->GroupId;
+    }
+
+    public function getGroupName() : string
+    {
+        $group = $this->daoGroups->getByGroupId($this->gameId, $this->groupId);
+        if ($group->isEmpty()) {
+            return "";
+        }
+        return $group->GroupName;
+    }
+
+    /**
+     * グループ向けメッセージ取得
+     * @param  integer $page   [description]
+     * @param  integer $number [description]
+     * @param  string  $order  [description]
+     * @return array           [description]
+     */
+    public function getGroupMessage(string $groupName, int $page = 0, int $number = 20, string $order = "DESC") : array
+    {
+        $offset = $page * $number;
+        $messages = $this->daoGroupBoard->get($this->gameId, $this->groupId, $number, $offset, $order);
+        $libShowIdiom = new ShowIdiom();
+        $count = count($messages);
+        for ($i = 0; $i < $count; $i++) {
+            switch ($messages[$i]->Idiom) {
+                case 1:
+                case 2:
+                    $reps = array($messages[$i]->Message, $groupName);
+                    $messages[$i]->Message = str_replace(["%1%", "%2%"], $reps, $libShowIdiom->getIdiom($messages[$i]->Idiom));
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $messages;
+    }
+
+    /**
+     * メッセージの総数を取得する
+     * @return int メッセージ総数
+     */
+    public function count() : int
+    {
+        return $this->daoGroupBoard->count($this->gameId, $this->groupId);
     }
 }

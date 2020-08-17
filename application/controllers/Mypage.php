@@ -36,7 +36,7 @@ class MyPage extends MY_Controller
         }
         $libUserPage = new UserPage();
         $data = $libUserPage->getPageData($this->userId);
-        $data['Mode'] = MYPAGE_MODE_PERSONAL;
+        $data['PageId'] = PAGE_ID_PERSONAL;
         $this->smarty->view('mypage', $data);
     }
 

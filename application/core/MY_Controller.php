@@ -37,13 +37,13 @@ class MY_Controller extends CI_Controller
                     redirect("");
                 }
             }
-        } /*else {
+        } else {
             if (!in_array($uri, EXCLUDE_USER_CHECK_NON_PRD)) {
                 if (empty($this->userId) && !empty(mb_strlen($uri))) {
                     redirect("");
                 }
             }
-        }*/
+        }
         // redis
         $this->redis = new \Redis();
         $this->config->load('redis', true);

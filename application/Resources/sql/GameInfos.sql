@@ -9,6 +9,7 @@ CREATE TABLE `GameInfos`
     `Genre` TINYINT(3) UNSIGNED COMMENT 'ジャンル',
     `Name` TEXT COMMENT 'ゲーム名',
     `Description` TEXT COMMENT '説明',
+    `GroupTitle` VARCHAR(16) COMMENT 'グループ名',
     `CreateDate` DATETIME COMMENT 'レコード登録日',
     `UpdateDate` DATETIME COMMENT 'レコード更新日',
     `DeleteDate` DATETIME COMMENT 'レコード無効日',

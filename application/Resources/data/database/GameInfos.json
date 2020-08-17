@@ -27,6 +27,11 @@
         "Description": {
             "type": "TEXT",
             "comment": "説明"
+        },
+        "GroupTitle": {
+            "type": "VARCHAR",
+            "constraint": 16,
+            "comment": "グループ名"
         }
     },
     "PrimaryKey": "GameId",
