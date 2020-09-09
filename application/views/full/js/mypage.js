@@ -121,6 +121,8 @@
                     }
                 ]
             });
+            //
+            extention();
         })
 {/literal}
     </script>

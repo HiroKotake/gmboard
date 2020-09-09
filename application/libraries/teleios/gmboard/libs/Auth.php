@@ -2,7 +2,7 @@
 namespace teleios\gmboard\libs;
 
 use teleios\utils\StringUtility;
-use teleios\gmboard\dao\Bean;
+use teleios\gmboard\Beans\Bean;
 use teleios\gmboard\dao\Users;
 use teleios\gmboard\dao\UserBoard;
 use teleios\gmboard\dao\Registration;

@@ -1,6 +1,7 @@
 <?php
 namespace teleios\gmboard\dao;
 
+use teleios\gmboard\Beans\Bean;
 use teleios\utils\StringUtility;
 
 /**
@@ -23,6 +24,16 @@ class GamePlayers extends \MY_Model
         $this->stringUtil = new StringUtility();
         $this->idType = ID_TYPE_GAME_PLAYER;
         $this->calledClass = __CLASS__;
+    }
+
+    /**
+     * テーブル名を生成する
+     * @param  int    $gameId [description]
+     * @return string         [description]
+     */
+    public function getTableName(int $gameId) : string
+    {
+        return self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
     }
 
     /**
@@ -49,7 +60,7 @@ class GamePlayers extends \MY_Model
     public function getAll(int $gameId, int $limit = 20, int $offset = 0) : array
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         return $this->searchAll($limit, $offset);
     }
 
@@ -61,7 +72,7 @@ class GamePlayers extends \MY_Model
     public function getAllRecords(int $gameId) : array
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         return $this->searchAll(0, 0, true);
     }
 
@@ -74,7 +85,7 @@ class GamePlayers extends \MY_Model
     public function getByGamePlayerId(int $gameId, int $gamePlayerId) : Bean
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         $cond = array(
             'WHERE' => array('GamePlayerId' => $gamePlayerId),
         );
@@ -85,16 +96,36 @@ class GamePlayers extends \MY_Model
     /**
      * 特定のユーザに関わるレコードを取得
      * @param  int     $gameId ゲーム管理ID
-     * @param  int     $userId [description]
-     * @param  string  $order  [description]
-     * @return array           [description]
+     * @param  int     $userId ユーザID
+     * @return Bean    [description]
      */
     public function getByUserId(int $gameId, int $userId) : Bean
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         $cond = array(
             'WHERE' => array('UserId' => $userId)
+        );
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
+    }
+
+    /**
+     * 指定したグループに所属する特定のユーザに関わるレコードを取得
+     * @param  int  $gameId  ゲーム管理ID
+     * @param  int  $groupId グループID
+     * @param  int  $userId  ユーザID
+     * @return Bean          検索結果を含むBeanオブジェクト
+     */
+    public function getByUserIdInGroup(int $gameId, int $groupId, int $userId) : Bean
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = $this->getTableName($gameId);
+        $cond = array(
+            'WHERE' => array(
+                'UserId'  => $userId,
+                'GroupId' => $groupId
+            )
         );
         $resultSet = $this->search($cond);
         return $this->getMonoResult($resultSet);
@@ -103,7 +134,7 @@ class GamePlayers extends \MY_Model
     public function getByLeaders(int $gameId, array $leaders) : array
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         $cond = array(
             'WHERE' => array('UserId' => $leaders)
         );
@@ -121,7 +152,7 @@ class GamePlayers extends \MY_Model
     public function getByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         $cond = array(
             'WHERE' => array('GroupId' => $groupId),
             'NUMBER' => array($limit, $offset)
@@ -139,7 +170,7 @@ class GamePlayers extends \MY_Model
     public function getByPlayerId(int $gameId, int $playerId) : array
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         $cond = array(
             'WHERE' => array(
                 'PlayerId' => $playerId
@@ -158,11 +189,29 @@ class GamePlayers extends \MY_Model
     public function getLikeNickname(int $gameId, string $nickname) : array
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         $cond = array(
             'LIKE' => array('GameNickname' => "%$nickname%")
         );
         return $this->search($cond);
+    }
+
+    /**
+     * 指定したエイリアスIDで検索し、レコードを取得する
+     * [基底クラスのgetByAliasIdのオーバーライド]
+     * @param  string $aliasId エイリアスID文字列
+     * @param  int    $gameId  ゲーム管理ID
+     * @return Bean            検索結果を含むBeanオブジェクト
+     */
+    public function getByAliasId(string $aliasId, $gameId) : Bean
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
+        $cond = array(
+            'WHERE' => array('AliasId' => $aliasId)
+        );
+        $resultSet = $this->search($cond);
+        return $this->getMonoResult($resultSet);
     }
 
     /**
@@ -174,22 +223,22 @@ class GamePlayers extends \MY_Model
     public function add(int $gameId, array $data) : int
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         return $this->attach($data);
     }
 
     /**
      * 特定のユーザIDのレコードを更新する
      * @param  int    $gameId       ゲーム管理ID
-     * @param  int    $userId       [description]
+     * @param  int    $gamePlayerId ゲームプレイヤーID
      * @param  array  $data         [description]
      * @return [type]               [description]
      */
-    public function set(int $gameId, int $userId, array $data) : bool
+    public function set(int $gameId, int $gamePlayerId, array $data) : bool
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
-        return $this->update($data, array('UserId' => $userId));
+        $this->tableName = $this->getTableName($gameId);
+        return $this->update($data, array('GamePlayerId' => $gamePlayerId));
     }
 
     /**
@@ -202,7 +251,7 @@ class GamePlayers extends \MY_Model
     public function setByGamePlayerId(int $gameId, int $gamePlayerId, array $data) : bool
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         return $this->update($data, array('GamePlayerId' => $gamePlayerId));
     }
 
@@ -215,7 +264,7 @@ class GamePlayers extends \MY_Model
     public function deleteByUserId(int $gameId, int $userId) : bool
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         return $this->logicalDelete(array('UserId' => $userId));
     }
 
@@ -228,7 +277,7 @@ class GamePlayers extends \MY_Model
     public function deleteByGamePlayerId(int $gameId, int $playerId) : bool
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         return $this->logicalDelete(array('PlayerId' => $playerId));
     }
 
@@ -240,7 +289,7 @@ class GamePlayers extends \MY_Model
     public function clearTable(int $gameId) : bool
     {
         $this->calledMethod = __FUNCTION__;
-        $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($gameId, "0", 8);
+        $this->tableName = $this->getTableName($gameId);
         return $this->truncate();
     }
 }

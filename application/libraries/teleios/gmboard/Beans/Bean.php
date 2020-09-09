@@ -1,5 +1,5 @@
 <?php
-namespace teleios\gmboard\dao;
+namespace teleios\gmboard\Beans;
 
 use teleios\utils\Identifier;
 use teleios\gmboard\dao\CiSessions;

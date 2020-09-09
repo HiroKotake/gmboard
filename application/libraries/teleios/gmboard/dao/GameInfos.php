@@ -1,7 +1,7 @@
 <?php
 namespace teleios\gmboard\dao;
 
-use teleios\gmboard\dao\Bean;
+use teleios\gmboard\Beans\Bean;
 
 /**
  * ゲーム情報テーブル管理テーブル

@@ -151,6 +151,10 @@ defined('AUTH_ACTIVATE_SUCCESS')    OR define('AUTH_ACTIVATE_SUCCESS', 300);    
 defined('AUTH_ACTIVATE_NOEXIST')    OR define('AUTH_ACTIVATE_NOEXIST', 312);    // 対象のアクティベーションコードが存在しない
 defined('AUTH_ACTIVATE_EXPIRE')     OR define('AUTH_ACTIVATE_EXPIRE', 312);     // アクティベーション期限切れ
 defined('AUTH_ACTIVATE_UNMATCH')    OR define('AUTH_ACTIVATE_UNMATCH', 313);    // アクティベーションコード不一致
+// 権限関連
+defined('AUTHORITY_NOT_HAVE')       OR define('AUTHORITY_NOT_HAVE', 500);       // 権限不足により実行不能
+defined('AUTHORITY_CHANGE_DONE')    OR define('AUTHORITY_CHANGE_DONE', 501);    // 権限変更完了
+defined('AUTHORITY_CHANGE_LDR')     OR define('AUTHORITY_CHANGE_LDR', 502);     // リーダー変更
 // マイページ関連
 defined('PAGE_ID_PERSONAL')          OR define('PAGE_ID_PERSONAL', 1);               // マイページ画面モード：個人トップ表示
 defined('PAGE_ID_GROUP_MAIN')        OR define('PAGE_ID_GROUP_MAIN', 101);           // グループページ：メイン
@@ -209,8 +213,8 @@ defined('TABLE_NAME_SYSTEM_COMMON')       OR define('TABLE_NAME_SYSTEM_COMMON', 
 defined('TABLE_NAME_USER_INFOS')          OR define('TABLE_NAME_USER_INFOS', 'UserInfos');
 defined('TABLE_NAME_USERS')               OR define('TABLE_NAME_USERS', 'Users');
 // グループ権限タイプ
-defined('GROUP_AUTHORITY_LEADER')      OR define('GROUP_AUTHORITY_LEADER', 1);      // リーダー： 任命権、招待操作可能、申請操作可能、告知読み書き可能、掲示板読み書き可能
-defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2);  // サブリーダー： 申請操作可能、告知読み書き可能、掲示板読み書き可能
+defined('GROUP_AUTHORITY_LEADER')      OR define('GROUP_AUTHORITY_LEADER', 1);      // リーダー： 任命権、下位権限者除名、招待操作可能、申請操作可能、告知読み書き可能、掲示板読み書き可能
+defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2);  // サブリーダー： 申請操作可能、下位権限者除名、告知読み書き可能、掲示板読み書き可能
 defined('GROUP_AUTHORITY_MENBER')      OR define('GROUP_AUTHORITY_MENBER', 3);      // 一般メンバー： 告知読み書き可能、掲示板読み書き可能
 defined('GROUP_AUTHORITY_OBSERVER')    OR define('GROUP_AUTHORITY_OBSERVER', 4);    // オブザーバー: 掲示板読み書き可能
 defined('GROUP_AUTHORITY_GUEST')       OR define('GROUP_AUTHORITY_GUEST', 5);       // ゲスト： 掲示板リードオンリー

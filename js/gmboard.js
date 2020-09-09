@@ -1,4 +1,5 @@
-function changeGameGenre() {
+function changeGameGenre()
+{
     var gameList = $("select[name=Target]");
     var selected = $("select[name=Genre]").val();
     // optionの削除
@@ -16,7 +17,8 @@ function changeGameGenre() {
     $("#TargetNickname").val("");
 }
 
-function changeGroupDropDown(data) {
+function changeGroupDropDown(data)
+{
     var genreList = $("#G_GameGenre");
     var gameList = $("#G_TargetGame");
     // optionの削除
@@ -39,15 +41,18 @@ function changeGroupDropDown(data) {
     }
 }
 
-function jmpGame(game) {
+function jmpGame(game)
+{
     window.location.href = "../Game?gmid=" + game;
 }
 
-function jmpGroup(game, group) {
+function jmpGroup(game, group)
+{
     window.location.href = "../Group?gmid=" + game + "&grid=" + group;
 }
 
-function changeGroupGameGenre() {
+function changeGroupGameGenre()
+{
     var gameList = $("select[name=GTarget]");
     var selected = $("select[name=GGenre]").val();
     // optionの削除

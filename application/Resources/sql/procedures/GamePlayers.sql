@@ -24,6 +24,7 @@ BEGIN
         PRIMARY KEY (`GamePlayerId`),
         INDEX `IdxUserId` (`UserId`),
         INDEX `IdxGroupId` (`GroupId`),
+        INDEX `IdxGroupIdUserId` (`GroupId`,`UserId`),
         INDEX `IdxAliasId` (`AliasId`)
     ) ENGINE=InnoDB COMMENT \'ゲームプレイヤー\';'
     );

@@ -3,7 +3,7 @@ namespace teleios\gmboard\libs;
 
 use teleios\gmboard\libs\common\Group;
 use teleios\gmboard\libs\common\ShowIdiom;
-use teleios\gmboard\dao\Bean;
+use teleios\gmboard\Beans\Bean;
 use teleios\gmboard\dao\Groups as daoGroups;
 use teleios\gmboard\dao\GamePlayers as daoGamePlayers;
 
@@ -47,11 +47,13 @@ class GroupPage extends Group
         $data['GroupName'] = $groupName;
         // グループ権限取得
         $daoGamePlayers = new daoGamePlayers();
-        $gamePlayer = $daoGamePlayers->getByUserId($userId);
+        $gamePlayer = $daoGamePlayers->getByUserId($this->gameId, $userId);
         $data['Authority'] = null;
-        if ($gamePlayer->isEmpty()) {
+        if (!$gamePlayer->isEmpty()) {
             $data['Authority'] = $gamePlayer->Authority;
         }
+        $data['GameId'] = $obfGameId;
+        $data['GroupId'] = $obfGroupId;
         return $data;
     }
 
@@ -84,6 +86,7 @@ class GroupPage extends Group
         $this->gameId = $this->trnasAliasToGameId($obfGameId);
         $this->groupId = $this->transAliasToId($obfGroupId, ID_TYPE_GROUP);
         $daoGamePlayers = new daoGamePlayers();
+        $data['UserId'] = $userId;
         $data['MemberList'] = $daoGamePlayers->getByGroupId($this->gameId, $this->groupId);
         return $data;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace teleios\gmboard\dao;
 
+use teleios\gmboard\Beans\Bean;
 use teleios\utils\StringUtility;
 
 /**

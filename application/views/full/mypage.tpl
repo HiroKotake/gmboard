@@ -4,13 +4,13 @@
     <title>マイページ</title>
 {include file="./includes/head.tpl"}
 {include file="./js/mypage.js"}
+    <script>{literal}
+    function extention(){}
+    {/literal}</script>
 </head>
 
 <body>
-    <!-- 隠しウィンドウ(ダイアログ代替) -->
-{include file="./includes/DialogAddGame.tpl" GameGenre=$GameGenre GameList=$GameList}
-{include file="./includes/DialogAddGroup.tpl" GameGenre=$GameGenre GroupGame=$GroupGame}
-{include file="./includes/dialogWarning.tpl"}
+    <!-- 表示 -->
     <div class="BaseContainer">
         <!-- Header -->
 {include file="./includes/menu.tpl"}
@@ -48,5 +48,9 @@
             footer
         </div>
     </div>
+    <!-- 隠しウィンドウ(ダイアログ代替) -->
+{include file="./includes/DialogAddGame.tpl" GameGenre=$GameGenre GameList=$GameList}
+{include file="./includes/DialogAddGroup.tpl" GameGenre=$GameGenre GroupGame=$GroupGame}
+{include file="./includes/dialogWarning.tpl"}
 </body>
 </html>

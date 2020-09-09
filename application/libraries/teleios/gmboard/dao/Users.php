@@ -1,6 +1,8 @@
 <?php
 namespace teleios\gmboard\dao;
 
+use teleios\gmboard\Beans\Bean;
+
 /**
  * ユーザ情報管理テーブル操作クラス
  *

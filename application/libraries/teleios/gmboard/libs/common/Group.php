@@ -1,7 +1,7 @@
 <?php
 namespace teleios\gmboard\libs\common;
 
-use teleios\gmboard\dao\Bean;
+use teleios\gmboard\Beans\Bean;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\Groups;
 use teleios\gmboard\dao\GroupBoard;
@@ -134,5 +134,38 @@ class Group extends GmbCommon
     public function count() : int
     {
         return $this->daoGroupBoard->count($this->gameId, $this->groupId);
+    }
+
+    /**
+     * グループメンバーの権限を変更する
+     * @param  string $targetUserId  対象ユーザID
+     * @param  int    $newAuth       新しい権限
+     * @param  int    $changerUserId 変更者ユーザID
+     * @return int                   変更結果
+     */
+    public function changeAuth(string $targetUserId, int $newAuth, int $changerUserId) : int
+    {
+        $libGamePlayer = new GamePlayers();
+        // 現在の情報取得
+        $targetMemberAlias = $this->transAliasToId($targetUserId, ID_TYPE_GAME_PLAYER);
+        $targetMember = $libGamePlayer->getByAliasId($targetMemberAlias, $this->gameId);
+        // 変更者確認
+        $adminMember = $libGamePlayer->getByUserIdInGroup($this->gemeId, $this->groupId, $changerUserId);
+        if ($adminMember->Authority > 2) {
+            return AUTHORITY_NOT_HAVE; // 権限不足により実行不可
+        }
+        // 変更実施（一般的変更)
+        $data = ['Authority' => $newAuth];
+        $result = $libGamePlayer->set($this->gameId, $targetMember->GamePlayerId, $data);
+        if ($result) {
+            if ($targetMember->userId == $adminMember->userId AND $newAuth > 1) {
+                // リーダーが自身の権限を返納する場合の、次リーダーの選出および対象メンバーへのメッセージ送信 (別メソッドにて実装)
+            } else if ($newAuth < 2) {
+                // 管理者権限を持つように変更した場合は、対象メンバーへメッセージ送信
+            } else {
+                // 権限変更対象メンバーへ、メッセージ送信
+            }
+        }
+        return $result;
     }
 }

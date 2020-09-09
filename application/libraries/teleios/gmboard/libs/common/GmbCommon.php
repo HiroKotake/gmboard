@@ -3,12 +3,13 @@ namespace teleios\gmboard\libs\common;
 
 use teleios\utils\StringUtility;
 use teleios\utils\Identifier;
-use teleios\gmboard\dao\Bean;
+use teleios\gmboard\Beans\Bean;
 use teleios\gmboard\dao\CiSessions;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\GamePlayers;
 use teleios\gmboard\dao\Groups;
 use teleios\gmboard\dao\PlayerIndex;
+use teleios\gmboard\dao\UserBoard;
 
 /**
  * サイト表示関連基底クラス
@@ -325,6 +326,9 @@ class GmbCommon
         );
         return $data;
     }
+
+    public function sendUserMessage() : int
+    {}
 
     /**
      * ログアウト処理

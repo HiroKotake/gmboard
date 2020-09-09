@@ -1,7 +1,7 @@
 <?php
 namespace teleios\gmboard\libs\test;
 
-use teleios\gmboard\dao\Bean;
+use teleios\gmboard\Beans\Bean;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\GamePlayers;
 use teleios\gmboard\dao\RegistBooking;

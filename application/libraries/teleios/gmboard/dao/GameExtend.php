@@ -1,6 +1,8 @@
 <?php
 namespace teleios\gmboard\dao;
 
+use teleios\gmboard\Beans\Bean;
+
 /**
  * ゲーム拡張機能管理テーブル操作クラス
  *

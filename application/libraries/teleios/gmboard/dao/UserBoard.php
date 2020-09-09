@@ -1,6 +1,7 @@
 <?php
 namespace teleios\gmboard\dao;
 
+use teleios\gmboard\Beans\Bean;
 use teleios\utils\StringUtility;
 
 /**
@@ -50,9 +51,8 @@ class UserBoard extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
         $cond = array(
-//            'WHERE' => array('UserId' => $userId),
             'LIMIT' => array($lineNumber, $offset),
-            'ORDER_BY' => ["CreateDate", $order]
+            'ORDER_BY' => ["CreateDate" => $order]
         );
         return $this->search($cond);
     }

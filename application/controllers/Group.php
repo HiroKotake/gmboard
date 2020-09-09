@@ -31,8 +31,6 @@ class Group extends MY_Controller
         $obfGroupId = $this->input->get("grid");
         $libGroup = new libGroup();
         $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
-        $data['GameId'] = $obfGameId;
-        $data['GroupId'] = $obfGroupId;
         $data['PageId'] = PAGE_ID_GROUP_MAIN;
         // グループ管理者判定し、メニューを変更
         $this->smarty->view('group', $data);
@@ -112,12 +110,37 @@ class Group extends MY_Controller
         $this->smarty->view('group', $data);
     }
 
+    // 退会
+    // 除名
+
     /**
      * グループ加入申請
      * @return [type] [description]
      */
     public function petition()
     {
+
+    }
+
+    /**
+     * メンバー権限変更
+     * @return [type] [description]
+     */
+    public function memberAuthChange()
+    {
+        $serverMethod = $this->input->server(false);
+        $obfGameId = $this->input->post_get("gmid");
+        $obfGroupId = $this->input->post_get("grid");
+        $obfTargetUserId = $this->input->post_get("tuid");
+        $libGroup = new libGroup();
+        // 権限変更
+        // 戻り処理
+        if ($serverMethod == "get") {
+            $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
+            $data['PageId'] = PAGE_ID_GROUP_MAIN;
+            // グループ管理者判定し、メニューを変更
+            $this->smarty->view('group', $data);
+        }
 
     }
 }

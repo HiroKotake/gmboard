@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 use teleios\utils\LogWriter;
 use teleios\utils\Identifier;
-use teleios\gmboard\dao\Bean;
+use teleios\gmboard\Beans\Bean;
 
 class MY_Model extends CI_Model
 {
