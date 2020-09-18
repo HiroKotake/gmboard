@@ -151,10 +151,14 @@ defined('AUTH_ACTIVATE_SUCCESS')    OR define('AUTH_ACTIVATE_SUCCESS', 300);    
 defined('AUTH_ACTIVATE_NOEXIST')    OR define('AUTH_ACTIVATE_NOEXIST', 312);    // 対象のアクティベーションコードが存在しない
 defined('AUTH_ACTIVATE_EXPIRE')     OR define('AUTH_ACTIVATE_EXPIRE', 312);     // アクティベーション期限切れ
 defined('AUTH_ACTIVATE_UNMATCH')    OR define('AUTH_ACTIVATE_UNMATCH', 313);    // アクティベーションコード不一致
-// 権限関連
-defined('AUTHORITY_NOT_HAVE')       OR define('AUTHORITY_NOT_HAVE', 500);       // 権限不足により実行不能
-defined('AUTHORITY_CHANGE_DONE')    OR define('AUTHORITY_CHANGE_DONE', 501);    // 権限変更完了
-defined('AUTHORITY_CHANGE_LDR')     OR define('AUTHORITY_CHANGE_LDR', 502);     // リーダー変更
+// グループ権限関連
+defined('GROUP_MAX_SUB_LEADER')         OR define('GROUP_MAX_SUB_LEADER', 2);           // サブリーダーの最大数
+defined('AUTHORITY_CHANGE_DONE')        OR define('AUTHORITY_CHANGE_DONE', 500);        // 権限変更完了
+defined('AUTHORITY_CHANGE_LDR')         OR define('AUTHORITY_CHANGE_LDR', 501);         // リーダー変更
+defined('AUTHORITY_CHANGE_NOT_HAVE')    OR define('AUTHORITY_CHANGE_NOT_HAVE', 510);    // 権限不足により実行不能
+defined('AUTHORITY_CHANGE_MAX_SUBLDR')  OR define('AUTHORITY_CHANGE_MAX_SUBLDR', 511);  // サブリーダー上限警告
+defined('AUTHORITY_CHANGE_ONE_MEMBER')  OR define('AUTHORITY_CHANGE_ONE_MEMBER', 512);  // メンバーが一人なのに、リーダー変更を実施した
+defined('AUTHORITY_CHANGE_FAILURE')     OR define('AUTHORITY_CHANGE_FAILURE', 520);     // 権限変更失敗(DBエラー)
 // マイページ関連
 defined('PAGE_ID_PERSONAL')          OR define('PAGE_ID_PERSONAL', 1);               // マイページ画面モード：個人トップ表示
 defined('PAGE_ID_GROUP_MAIN')        OR define('PAGE_ID_GROUP_MAIN', 101);           // グループページ：メイン

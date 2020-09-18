@@ -161,6 +161,26 @@ class GamePlayers extends \MY_Model
     }
 
     /**
+     * 特定のグループに属する正規メンバーを取得
+     * @param  int   $gameId  ゲーム管理ID
+     * @param  int   $groupId グループ管理ID
+     * @return array          取得に成功した場合は内容を含む配列を返す。失敗した場合は空の配列を返す
+     */
+    public function getRegularMemberByGroupId(int $gameId, int $groupId) : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = $this->getTableName($gameId);
+        $cond = array(
+            'WHERE' => array(
+                'GroupId' => $groupId,
+                'Authority <=' => GROUP_AUTHORITY_MENBER
+            ),
+            'ORDER_BY' => array('GamePlayerId' => 'ASC')
+        );
+        return $this->search($cond);
+    }
+
+    /**
      * 特定のゲーム側のID持つレコードを取得
      * ：間違えて同じPlayerIdで複数のユーザが登録されている場合がある。
      * @param  int   $gameId    ゲーム管理ID

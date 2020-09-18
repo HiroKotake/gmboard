@@ -4,11 +4,14 @@ namespace teleios\gmboard\libs\common;
 use teleios\utils\StringUtility;
 use teleios\utils\Identifier;
 use teleios\gmboard\Beans\Bean;
+use teleios\gmboard\Beans\GroupMessageBean;
+use teleios\gmboard\Beans\UserMessageBean;
 use teleios\gmboard\dao\CiSessions;
 use teleios\gmboard\dao\GameInfos;
 use teleios\gmboard\dao\GamePlayers;
 use teleios\gmboard\dao\Groups;
 use teleios\gmboard\dao\PlayerIndex;
+use teleios\gmboard\dao\GroupBoard;
 use teleios\gmboard\dao\UserBoard;
 
 /**
@@ -327,8 +330,32 @@ class GmbCommon
         return $data;
     }
 
-    public function sendUserMessage() : int
-    {}
+    /**
+     * 指定したユーザへメッセージを送信する
+     * @param  int             $toUserid 送信先のユーザID
+     * @param  UserMessageBean $bean     送信内容を含むUserMessageBean
+     * @return bool                      送信に成功した場合はtrueを、失敗した場合はfalseを返す
+     */
+    public function sendUserMessage(int $toUserid, UserMessageBean $bean) : bool
+    {
+        $daoUserBoard = new UserBoard();
+        $resultId = $daoUserBoard->add($toUserid, $bean->getInsertData());
+        return $resultId > 0 ? true : false;
+    }
+
+    /**
+     * 指定したゲームに所属するグループへメッセージを送信する
+     * @param  int              $gameId  ゲームID
+     * @param  int              $groupId グループID
+     * @param  GroupMessageBean $bean    送信内容を含むGroupMessageBean
+     * @return bool                      送信に成功した場合はtrueを、失敗した場合はfalseを返す
+     */
+    public function sendGroupMessage(int $gameId, int $groupId, GroupMessageBean $bean) : bool
+    {
+        $daoGroupBoard = new GroupBoard();
+        $resultId = $daoGroupBoard->add($gameId, $groupId, $bean->getInsertData());
+        return $resultId > 0 ? true : false;
+    }
 
     /**
      * ログアウト処理

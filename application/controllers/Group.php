@@ -33,7 +33,7 @@ class Group extends MY_Controller
         $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
         $data['PageId'] = PAGE_ID_GROUP_MAIN;
         // グループ管理者判定し、メニューを変更
-        $this->smarty->view('group', $data);
+        $this->smarty->view('group/top', $data);
     }
 
     /**
@@ -47,11 +47,11 @@ class Group extends MY_Controller
         $libGroup = new libGroup();
         $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
         $data['PageId'] = PAGE_ID_GROUP_MEMBER_LIST;
-        $this->smarty->view('group', $data);
+        $this->smarty->view('group/member', $data);
     }
 
     /**
-     * グループ申請者関連情報表示
+     * グループ加入申請者関連情報表示
      * @return [type] [description]
      */
     public function requestList()
@@ -61,7 +61,7 @@ class Group extends MY_Controller
         $libGroup = new libGroup();
         $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
         $data['PageId'] = PAGE_ID_GROUP_REQEST_LIST;
-        $this->smarty->view('group', $data);
+        $this->smarty->view('group/request', $data);
     }
 
     /**
@@ -75,7 +75,7 @@ class Group extends MY_Controller
         $libGroup = new libGroup();
         $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
         $data['PageId'] = PAGE_ID_GROUP_INVITATION;
-        $this->smarty->view('group', $data);
+        $this->smarty->view('group/invite', $data);
     }
 
     /**
@@ -111,7 +111,16 @@ class Group extends MY_Controller
     }
 
     // 退会
+    public function withdraw()
+    {
+
+    }
+
     // 除名
+    public function dismiss()
+    {
+
+    }
 
     /**
      * グループ加入申請
@@ -128,19 +137,23 @@ class Group extends MY_Controller
      */
     public function memberAuthChange()
     {
-        $serverMethod = $this->input->server(false);
+        // $serverMethod = $this->input->server(false);
         $obfGameId = $this->input->post_get("gmid");
         $obfGroupId = $this->input->post_get("grid");
         $obfTargetUserId = $this->input->post_get("tuid");
+        $newAuth = $this->input->post_get("nath");
         $libGroup = new libGroup();
+        $libGroup->setBaseInfos($obfGameId, $obfGroupId);
         // 権限変更
+        $result = $libGroup->changeAuth($obfTargetUserId, $newAuth, $this->userId);
         // 戻り処理
-        if ($serverMethod == "get") {
-            $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
-            $data['PageId'] = PAGE_ID_GROUP_MAIN;
-            // グループ管理者判定し、メニューを変更
-            $this->smarty->view('group', $data);
-        }
+        $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
+        $data['Result'] = $result;
+        // メンバーリスト
+        $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
+        $data['PageId'] = PAGE_ID_GROUP_MEMBER_LIST;
+        // ページ送信
+        $this->smarty->view('group/member', $data);
 
     }
 }

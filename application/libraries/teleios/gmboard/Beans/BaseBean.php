@@ -29,7 +29,7 @@ class BaseBean
      * @param  [type]  $value 設定値
      * @return boolean        カラムに設定されているもの以外をカラム名にした場合には、falseを返し、値が設定できた場合にはtrueを返す。また設定値がそのカラムの属性と異なる場合には値を設定せずfalseを返す
      */
-    public function set(sting $key, $value) : boolean
+    public function set(string $key, $value) : bool
     {
         if (in_array($key, array_keys($this->property))) {
             if ($this->attribute[$key] == gettype($value)) {

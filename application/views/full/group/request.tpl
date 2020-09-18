@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>グループページ</title>
-{include file="./includes/head.tpl"}
-{include file="./js/mypage.js"}
+{include file="../includes/head.tpl"}
+{include file="../js/mypage.js"}
     <script>{literal}
         var gid = "{/literal}{$GameId}{literal}";
         var grid = "{/literal}{$GroupId}{literal}";
@@ -76,12 +76,12 @@
     <div class="BaseContainer">
         <!-- Header -->
         <!-- div class="header" -->
-{include file="./includes/menu.tpl"}
+{include file="../includes/menu.tpl"}
         <!-- Left Sidemenu -->
         <div class="sidemenu">
-{include file="./includes/GameList.tpl" GameInfos=$GameInfos}
+{include file="../includes/GameList.tpl" GameInfos=$GameInfos}
             <br />
-{include file="./includes/GroupList.tpl" GroupInfos=$GroupInfos}
+{include file="../includes/GroupList.tpl" GroupInfos=$GroupInfos}
             <br />
             <fieldset class="smGrouping">
                 <legend>グループメニュー</legend>
@@ -99,45 +99,10 @@
             </div>
             <!-- Right Main -->
             <div class="mainwork">
-{if $PageId == $smarty.const.PAGE_ID_GROUP_MAIN}
-                <!-- メッセージ表示 -->
-                <h2>メッセージボード</h2>
-    {foreach from=$Message item=msg name=MessageList}
-        {if $smarty.foreach.MessageList.first}
-                <hr />
-        {/if}
-                <div>
-                    [{$msg->GameNickname}]{$msg->Message}<br />
-                </div>
-    {/foreach}
-{elseif $PageId == $smarty.const.PAGE_ID_GROUP_MEMBER_LIST}
-                <!-- メンバーリスト -->
-                <h2>メンバーリスト</h2>
-DEBUG(UserId):{$UserId};
-    {foreach from=$MemberList item=member name=Members}
-        {if $smarty.foreach.Members.first}
-                <hr />
-        {/if}
-                <div>
-                    {$member->GameNickname}{$member->UserId}{if $UserId == $member->UserId}<button>退会</button>{else}{if $Authority <= 2}<button>除名</button>{/if}{/if}{if $Authority <= 2}<button onClick="changeAuth('{$member->AliasId}',{$member->Authority})">権限変更</button>{/if}
-                </div>
-    {/foreach}
-{elseif $PageId == $smarty.const.PAGE_ID_GROUP_REQEST_LIST}
-                <!-- 申請者リスト -->
                 <h2>申請者リスト</h2>
-{elseif $PageId == $smarty.const.PAGE_ID_GROUP_INVITATION}
-                <!-- 招待者 -->
-                <h2>招待者</h2>
-{elseif $PageId == $smarty.const.PAGE_ID_GROUP_EXTENTION}
-                <!-- 拡張機能 -->
-{/if}
-
             </div>
             <div class="funcarea">
                 {$MsgTotal}
-{if $PageId == $smarty.const.PAGE_ID_GROUP_MAIN}
-                <button class="btnBlue_32x180">メッセージ作成</button>
-{/if}
             </div>
         </div>
         <!-- Footer -->
@@ -146,19 +111,8 @@ DEBUG(UserId):{$UserId};
         </div>
     </div>
     <!-- 隠しウィンドウ(ダイアログ代替) -->
-{include file="./includes/DialogAddGame.tpl" GameGenre=$GameGenre GameList=$GameList}
-{include file="./includes/DialogAddGroup.tpl" GameGenre=$GameGenre GroupGame=$GroupGame}
-{include file="./includes/dialogWarning.tpl"}
-    <div id="dialogAuthChange">
-        <form action="memberAuthChange" method="post">
-            <ul>
-                <li><input type="radio" name="auth" id="catAuth1" value="{$smarty.const.GROUP_AUTHORITY_LEADER}">リーダー</li>
-                <li><input type="radio" name="auth" id="catAuth2" value="{$smarty.const.GROUP_AUTHORITY_SUB_LEADER}">サブリーダー</li>
-                <li><input type="radio" name="auth" id="catAuth3" value="{$smarty.const.GROUP_AUTHORITY_MENBER}">一般メンバー</li>
-                <li><input type="radio" name="auth" id="catAuth4" value="{$smarty.const.GROUP_AUTHORITY_OBSERVER}">オブサーバー</li>
-                <li><input type="radio" name="auth" id="catAuth5" value="{$smarty.const.GROUP_AUTHORITY_GUEST}">ゲスト</li>
-            </ul>
-        </form>
-    </div>
+{include file="../includes/DialogAddGame.tpl" GameGenre=$GameGenre GameList=$GameList}
+{include file="../includes/DialogAddGroup.tpl" GameGenre=$GameGenre GroupGame=$GroupGame}
+{include file="../includes/dialogWarning.tpl"}
 </body>
 </html>

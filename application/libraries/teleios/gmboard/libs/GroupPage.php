@@ -54,6 +54,7 @@ class GroupPage extends Group
         }
         $data['GameId'] = $obfGameId;
         $data['GroupId'] = $obfGroupId;
+        $data['Result'] = "";
         return $data;
     }
 
