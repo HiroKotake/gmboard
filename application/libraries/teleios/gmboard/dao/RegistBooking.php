@@ -175,6 +175,48 @@ class RegistBooking extends \MY_Model
     }
 
     /**
+     * グループへの申請者リストを取得する
+     * @param  int     $gameId  ゲーム管理ID
+     * @param  int     $groupId [description]
+     * @param  integer $limit   [description]
+     * @param  integer $offset  [description]
+     * @return array            [description]
+     */
+    public function getRequestsByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $cond = array(
+            'WHERE' => array(
+                'GroupId' => $groupId,
+                'Type' => 0
+            ),
+            'LIMIT' => array($limit, $offset)
+        );
+        return $this->get($gameId, $cond);
+    }
+
+    /**
+     * グループへの招待者リストを取得する
+     * @param  int     $gameId  ゲーム管理ID
+     * @param  int     $groupId [description]
+     * @param  integer $limit   [description]
+     * @param  integer $offset  [description]
+     * @return array            [description]
+     */
+    public function getInvitesByGroupId(int $gameId, int $groupId, int $limit = 20, int $offset = 0) : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $cond = array(
+            'WHERE' => array(
+                'GroupId' => $groupId,
+                'Type' => 1
+            ),
+            'LIMIT' => array($limit, $offset)
+        );
+        return $this->get($gameId, $cond);
+    }
+
+    /**
      * ユーザIDで検索
      * @param  int   $gameId ゲーム管理ID
      * @param  int   $userId [description]

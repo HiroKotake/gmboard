@@ -16,6 +16,7 @@ BEGIN
         `AuthCode` VARCHAR(30) NOT NULL COMMENT \'認証確認用コード\',
         `GameNickname` VARCHAR(30) NOT NULL COMMENT \'ゲーム側ニックネーム\',
         `UserId` BIGINT(12) UNSIGNED COMMENT \'ユーザ管理ID\',
+        `Type` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'レコードタイプ(0:加入申請, 1:招待)\',
         `Registed` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'登録済みフラグ(0:未登録, 1:登録済)\',
         `Approved` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT \'承認済みフラグ(0:未承認, 1:承認済)\',
         `CreateDate` DATETIME COMMENT \'レコード登録日\',

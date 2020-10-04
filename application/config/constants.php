@@ -217,6 +217,7 @@ defined('TABLE_NAME_SYSTEM_COMMON')       OR define('TABLE_NAME_SYSTEM_COMMON', 
 defined('TABLE_NAME_USER_INFOS')          OR define('TABLE_NAME_USER_INFOS', 'UserInfos');
 defined('TABLE_NAME_USERS')               OR define('TABLE_NAME_USERS', 'Users');
 // グループ権限タイプ
+defined('GROUP_AUTHORITY_WITHDRAWED')  OR define('GROUP_AUTHORITY_WITHDRAWED', 0);  // 退会者： 履歴保持目的
 defined('GROUP_AUTHORITY_LEADER')      OR define('GROUP_AUTHORITY_LEADER', 1);      // リーダー： 任命権、下位権限者除名、招待操作可能、申請操作可能、告知読み書き可能、掲示板読み書き可能
 defined('GROUP_AUTHORITY_SUB_LEADER')  OR define('GROUP_AUTHORITY_SUB_LEADER', 2);  // サブリーダー： 申請操作可能、下位権限者除名、告知読み書き可能、掲示板読み書き可能
 defined('GROUP_AUTHORITY_MENBER')      OR define('GROUP_AUTHORITY_MENBER', 3);      // 一般メンバー： 告知読み書き可能、掲示板読み書き可能

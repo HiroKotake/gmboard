@@ -29,6 +29,22 @@
             $("#dialogAuthChange").dialog("open");
         }
 
+        function doWithdraw(tid)
+        {
+            var result = window.confirm("退会しようとしていますが、よろしいですか？");
+            if (result) {
+                window.location.href="./withdraw?gmid=" + gid + "&grid=" + grid;
+            }
+        }
+
+        function doDismiss(tid)
+        {
+            var result = window.confirm("除名しようとしていますが、よろしいですか？");
+            if (result) {
+                window.location.href="./dismiss?gmid=" + gid + "&grid=" + grid + "&tuid=" + tid;
+            }
+        }
+
         function extention()
         {
             $("#dialogAuthChange").dialog({
@@ -109,7 +125,7 @@ DEBUG(UserId):{$UserId};
                 <hr />
         {/if}
                 <div>
-                    {$member->GameNickname}{$member->UserId}{if $UserId == $member->UserId}<button>退会</button>{else}{if $Authority <= 2}<button>除名</button>{/if}{/if}{if $Authority <= 2}<button onClick="changeAuth('{$member->AliasId}',{$member->Authority})">権限変更</button>{/if}
+                    {$member->GameNickname}{$member->UserId}{if $UserId == $member->UserId}<button onClick="doWithdraw('{$member->AliasId}')">退会</button>{else}{if $Authority <= 2}<button onClick="doDismiss('{$member->AliasId}')">除名</button>{/if}{/if}{if $Authority <= 2}<button onClick="changeAuth('{$member->AliasId}',{$member->Authority})">権限変更</button>{/if}
                 </div>
     {/foreach}
             </div>
@@ -118,7 +134,7 @@ DEBUG(UserId):{$UserId};
         </div>
         <!-- Footer -->
         <div class="footer">
-            footer
+            {$Result}footer
         </div>
     </div>
     <!-- 隠しウィンドウ(ダイアログ代替) -->

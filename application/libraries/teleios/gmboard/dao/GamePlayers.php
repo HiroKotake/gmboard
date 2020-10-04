@@ -104,7 +104,10 @@ class GamePlayers extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->getTableName($gameId);
         $cond = array(
-            'WHERE' => array('UserId' => $userId)
+            'WHERE' => array(
+                'UserId' => $userId,
+                'Authority > ' => GROUP_AUTHORITY_WITHDRAWED
+            )
         );
         $resultSet = $this->search($cond);
         return $this->getMonoResult($resultSet);
@@ -154,7 +157,10 @@ class GamePlayers extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->getTableName($gameId);
         $cond = array(
-            'WHERE' => array('GroupId' => $groupId),
+            'WHERE' => array(
+                'GroupId' => $groupId,
+                'Authority > ' => GROUP_AUTHORITY_WITHDRAWED
+            ),
             'NUMBER' => array($limit, $offset)
         );
         return $this->search($cond);
@@ -173,7 +179,8 @@ class GamePlayers extends \MY_Model
         $cond = array(
             'WHERE' => array(
                 'GroupId' => $groupId,
-                'Authority <=' => GROUP_AUTHORITY_MENBER
+                'Authority <=' => GROUP_AUTHORITY_MENBER,
+                'Authority >' => GROUP_AUTHORITY_WITHDRAWED
             ),
             'ORDER_BY' => array('GamePlayerId' => 'ASC')
         );

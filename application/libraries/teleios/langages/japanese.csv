@@ -1,0 +1,8 @@
+join,'"%member%"が"%group%"に加入しました'
+withdrawal,'"%member%"が"%group%"から退会しました'
+dismiss,'"%group%"から除名されました'
+joinLeader,'"%group%"のリーダーに任命されました'
+joinSubLeader,'"%group%"のサブリーダーに任命されました'
+joinMember,'"%group%"のメンバーになりました'
+joinObserver,'"%group%"のオブザーバーになりました'
+joinGuest,'"%group%"のゲストになりました'

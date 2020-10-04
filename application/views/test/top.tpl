@@ -195,6 +195,8 @@
         <li><a href="TestIdentifier">ID生成</a></li>
         <li><a href="TestIdentifier/rcode?len=128">ランダムコード生成</a></li>
         <li><a href="TestIdentifier/showCache">AliasIDキャッシュ表示</a></li>
+        <li><a href="Top/lang">言語ファイルチェック</a></li>
+        <li><a href="Top/langCache">言語ファイルチェック<キャッシュ版></a></li>
     </ul>
 </body>
 </html>

@@ -58,9 +58,11 @@ class Group extends MY_Controller
     {
         $obfGameId = $this->input->get("gmid");
         $obfGroupId = $this->input->get("grid");
+        $page = $this->input->get("page");
         $libGroup = new libGroup();
-        $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
-        $data['PageId'] = PAGE_ID_GROUP_REQEST_LIST;
+        // 加入申請者リスト取得
+        $data = $libGroup->getPageRequestList($this->userId, $obfGameId, $obfGroupId, $page);
+        // 表示
         $this->smarty->view('group/request', $data);
     }
 
@@ -72,9 +74,11 @@ class Group extends MY_Controller
     {
         $obfGameId = $this->input->get("gmid");
         $obfGroupId = $this->input->get("grid");
+        $page = $this->input->get("page");
         $libGroup = new libGroup();
-        $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
-        $data['PageId'] = PAGE_ID_GROUP_INVITATION;
+        // グループ招待者リスト取得
+        $data = $libGroup->getPageInviteList($this->userId, $obfGameId, $obfGroupId, $page);
+        // 表示
         $this->smarty->view('group/invite', $data);
     }
 
@@ -110,16 +114,35 @@ class Group extends MY_Controller
         $this->smarty->view('group', $data);
     }
 
-    // 退会
+    /**
+     * 退会
+     * @return [type] [description]
+     */
     public function withdraw()
     {
-
+        $obfGameId = $this->input->post_get("gmid");
+        $obfGroupId = $this->input->post_get("grid");
+        $libGroup = new libGroup();
+        $libGroup->setBaseInfos($obfGameId, $obfGroupId, $this->userId);
+        // 退会処理
+        $libGroup->doWithdraw();
+        redirect("../mypage");
     }
 
-    // 除名
+    /**
+     * 除名
+     * @return [type] [description]
+     */
     public function dismiss()
     {
-
+        $obfGameId = $this->input->post_get("gmid");
+        $obfGroupId = $this->input->post_get("grid");
+        $obfTargetUserId = $this->input->post_get("tuid");
+        $libGroup = new libGroup();
+        $libGroup->setBaseInfos($obfGameId, $obfGroupId, $this->userId);
+        // 除名処理
+        $libGroup->doDismiss($obfTargetUserId, $this->userId);
+        redirect("../group/memberList?gmid=" . $obfGameId . "&grid=" . $obfGroupId);
     }
 
     /**
@@ -128,7 +151,12 @@ class Group extends MY_Controller
      */
     public function petition()
     {
-
+        $obfGameId = $this->input->post_get("gmid");
+        $obfGroupId = $this->input->post_get("grid");
+        $libGroup = new libGroup();
+        $libGroup->setBaseInfos($obfGameId, $obfGroupId, $this->userId);
+        // 申請
+        // 結果表示
     }
 
     /**
@@ -143,14 +171,12 @@ class Group extends MY_Controller
         $obfTargetUserId = $this->input->post_get("tuid");
         $newAuth = $this->input->post_get("nath");
         $libGroup = new libGroup();
-        $libGroup->setBaseInfos($obfGameId, $obfGroupId);
         // 権限変更
         $result = $libGroup->changeAuth($obfTargetUserId, $newAuth, $this->userId);
         // 戻り処理
-        $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
-        $data['Result'] = $result;
         // メンバーリスト
         $data = $libGroup->getPageMemberList($this->userId, $obfGameId, $obfGroupId);
+        $data['Result'] = $result;
         $data['PageId'] = PAGE_ID_GROUP_MEMBER_LIST;
         // ページ送信
         $this->smarty->view('group/member', $data);

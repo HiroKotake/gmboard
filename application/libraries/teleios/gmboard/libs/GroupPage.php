@@ -6,6 +6,7 @@ use teleios\gmboard\libs\common\ShowIdiom;
 use teleios\gmboard\Beans\Bean;
 use teleios\gmboard\dao\Groups as daoGroups;
 use teleios\gmboard\dao\GamePlayers as daoGamePlayers;
+use teleios\gmboard\dao\RegistBooking as daoRegistBooking;
 
 /**
  * グループページ関連クラス
@@ -34,8 +35,7 @@ class GroupPage extends Group
     private function getGroupPageDataCommon(int $userId, string $obfGameId, string $obfGroupId) : array
     {
         // ID関連
-        $this->gameId = $this->trnasAliasToGameId($obfGameId);
-        $this->groupId = $this->transAliasToId($obfGroupId, ID_TYPE_GROUP);
+        $this->setBaseInfos($obfGameId, $obfGroupId, $userId);
         if ($this->groupId == 0) {
             // セッションからGroupIdを取れなかった場合の保険
             $this->groupId = $this->getAliasIdtoGroupId($obfGroupId);
@@ -43,8 +43,7 @@ class GroupPage extends Group
         // 共通ページデータ取得
         $data = $this->getPageDataCommon($userId);
         // グループ名取得
-        $groupName = $this->getGroupName();
-        $data['GroupName'] = $groupName;
+        $data['GroupName'] = $this->groupName;
         // グループ権限取得
         $daoGamePlayers = new daoGamePlayers();
         $gamePlayer = $daoGamePlayers->getByUserId($this->gameId, $userId);
@@ -84,8 +83,6 @@ class GroupPage extends Group
     {
         $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
         // メンバーリスト取得
-        $this->gameId = $this->trnasAliasToGameId($obfGameId);
-        $this->groupId = $this->transAliasToId($obfGroupId, ID_TYPE_GROUP);
         $daoGamePlayers = new daoGamePlayers();
         $data['UserId'] = $userId;
         $data['MemberList'] = $daoGamePlayers->getByGroupId($this->gameId, $this->groupId);
@@ -94,29 +91,37 @@ class GroupPage extends Group
 
     /**
      * グループ(申請者リスト)ページで表示するデータを取得する
-     * @param  int    $userId     ユーザID
-     * @param  string $obfGameId  難読化ゲームID
-     * @param  string $obfGroupId 難読化グループID
-     * @return array              表示用データ
+     * @param  int     $userId     ユーザID
+     * @param  string  $obfGameId  難読化ゲームID
+     * @param  string  $obfGroupId 難読化グループID
+     * @param  integer $page       ページ番号（オフセットのベーズ数値として使用)
+     * @param  integer $line       習得レコード数
+     * @return array               表示用データ
      */
-    public function getPageRequestList(int $userId, string $obfGameId, string $obfGroupId) : array
+    public function getPageRequestList(int $userId, string $obfGameId, string $obfGroupId, $page = 0, $line = 20) : array
     {
         $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
         // 申請者リスト取得
+        $daoRegistBooking = new daoRegistBooking();
+        $data['Requests'] = $daoRegistBooking->getRequestsByGroupId($this->gameId, $this->groupId, $line, $line * $page);
         return $data;
     }
 
     /**
      * グループ(招待者リスト)ページで表示するデータを取得する
-     * @param  int    $userId     ユーザID
-     * @param  string $obfGameId  難読化ゲームID
-     * @param  string $obfGroupId 難読化グループID
-     * @return array              表示用データ
+     * @param  int     $userId     ユーザID
+     * @param  string  $obfGameId  難読化ゲームID
+     * @param  string  $obfGroupId 難読化グループID
+     * @param  integer $page       ページ番号（オフセットのベーズ数値として使用)
+     * @param  integer $line       習得レコード数
+     * @return array               表示用データ
      */
-    public function getPageInviteList(int $userId, string $obfGameId, string $obfGroupId) : array
+    public function getPageInviteList(int $userId, string $obfGameId, string $obfGroupId, $page = 0, $line = 20) : array
     {
         $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
         // 招待者リスト
+        $daoRegistBooking = new daoRegistBooking();
+        $data['Invites'] = $daoRegistBooking->getInvitesByGroupId($this->gameId, $this->groupId, $line, $line * $page);
         return $data;
     }
 }

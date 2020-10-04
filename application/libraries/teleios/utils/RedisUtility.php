@@ -44,7 +44,7 @@ class RedisUtility
             if ($result) {
                 // 有効期間を設定
                 $now = self::$hCache[$cacheGroup]->time(null);
-                self::$hCache[$cacheGroup]->expireAt($now + $expireTime);
+                self::$hCache[$cacheGroup]->expireAt($key, $now[0] + $expireTime);
             }
             return $result;
         }
@@ -64,11 +64,26 @@ class RedisUtility
         if (self::locConnect($cacheGroup)) {
             // 値をゲット
             $value = self::$hCache[$cacheGroup]->get($key);
-            if (!$value) {
+            if (!empty($value)) {
                 return unserialize($value);
             }
         }
         return false;
+    }
+
+    /**
+     * キーが存在するか確認
+     * @param  String $key キー名
+     * @param  String $cacheGroup 設定ファイル上のグループ名 - 省略時:default
+     * @return bool               存在する場合は true を、存在しない場合は false を返す
+     */
+    public static function exist($key, $cacheGroup = 'default') : bool
+    {
+        // コネクション設定
+        if (self::locConnect($cacheGroup)) {
+            // 値の存在確認
+            return (self::$hCache[$cacheGroup]->exists($key) == 1 ? true : false);
+        }
     }
 
     /**
@@ -114,7 +129,7 @@ class RedisUtility
         if (empty($mConf)) {
             return false;
         }
-        self::$hCache[$cacheGroup] = new Radis();
+        self::$hCache[$cacheGroup] = new \Redis();
         self::$hCache[$cacheGroup]->pconnect($mConf['hostname'], $mConf['port']);
         if (empty(self::$hCache[$cacheGroup])) {
             return false;
@@ -123,7 +138,7 @@ class RedisUtility
     }
 
     /**
-     * 設定ファイルからmemcacheサーバの情報をを取得する
+     * 設定ファイルからRedisサーバの情報をを取得する
      *
      * @param String $memcacheGroup 設定ファイル上のグループ名
      * @return なし

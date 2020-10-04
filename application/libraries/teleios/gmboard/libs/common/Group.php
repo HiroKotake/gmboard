@@ -20,8 +20,16 @@ use teleios\gmboard\dao\GamePlayers;
  */
 class Group extends GmbCommon
 {
-    public $gameId;
-    public $groupId;
+    // const
+    const MESSAGE_AUTH_BASE = 3;
+    const MESSAGE_CHANGE_LEADER = 4;
+    const MESSAGE_WITHDRAW = 2;
+    const MESSAGE_DISMISS = 3;
+    // variable
+    public  $adminUserId;
+    public  $gameId;
+    public  $groupId;
+    public  $groupName;
     private $daoGroups;
     private $daoGroupBoard;
 
@@ -44,13 +52,16 @@ class Group extends GmbCommon
 
     /**
      * グループの基本IDを設定する
-     * @param string $obfGameId  [description]
-     * @param string $obfGroupId [description]
+     * @param string $obfGameId   [description]
+     * @param string $obfGroupId  [description]
+     * @param int    $adminUserId [description]
      */
-    public function setBaseInfos(string $obfGameId, string $obfGroupId) : void
+    public function setBaseInfos(string $obfGameId, string $obfGroupId, int $adminUserId) : void
     {
         $this->gameId = $this->trnasAliasToGameId($obfGameId);
         $this->groupId = $this->transAliasToId($obfGroupId, ID_TYPE_GROUP);
+        $this->adminUserId = $adminUserId;
+        $this->groupName = $this->getGroupName();
     }
 
     /**
@@ -97,12 +108,21 @@ class Group extends GmbCommon
         return $result;
     }
 
+    /**
+     * 暗号化済みエイリアスIDからグループIDを取得
+     * @param  string $obfAliasId 暗号化済みエイリアスID
+     * @return int                対象が存在する場合はグループIDを返し、存在しない場合は 0 を返す
+     */
     public function getAliasIdtoGroupId(string $obfAliasId) : int
     {
         $groupInfo = $this->daoGroups->getByAliasId($obfAliasId, $this->gameId);
         return $groupInfo->isEmpty() ? 0 : $groupInfo->GroupId;
     }
 
+    /**
+     * 設定済みグループIDからグループ名を取得
+     * @return string 存在する場合はグループ名を、存在しない場合は空を返す
+     */
     public function getGroupName() : string
     {
         $group = $this->daoGroups->getByGroupId($this->gameId, $this->groupId);
@@ -205,20 +225,103 @@ class Group extends GmbCommon
     }
 
     /**
+     * 退会処理
+     * @return bool 処理に成功した場合はtrueを、失敗した場合はfalseを返す
+     */
+    public function doWithdraw() : bool
+    {
+        $libGamePlayer = new GamePlayers();
+        // リーダーか確認し、リーダーの場合は権限移譲処理を先に実施
+        $targetMember = $libGamePlayer->getByUserIdInGroup($this->gameId, $this->groupId, $this->adminUserId);
+        if ($targetMember->Authority == GROUP_AUTHORITY_LEADER) {
+            $regulerMemberList = $libGamePlayer->getRegularMemberByGroupId($this->gameId, $this->groupId);
+            if (count($regulerMemberList) == 1) {
+                return false;
+            }
+            $this->changeLeader($regulerMemberList);
+        }
+        // 実退会処理
+        $result = $this->deleteMember($libGamePlayer, $targetMember->GamePlayerId);
+        if ($result) {
+            // 退会メッセージを送信
+            // - グループメッセージ
+            $gmBean = new GroupMessageBean();
+            $this->sendGroupMessage($this->gameId, $this->groupId, $gmBean);
+            // - ユーザメッセージ
+            $umBean = new UserMessageBean();
+            $umBean->set("GamePlayerId", SYSTEM_NOTICE_ID);
+            $umBean->set("GameNickname", SYSTEM_NOTICE_NAME);
+            $umBean->set("Idiom", );
+            $umBean->set("Message", $this->GroupName);
+            $this->sendUserMessage($targetMember->UserId, $umBean);
+        }
+        return $result;
+    }
+
+    /**
+     * 除名処理
+     * @param  string $obfTargetUserId ターゲットメンバーのエイリアスID
+     * @return bool                    処理に成功した場合はtrueを、失敗した場合はfalseを返す
+     */
+    public function doDismiss(string $obfTargetUserId) : bool
+    {
+        $libGamePlayer = new GamePlayers();
+        // 権限確認
+        $adminMember = $libGamePlayer->getByUserIdInGroup($this->gameId, $this->groupId, $this->adminUserId);
+        if ($adminMember->Authority >= GROUP_AUTHORITY_SUB_LEADER) {
+            return false;
+        }
+        // 同一ユーザ確認
+        $gamePlayer = $libGamePlayer->getByAliasId($obfTargetUserId, $this->gameId);
+        // 実退会処理
+        if ($this->userId != $gamePlayer->UserId) {
+            $result = $this->deleteMember($libGamePlayer, $gamePlayer->GamePlayerId);
+            if ($result) {
+                // 除名メッセージを送信
+                // - グループメッセージ
+                $gmBean = new GroupMessageBean();
+                $this->sendGroupMessage($this->gameId, $this->groupId, $gmBean);
+                // - ユーザメッセージ
+                $umBean = new UserMessageBean();
+                $umBean->set("GamePlayerId", SYSTEM_NOTICE_ID);
+                $umBean->set("GameNickname", SYSTEM_NOTICE_NAME);
+                $umBean->set("Idiom", );
+                $umBean->set("Message", $this->GroupName);
+                $this->sendUserMessage($gamePlayer->UserId, $umBean);
+            }
+            return $result;
+        }
+        return false;
+    }
+
+    /**
+     * グループ退会処理
+     * @param  GamePlayers $libGamePlayer GamePlayersのインスタンス
+     * @param  int         $gamePlayerId  退会処理するメンバーのGamePlayerId
+     * @return bool                       処理に成功した場合はtrueを、失敗した場合はfalseを返す
+     */
+    private function deleteMember(GamePlayers &$libGamePlayer, int $gamePlayerId) : bool
+    {
+        $data = [
+            'Authority' => GROUP_AUTHORITY_WITHDRAWED
+        ];
+        $libGamePlayer->set($this->gameId, $gamePlayerId, $data);
+        return false;
+    }
+
+    /**
      * 対象メンバーに権限変更があったことを通知
      * @param Bean $targetMember 対象メンバーのGamePlayer情報
      * @param int  $newAuth      新権限
      */
     private function sendChangeGroupAuthority(Bean $targetMember, int $newAuth) : void
     {
-        $libGroups = new Groups();
-        $groupInfo = $libGroups->getByGroupId($this->gameId, $this->groupId);
         // 任命メッセージ送信
         $umBean = new UserMessageBean();
         $umBean->set("GamePlayerId", SYSTEM_NOTICE_ID);
         $umBean->set("GameNickname", SYSTEM_NOTICE_NAME);
-        $umBean->set("Idiom", $newAuth + 2);
-        $umBean->set("Message", $groupInfo->GroupName);
+        $umBean->set("Idiom", $newAuth + MESSAGE_AUTH_BASE);
+        $umBean->set("Message", $this->GroupName);
         $this->sendUserMessage($targetMember->UserId, $umBean);
     }
 
@@ -288,7 +391,7 @@ class Group extends GmbCommon
         $umBean = new UserMessageBean();
         $umBean->set("GamePlayerId", SYSTEM_NOTICE_ID);
         $umBean->set("GameNickname", SYSTEM_NOTICE_NAME);
-        $umBean->set("Idiom", 3);
+        $umBean->set("Idiom", MESSAGE_CHANGE_LEADER);
         $umBean->set("Message", $groupInfo->GroupName);
         //
         $libGroups->updateLeader($this->gameId, $this->groupId, $member->UserId);
