@@ -3,6 +3,7 @@ namespace teleios\gmboard\dao;
 
 use teleios\gmboard\Beans\Bean;
 use teleios\utils\StringUtility;
+use teleios\utils\Identifier;
 
 /**
  * ゲームプレイヤー管理テーブル操作クラス
@@ -251,6 +252,9 @@ class GamePlayers extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->getTableName($gameId);
+        if (!in_array('AliasId', array_keys($data))) {
+            $data['AliasId'] = Identifier::getRandomId();
+        }
         return $this->attach($data);
     }
 

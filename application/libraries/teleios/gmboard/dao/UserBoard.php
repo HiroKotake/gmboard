@@ -3,6 +3,7 @@ namespace teleios\gmboard\dao;
 
 use teleios\gmboard\Beans\Bean;
 use teleios\utils\StringUtility;
+use teleios\utils\Identifier;
 
 /**
  * ユーザメッセージ管理テーブル操作クラス
@@ -97,6 +98,9 @@ class UserBoard extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         $this->tableName = self::TABLE_PREFIX . $this->stringUtil->lpad($userId, "0", 12);
+        if (!in_array('AliasId', array_keys($data))) {
+            $data['AliasId'] = Identifier::getRandomId();
+        }
         return $this->attach($data);
     }
 

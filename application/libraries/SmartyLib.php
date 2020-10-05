@@ -4,6 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 require_once(APPPATH . 'third_party/smarty/libs/Smarty.class.php');
 
+use teleios\utils\LangUtils;
+
 class SmartyLib extends Smarty
 {
 
@@ -36,6 +38,10 @@ class SmartyLib extends Smarty
         }
         // インスタンス取得
         $CI =& get_instance();
+        // 多言語ユーティリティ設定
+        // ToDo: 言語の設定をユーザ指定のものから引き継げるように変更を実施すること
+        // ToDo: 他のview関連ファンクションにも波及させること
+        $this->assign("LangUtil", new LangUtils("japanese", LangUtils::MODE_REDIS));
         // テンプレートファイル名補完
         $filePeace = explode('.', $template);
         $lastPeace = $filePeace[count($filePeace) - 1];

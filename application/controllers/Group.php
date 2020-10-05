@@ -82,6 +82,14 @@ class Group extends MY_Controller
         $this->smarty->view('group/invite', $data);
     }
 
+    public function newInvite()
+    {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $newPlayer = $this->input->get("gpid");  // ゲーム側のプレイヤーID
+        $libGroup = new libGroup();
+    }
+
     /**
      * グループ検索
      * 指定された名称を含むグループを検索を、検索結果を表示する

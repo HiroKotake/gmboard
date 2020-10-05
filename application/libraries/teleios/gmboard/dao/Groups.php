@@ -3,6 +3,7 @@ namespace teleios\gmboard\dao;
 
 use teleios\gmboard\Beans\Bean;
 use teleios\utils\StringUtility;
+use teleios\utils\Identifier;
 
 /**
  * グループ情報管理テーブル操作クラス
@@ -85,6 +86,9 @@ class Groups extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
             $this->setTableName($this->getTableName($gameId));
+            if (!in_array('AliasId', array_keys($data))) {
+                $data['AliasId'] = Identifier::getRandomId();
+            }
             return $this->attach($data);
         }
         return false;

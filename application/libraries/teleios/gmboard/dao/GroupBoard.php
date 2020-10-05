@@ -3,6 +3,7 @@ namespace teleios\gmboard\dao;
 
 use teleios\gmboard\Beans\Bean;
 use teleios\utils\StringUtility;
+use teleios\utils\Identifier;
 
 /**
  * グループメッセージ管理テーブル操作クラス
@@ -209,6 +210,9 @@ class GroupBoard extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         $this->tableName = $this->buildTableName($gameId, $groupId);
+        if (!in_array('AliasId', array_keys($data))) {
+            $data['AliasId'] = Identifier::getRandomId();
+        }
         return $this->attach($data);
     }
 

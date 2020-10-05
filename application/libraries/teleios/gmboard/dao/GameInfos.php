@@ -2,6 +2,7 @@
 namespace teleios\gmboard\dao;
 
 use teleios\gmboard\Beans\Bean;
+use teleios\utils\Identifier;
 
 /**
  * ゲーム情報テーブル管理テーブル
@@ -34,7 +35,8 @@ class GameInfos extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         $data = array(
             'Name'          => $name,
-            'Description'   => $description
+            'Description'   => $description,
+            'AliasId'       => Identifier::getRandomId()
         );
         // ゲームレコード追加
         return $this->attach($data);

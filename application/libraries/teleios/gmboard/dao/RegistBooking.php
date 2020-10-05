@@ -2,6 +2,7 @@
 namespace teleios\gmboard\dao;
 
 use teleios\utils\StringUtility;
+use teleios\utils\Identifier;
 
 /**
  * ユーザ登録予約管理テーブル操作クラス
@@ -61,6 +62,7 @@ class RegistBooking extends \MY_Model
             'PlayerId'      => $playerId,
             'GameNickName'  => $nickname,
             'AuthCode'      => $authCode,
+            'AliasId'       => Identifier::getRandomId()
         );
         return $this->attach($data);
     }

@@ -1,5 +1,6 @@
 <?php
 namespace teleios\gmboard\dao;
+use teleios\utils\Identifier;
 
 /**
  * 全体告知管理テーブル操作クラス
@@ -36,6 +37,9 @@ class Notices extends \MY_Model
     {
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
+            if (!in_array('AliasId', array_keys($data))) {
+                $data['AliasId'] = Identifier::getRandomId();
+            }
             return $this->attach($data);
         }
         return false;

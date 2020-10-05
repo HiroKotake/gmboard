@@ -2,6 +2,7 @@
 namespace teleios\gmboard\dao;
 
 use teleios\utils\StringUtility;
+use teleios\utils\Identifier;
 
 /**
  * グループ内告知管理テーブル操作クラス
@@ -69,6 +70,9 @@ class GroupNotices extends \MY_Model
         $this->calledMethod = __FUNCTION__;
         if (count($data) > 0) {
             $this->tableName = $this->buildTableName($gameId, $groupId);
+            if (!in_array('AliasId', array_keys($data))) {
+                $data['AliasId'] = Identifier::getRandomId();
+            }
             return $this->attach($data);
         }
         return false;

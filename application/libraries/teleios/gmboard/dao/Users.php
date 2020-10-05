@@ -2,6 +2,7 @@
 namespace teleios\gmboard\dao;
 
 use teleios\gmboard\Beans\Bean;
+use teleios\utils\Identifier;
 
 /**
  * ユーザ情報管理テーブル操作クラス
@@ -32,6 +33,9 @@ class Users extends \MY_Model
     public function add(array $data) : int
     {
         $this->calledMethod = __FUNCTION__;
+        if (!in_array('AliasId', array_keys($data))) {
+            $data['AliasId'] = Identifier::getRandomId();
+        }
         return $this->attach($data);
     }
 

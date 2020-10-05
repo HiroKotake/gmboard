@@ -88,7 +88,7 @@
                 <ul>
                     <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "memberList")'>メンバーリスト</button></li>
                     <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "requestList")'>申請者リスト</button></li>
-                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "inviteList")'>招待者登録</button></li>
+                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "inviteList")'>招待者リスト</button></li>
                 </ul>
             </fieldset>
         </div>
@@ -103,6 +103,7 @@
             </div>
             <div class="funcarea">
                 {$MsgTotal}
+                <button class="btnBlue_32x180">新規招待者登録</button>
             </div>
         </div>
         <!-- Footer -->
