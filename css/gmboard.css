@@ -44,6 +44,22 @@ button.perple_40x280:hover {
 	background:#4E4DEF;
     color: #FFFFFF;
 }
+button.yellow_40x280 {
+	background: #AFAF30;
+    border-color: #AFAF30;
+	border-radius: 5px;
+    color: #000000;
+	font-size: 16px;
+	font-weight: 400;
+    height: 40px;
+    text-align: left;;
+    width: 280px;
+}
+button.yellow_40x280:hover {
+	background:#4F4F20;
+    border-color: #4F4F20;
+    color: #FFFFFF;
+}
 button.perple_50x280 {
 	background: #AEADFF;
     border-color: #AEADFF;

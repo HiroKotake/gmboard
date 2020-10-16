@@ -5,7 +5,8 @@
         "PlayerIndex": ["UserId", "GameId", "PlayerId", "GameNickname"],
         "Group": ["GroupId", "GameId", "AliasId", "GroupName", "Leader", "Description"],
         "GroupMember": ["GameId", "GroupId", "UserId", "Authority", "GamePlayersAliasId", "GBoardAliasId"],
-        "RegistBooking": ["GameId", "GroupId", "PlayerId", "AuthCode", "GameNickname", "UserId"]
+        "RegistBooking": ["GameId", "GroupId", "PlayerId", "AuthCode", "GameNickname", "UserId"],
+        "GNotices": ["GameId", "GroupId", "GamePlayerId", "Priority", "Message", "ShowStartDateTime", "ShowEndDateTime"]
     },
     "Data": {
         "GameInfos": [
@@ -112,6 +113,12 @@
             [      16,         1,      25,            1, "SR3R0SR5NNPSEPZN",   "8TM430I5NQ27ZUI3"],
             [      21,         1,      26,            1, "GOKSW3Y5NNPSEPZO",   "4IZW7Q75NQ27ZUI3"],
             [      26,         1,      27,            1, "98U8IOA5NNPSEPZO",   "JV482P8UKDEMEDUM"]
+        ],
+        "GNotices": [
+            ["GameId", "GroupId", "GamePlayerId", "Priority", "Message", "ShowStartDateTime",   "ShowEndDateTime"],
+            [       1,         0,   999999999999,          1, "告知１",   "2020/01/01 00:00:00", "2030/12/31 23:59:59"],
+            [       1,         0,   999999999999,          2, "告知２",   "2020/01/01 00:00:00", "2030/12/31 23:59:59"],
+            [       1,         0,   999999999999,          3, "告知３",   "2020/01/01 00:00:00", "2030/12/31 23:59:59"]
         ]
     }
 }

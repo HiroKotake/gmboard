@@ -295,7 +295,7 @@ class MY_Model extends CI_Model
     /**
      * エイリアスでレコード取得する
      * @param  string $alias エイリアスID
-     * @return array         [description]
+     * @return Bean          [description]
      */
     public function getByAlias(string $alias) : Bean
     {
@@ -331,9 +331,9 @@ class MY_Model extends CI_Model
      * @param  string $aliasId エイリアスID文字列
      * @param  int    $subId   サブID (本関数では使用しないが、継承先で引数が二つ必要な場合に備えて配置)
      * @param  int    $subId2  サブID (本関数では使用しないが、継承先で引数が三つ必要な場合に備えて配置)
-     * @return array           検索結果を含んだ配列
+     * @return Bean            検索結果を含んだBeanオブジェクト
      */
-    public function getByAliasId(string $aliasId, $subId = "", $subId2 = "")
+    public function getByAliasId(string $aliasId, $subId = "", $subId2 = "") : Bean
     {
         if (empty($this->calledMethod)) {
             $this->calledMethod = __FUNCTION__;
@@ -342,7 +342,7 @@ class MY_Model extends CI_Model
             'WHERE' => array('AliasId' => $aliasId)
         );
         $resultSet = $this->search($cond);
-        return $resultSet;
+        return $this->getMonoResult($resultSet);
     }
 
     /**
@@ -474,6 +474,18 @@ class MY_Model extends CI_Model
             $this->db->simple_query($query);
         }
         return false;
+    }
+
+    /**
+     * 対象のテーブルを初期化する
+     * @param  string $tableName テーブル名
+     * @return bool              [description]
+     */
+    public function truncateTable(string $tableName) : bool
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->tableName = $tableName;
+        return $this->truncate();
     }
 
     /**

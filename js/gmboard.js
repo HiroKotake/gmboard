@@ -46,6 +46,20 @@ function jmpGame(game)
     window.location.href = "../Game?gmid=" + game;
 }
 
+function jmpGamePage(game, pageId)
+{
+    switch(pageId) {
+        case 0:
+            window.location.href = "../Game?gmid=" + game;
+            break;
+        case 1:
+            window.location.href = "../Game/group?gmid=" + game + "&page=0";
+            break;
+        default:
+            window.location.href = "../Game?gmid=" + game;
+    }
+}
+
 function jmpGroup(game, group)
 {
     window.location.href = "../Group?gmid=" + game + "&grid=" + group;

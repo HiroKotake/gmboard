@@ -166,6 +166,21 @@ class GmbCommon
     }
 
     /**
+     * 難読化エイリアスIDからゲームの名称を取得する
+     * @param  string $obfGameId []
+     * @return string            [description]
+     */
+    public function getGameName(string $obfGameId) : string
+    {
+        $daoGameInfos = new GameInfos();
+        $gameBean = $daoGameInfos->getByAliasId($obfGameId);
+        if ($gameBean->isEmpty()) {
+            return "";
+        }
+        return $gameBean->Name;
+    }
+
+    /**
      * カテゴリ別ゲーム一覧取得
      * @return array [description]
      */
@@ -326,6 +341,7 @@ class GmbCommon
             'GroupGenre' => (count($groupDropDown) > 0 ? $groupDropDown["Genre"] : null),
             'GroupGame' => (count($groupDropDown) > 0 ? $groupDropDown["GameInfos"] : null),
             'GamesListVer' => $this->cIns->sysComns->get(SYSTEM_KEY_GAMELIST_VER),
+            'PageName' => "mypage"
         );
         return $data;
     }
@@ -355,6 +371,63 @@ class GmbCommon
         $daoGroupBoard = new GroupBoard();
         $resultId = $daoGroupBoard->add($gameId, $groupId, $bean->getInsertData());
         return $resultId > 0 ? true : false;
+    }
+
+    /**
+     * グループネームで検索を実行
+     *
+     * @param  int     $gameId    [description]
+     * @param  string  $groupName [description]
+     * @param  int     $userId    [description]
+     * @param  integer $page      [description]
+     * @param  integer $number    [description]
+     * @return array              [description]
+     */
+    public function searchByGroupName(int $gameId, string $groupName, int $userId, int $page = 0, int $number = 20) : array
+    {
+        $data = array();
+        // ユーザのグループ登録状況を確認するためにGamePlayerテーブルから対象ユーザを取得
+        $daoGamePlayers = new GamePlayers();
+        $userInfo = $daoGamePlayers->getByUserId($gameId, $userId);
+        // 検索
+        // グループリストを取得し、登録状況カラムを追加。また、不要なデータを削除
+        $daoGroups = new Groups();
+        $listGroups = $daoGroups->getByGroupName($gameId, $groupName, $page, $number);
+        $leaderIds = array();
+        if (count($listGroups) > 0) {
+            foreach ($listGroups as $group) {
+                $leaderIds[] = $group->Leader;
+                $data[$group->GroupId] = array(
+                    "GroupId" => $group->GroupId,
+                    "AliasId" => $group->AliasId,
+                    "GroupName" => $group->GroupName,
+                    "Leader" => "",
+                    "Joined" => ($group->GroupId == $userInfo->GroupId ? 1 : 0)
+                );
+            }
+            // リーダーのニックネームを取得し、データに追記
+            $leaders = $daoGamePlayers->getByLeaders($gameId, $leaderIds);
+            foreach ($leaders as $ld) {
+                $data[$ld->GroupId]["Leader"] = $ld->GameNickname;
+            }
+        }
+        $result = array(
+            'TotalNumber' => $daoGroups->countByGroupName($gameId, $groupName),
+            'GroupList' => $data
+        );
+        return $result;
+    }
+
+    /**
+     * [attachGroupRequest description]
+     * @param  int  $userId  [description]
+     * @param  int  $gameId  [description]
+     * @param  int  $groupId [description]
+     * @return bool          [description]
+     */
+    public function attachGroupRequest(int $userId, int $gameId, int $groupId) : bool
+    {
+        return false;
     }
 
     /**

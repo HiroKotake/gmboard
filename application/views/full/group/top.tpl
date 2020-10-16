@@ -3,7 +3,7 @@
 <head>
     <title>グループページ</title>
 {include file="../includes/head.tpl"}
-{include file="../js/mypage.js"}
+{include file="../js/mypage.js" obfGroupId=$GroupId}
     <script>{literal}
         var gid = "{/literal}{$GameId}{literal}";
         var grid = "{/literal}{$GroupId}{literal}";
@@ -79,18 +79,11 @@
 {include file="../includes/menu.tpl"}
         <!-- Left Sidemenu -->
         <div class="sidemenu">
+{include file="../includes/GroupMenu.tpl" GameId=$GameId GroupId=$GroupId}
+            <br />
 {include file="../includes/GameList.tpl" GameInfos=$GameInfos}
             <br />
 {include file="../includes/GroupList.tpl" GroupInfos=$GroupInfos}
-            <br />
-            <fieldset class="smGrouping">
-                <legend>グループメニュー</legend>
-                <ul>
-                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "memberList")'>メンバーリスト</button></li>
-                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "requestList")'>申請者リスト</button></li>
-                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "inviteList")'>招待者リスト</button></li>
-                </ul>
-            </fieldset>
         </div>
         <div class="WorkContainer">
             <!-- Right CM Area -->
@@ -100,7 +93,7 @@
             <!-- Right Main -->
             <div class="mainwork">
                 <!-- メッセージ表示 -->
-                <h2>メッセージボード</h2>
+                <h2>{$GroupName}&nbsp;&nbsp;メッセージボード</h2>
     {foreach from=$Message item=msg name=MessageList}
         {if $smarty.foreach.MessageList.first}
                 <hr />

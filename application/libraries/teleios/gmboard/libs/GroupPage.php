@@ -42,7 +42,8 @@ class GroupPage extends Group
         }
         // 共通ページデータ取得
         $data = $this->getPageDataCommon($userId);
-        // グループ名取得
+        // ゲーム名、グループ名取得
+        $data['GameName']  = $this->getGameName($obfGameId);
         $data['GroupName'] = $this->groupName;
         // グループ権限取得
         $daoGamePlayers = new daoGamePlayers();
@@ -53,7 +54,32 @@ class GroupPage extends Group
         }
         $data['GameId'] = $obfGameId;
         $data['GroupId'] = $obfGroupId;
+        $data['PageName'] = "Group";  // GmbCommonのものを上書き
         $data['Result'] = "";
+        return $data;
+    }
+
+    /**
+     * グループページで表示するデータを取得する
+     * @param  int     $userId     ユーザID
+     * @param  string  $obfGameId  難読化ゲームID
+     * @param  string  $obfGroupId 難読化グループID
+     * @param  integer $page       ページ番号
+     * @return array               [description]
+     */
+    public function getNoticesData(int $userId, string $obfGameId, string $obfGroupId = "0", int $page = 0) : array
+    {
+        $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
+        // グループ向け告知取得
+        $data['Notices'] = $this->getGroupNotices($page);
+        return $data;
+    }
+
+    public function getMessagePage(int $userId, string $obfGameId, string $obfGroupId = "0") : array
+    {
+        $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
+        // グループ向けメッセージ取得
+        $data["Message"] = $this->getGroupMessage($data['GroupName']);
         return $data;
     }
 
@@ -64,11 +90,23 @@ class GroupPage extends Group
      * @param  string $obfGroupId 難読化グループID
      * @return array              表示用データ
      */
-    public function getPageData(int $userId, string $obfGameId, string $obfGroupId) : array
+    public function getGroupSearchPage(int $userId, string $obfGameId, string $obfGroupId, string $groupName, int $pageNumber) : array
     {
         $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
-        // グループ向けメッセージ取得
-        $data["Message"] = $this->getGroupMessage($data['GroupName']);
+        // グループ検索結果
+        $searchResult = $this->searchByGroupName($obfGameId, $groupName, $userId, $pageNumber, LINE_NUMBER_SEARCH);
+        $data['Type'] = 'GroupSearch';
+        $data['Title'] = 'グループ検索結果';
+        $data['List'] = $searchResult['GroupList'];
+        $data['MaxLineNumber'] = LINE_NUMBER_SEARCH;
+        $data['TotalNumber'] = $searchResult['TotalNumber'];
+        $data['CurrentPage'] = $pageNumber + 1;
+        $totalPageSub = $searchResult['TotalNumber'] % LINE_NUMBER_SEARCH;
+        $totalPage = ($searchResult['TotalNumber'] - $totalPageSub) / LINE_NUMBER_SEARCH;
+        if ($totalPageSub > 0) {
+            $totalPage += 1;
+        }
+        $data['TotalPage'] = $totalPage;
         return $data;
     }
 

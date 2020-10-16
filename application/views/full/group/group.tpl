@@ -3,7 +3,7 @@
 <head>
     <title>グループページ</title>
 {include file="../includes/head.tpl"}
-{include file="../js/mypage.js"}
+{include file="../js/mypage.js" obfGroupId=$GroupId}
     <script>{literal}
         var gid = "{/literal}{$GameId}{literal}";
         var grid = "{/literal}{$GroupId}{literal}";
@@ -79,8 +79,6 @@
 {include file="../includes/menu.tpl"}
         <!-- Left Sidemenu -->
         <div class="sidemenu">
-{include file="../includes/GroupMenu.tpl" GameId=$GameId GroupId=$GroupId}
-            <br />
 {include file="../includes/GameList.tpl" GameInfos=$GameInfos}
             <br />
 {include file="../includes/GroupList.tpl" GroupInfos=$GroupInfos}
@@ -92,13 +90,19 @@
             </div>
             <!-- Right Main -->
             <div class="mainwork">
-                <h2>{$GroupName}&nbsp;&nbsp;招待者リスト</h2>
+                <!-- メッセージ表示 -->
+                <h2>{$gameName}&nbsp;&nbsp;グループリスト</h2>
+{foreach from=$GroupList item=group}
+{$group->GroupName}&nbsp;[{$group->LeaderName}]<br />
+{/foreach}
             </div>
             <div class="funcarea">
-                {$MsgTotal}
-{if $Authority <= $smarty.const.GROUP_AUTHORITY_SUB_LEADER}
-                <button class="btnBlue_32x180">新規招待者登録</button>
-{/if}
+                <form action="../mypage/searchGroup" method="get">
+                    グループ名検索：<input type="text" name="tgn"/>
+                    <input type="hidden" name="gpid" value="{$GameId}" />
+                    <input type="hidden" name="pg" value="" />
+                    <input type="submit" value="検索" />
+                </form>
             </div>
         </div>
         <!-- Footer -->

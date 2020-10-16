@@ -37,7 +37,7 @@ class MyPage extends MY_Controller
         $libUserPage = new UserPage();
         $data = $libUserPage->getPageData($this->userId);
         $data['PageId'] = PAGE_ID_PERSONAL;
-        $this->smarty->view('mypage', $data);
+        $this->smarty->view('mypage/mypage', $data);
     }
 
     /**
@@ -148,7 +148,7 @@ class MyPage extends MY_Controller
             // デバッグ環境なのでレジスト済みにして、ユーザページへ遷移
             $libUserPage = new UserPage();
             $data = $libUserPage->getPageData($userId);
-            $this->smarty->view('mypage', $data);
+            $this->smarty->view('mypage/mypage', $data);
         }
     }
 
@@ -199,6 +199,17 @@ class MyPage extends MY_Controller
             "GpDrDw" => $groupDropDown
         );
         echo json_encode($data);
+    }
+
+    public function searchGroup()
+    {
+        $gameId = $this->input->get("gpid");
+        $groupName = $this->input->get("tgn");
+        $currentPageNumber = $this->input->get("pg");
+        $pageNumber = $currentPageNumber - 1;
+        $libUserPage = new UserPage();
+        $data = $libUserPage->getGroupSearchPage($this->userId, $gameId, $groupName, $pageNumber);
+        $this->smarty->view('mypage/group', $data);
     }
 
     /**

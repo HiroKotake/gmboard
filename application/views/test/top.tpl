@@ -12,17 +12,19 @@
             $("#" + pref + "Group").prop("checked", flag);
             $("#" + pref + "GroupMember").prop("checked", flag);
             $("#" + pref + "BookingGroupMember").prop("checked", flag);
+            $("#" + pref + "GroupNotices").prop("checked", flag);
         }
 
         function sumModifyData(pref) {
             var result = 0;
-            if ($("#" + pref + "GameInfo").prop("checked"))             result +=      1;
-            if ($("#" + pref + "User").prop("checked"))                 result +=     10;
-            if ($("#" + pref + "PlayerIndex").prop("checked"))          result +=    100;
-            if ($("#" + pref + "Group").prop("checked"))                result +=   1000;
-            if ($("#" + pref + "GroupMember").prop("checked"))          result +=  10000;
-            if ($("#" + pref + "BookingGroupMember").prop("checked"))   result += 100000;
-            return (result + '').padStart(6, '0');  // 数値を文字列化し、左に"0"を６桁になるように追加する
+            if ($("#" + pref + "GameInfo").prop("checked"))             result +=       1;
+            if ($("#" + pref + "User").prop("checked"))                 result +=      10;
+            if ($("#" + pref + "PlayerIndex").prop("checked"))          result +=     100;
+            if ($("#" + pref + "Group").prop("checked"))                result +=    1000;
+            if ($("#" + pref + "GroupMember").prop("checked"))          result +=   10000;
+            if ($("#" + pref + "BookingGroupMember").prop("checked"))   result +=  100000;
+            if ($("#" + pref + "GroupNotices").prop("checked"))         result += 1000000;
+            return (result + '').padStart(7, '0');  // 数値を文字列化し、左に"0"を６桁になるように追加する
         }
 
         function showConfirmTable(target) {
@@ -129,6 +131,7 @@
                 <li><input type="checkbox" id="addGroup" />&nbsp;-&nbsp;グループ登録</li>
                 <li><input type="checkbox" id="addGroupMember" />&nbsp;-&nbsp;グループメンバー登録</li>
                 <li><input type="checkbox" id="addBookingGroupMember" />&nbsp;-&nbsp;グループ予約メンバー登録</li>
+                <li><input type="checkbox" id="addGroupNotices" />&nbsp;-&nbsp;グループ告知登録</li>
             </ul>
         </form>
         </li>
@@ -144,6 +147,7 @@
                 <li><input type="checkbox" id="delGroup" />&nbsp;-&nbsp;グループ削除</li>
                 <li><input type="checkbox" id="delGroupMember" />&nbsp;-&nbsp;グループメンバー削除</li>
                 <li><input type="checkbox" id="delBookingGroupMember" />&nbsp;-&nbsp;グループ予約メンバー削除</li>
+                <li><input type="checkbox" id="delGroupNotices" />&nbsp;-&nbsp;グループ告知削除</li>
             </ul>
         </form>
         </li>

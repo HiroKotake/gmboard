@@ -77,4 +77,25 @@ class UserPage extends Personal
         $data["MsgTotal"] = $this->count();
         return $data;
     }
+
+    public function getGroupSearchPage(int $userId, string $obfGameId, string $groupName, int $pageNumber) : array
+    {
+        // ゲームID復号化
+        $gameId = $this->trnasAliasToGameId($obfGameId);
+        // 共通ページデータ取得
+        $data = $this->getPageDataCommon($userId);
+        // グループ検索
+        $searchResult = $this->searchByGroupName($gameId, $groupName, $userId, $pageNumber, LINE_NUMBER_SEARCH);
+        $data['List'] = $searchResult['GroupList'];
+        $data['MaxLineNumber'] = LINE_NUMBER_SEARCH;
+        $data['TotalNumber'] = $searchResult['TotalNumber'];
+        $data['CurrentPage'] = $pageNumber + 1;
+        $totalPageSub = $searchResult['TotalNumber'] % LINE_NUMBER_SEARCH;
+        $totalPage = ($searchResult['TotalNumber'] - $totalPageSub) / LINE_NUMBER_SEARCH;
+        if ($totalPageSub > 0) {
+            $totalPage += 1;
+        }
+        $data['TotalPage'] = $totalPage;
+        return $data;
+    }
 }

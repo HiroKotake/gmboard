@@ -1,0 +1,1 @@
+// ToDo : ページ内のメッセージを多言語化するためのライブラリを作成する。配置先はteleios/gmboard/libs/extendsにし、teleios\utils\LangUtilsを利用すること。

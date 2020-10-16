@@ -27,13 +27,46 @@ class Group extends MY_Controller
      */
     public function index()
     {
+        /*
         $obfGameId = $this->input->get("gmid");
         $obfGroupId = $this->input->get("grid");
         $libGroup = new libGroup();
-        $data = $libGroup->getPageData($this->userId, $obfGameId, $obfGroupId);
+        $data = $libGroup->getMessagePage($this->userId, $obfGameId, $obfGroupId);
         $data['PageId'] = PAGE_ID_GROUP_MAIN;
         // グループ管理者判定し、メニューを変更
         $this->smarty->view('group/top', $data);
+        */
+       $this->notices();
+    }
+
+    /**
+     * メッセージボード表示
+     * @return [type] [description]
+     */
+    public function board()
+    {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $libGroup = new libGroup();
+        $data = $libGroup->getMessagePage($this->userId, $obfGameId, $obfGroupId);
+        $data['PageId'] = PAGE_ID_GROUP_MAIN;
+        // グループ管理者判定し、メニューを変更
+        $this->smarty->view('group/top', $data);
+    }
+
+    public function notices()
+    {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $page = $this->input->get("page") ?? 0;
+        if ($page > 0) {
+            $page = $page - 1;
+        }
+        $libGroup = new libGroup();
+        $data = $libGroup->getNoticesData($this->userId, $obfGameId, $obfGroupId, $page);
+        $data['PageId'] = PAGE_ID_GROUP_MAIN;
+        // グループ管理者判定し、メニューを変更
+        $this->smarty->view('group/notices', $data);
     }
 
     /**
@@ -90,6 +123,7 @@ class Group extends MY_Controller
         $libGroup = new libGroup();
     }
 
+    // ToDo グループ名検索機能については各コントローラー上で実装するように変更すること。view関連で問題が発生しているので、その対応。また、js側も改修が必要！
     /**
      * グループ検索
      * 指定された名称を含むグループを検索を、検索結果を表示する
@@ -99,27 +133,13 @@ class Group extends MY_Controller
     public function search()
     {
         $gameId = $this->input->get("gpid");
+        $groupId = $this->input->get("grid");
         $groupName = $this->input->get("tgn");
         $currentPageNumber = $this->input->get("pg");
         $pageNumber = $currentPageNumber - 1;
-        // グループ検索
         $libGroup = new libGroup();
-        $searchResult = $libGroup->searchByGroupName($gameId, $groupName, $this->userId, $pageNumber, LINE_NUMBER_SEARCH);
-        // データ生成
-        $data = $libGroup->getPageData($this->userId);
-        $data['Type'] = 'GroupSearch';
-        $data['Title'] = 'グループ検索結果';
-        $data['List'] = $searchResult['GroupList'];
-        $data['MaxLineNumber'] = LINE_NUMBER_SEARCH;
-        $data['TotalNumber'] = $searchResult['TotalNumber'];
-        $data['CurrentPage'] = $currentPageNumber;
-        $totalPageSub = $searchResult['TotalNumber'] % LINE_NUMBER_SEARCH;
-        $totalPage = ($searchResult['TotalNumber'] - $totalPageSub) / LINE_NUMBER_SEARCH;
-        if ($totalPageSub > 0) {
-            $totalPage += 1;
-        }
-        $data['TotalPage'] = $totalPage;
-        $this->smarty->view('group', $data);
+        $data = $libGroup->getGroupSearchPage($this->userId, $gameId, $groupId, $groupName, $pageNumber); // ToDo: グループIDが必要
+        $this->smarty->view('group/group', $data);
     }
 
     /**

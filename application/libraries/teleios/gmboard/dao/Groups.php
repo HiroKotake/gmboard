@@ -94,7 +94,37 @@ class Groups extends \MY_Model
         return false;
     }
 
-    // グループ名検索
+    /**
+     * ゲーム内グループ取得
+     * @param  int     $gameId ゲーム管理ID
+     * @param  integer $limit  [description]
+     * @param  integer $offset [description]
+     * @return array           [description]
+     */
+    public function getByGameId(int $gameId, int $limit = 10, int $offset = 0) : array
+    {
+        $this->calledMethod = __FUNCTION__;
+        $this->setTableName($this->getTableName($gameId));
+        $cond = array(
+            'LIMIT' => array($limit, $offset),
+            'ORDER_BY' => array('GroupId' => 'ASC')
+        );
+        return $this->search($cond);
+    }
+
+    /**
+     * ゲーム内グループ数取得
+     * @param  int $gameId [description]
+     * @return int         [description]
+     */
+    public function countGroupInGame(int $gameId) : int
+    {
+        $query = "SELECT COUNT(*) AS 'rnum' FROM " . $this->getTableName($gameId) . " WHERE 'DeleteFlag' = 0";
+        $resultSet = $this->execQuery($query);
+        $record = $resultSet->result_array();
+        return $record[0]["rnum"];
+    }
+
     /**
      * グループ名検索
      * @param  int     $gameId    ゲーム管理ID
@@ -123,7 +153,7 @@ class Groups extends \MY_Model
      */
     public function countByGroupName(int $gameId, string $groupName) : int
     {
-        $query = "SELECT COUNT(*) AS 'rnum' FROM " . $this->getTableName($gameId) . " WHERE `GroupName` LIKE '%$groupName%'";
+        $query = "SELECT COUNT(*) AS 'rnum' FROM " . $this->getTableName($gameId) . " WHERE `GroupName` LIKE '%$groupName%' AND 'DeleteFlag' = 0";
         $resultSet = $this->execQuery($query);
         $record = $resultSet->result_array();
         return $record[0]["rnum"];

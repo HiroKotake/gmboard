@@ -59,6 +59,7 @@ class GroupNotices extends \MY_Model
      * @param  int   $gameId  ゲーム管理ID
      * @param  int   $groupId グループ管理ID
      * @param  array $data    表示内容
+     *                          'GamePlayerId' => [登録者]<br />
      *                          'Priority' => [優先度]<br />
      *                          'Message' => [メッセージテキスト]<br />
      *                          'ShowStartDateTime' => [表示開始日時]<br />
@@ -100,10 +101,13 @@ class GroupNotices extends \MY_Model
         $cond = array(
             'WHERE' => array(
                 'Showable' => 1,
-                'ShowStartDateTime >=' => $now,
-                'ShowEndDateTime <' => $now
+                'ShowStartDateTime <=' => $now,
+                'ShowEndDateTime >=' => $now
             ),
-            'ORDER_BY' => array('GNoticeId' => $order),
+            'ORDER_BY' => array(
+                'ShowStartDateTime' => $order,
+                'Priority' => 'ASC'
+            ),
             'LIMIT' => array($number, $offset)
         );
         return $this->search($cond);

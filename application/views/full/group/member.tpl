@@ -95,18 +95,11 @@
 {include file="../includes/menu.tpl"}
         <!-- Left Sidemenu -->
         <div class="sidemenu">
+{include file="../includes/GroupMenu.tpl" GameId=$GameId GroupId=$GroupId}
+            <br />
 {include file="../includes/GameList.tpl" GameInfos=$GameInfos}
             <br />
 {include file="../includes/GroupList.tpl" GroupInfos=$GroupInfos}
-            <br />
-            <fieldset class="smGrouping">
-                <legend>グループメニュー</legend>
-                <ul>
-                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "memberList")'>メンバーリスト</button></li>
-                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "requestList")'>申請者リスト</button></li>
-                    <li><button class="perple_40x280" onclick='jmpGroupFunc("{$GameId}","{$GroupId}", "inviteList")'>招待者リスト</button></li>
-                </ul>
-            </fieldset>
         </div>
         <div class="WorkContainer">
             <!-- Right CM Area -->
@@ -116,7 +109,7 @@
             <!-- Right Main -->
             <div class="mainwork">
                 <!-- メンバーリスト -->
-                <h2>メンバーリスト</h2>
+                <h2>{$GroupName}&nbsp;&nbsp;メンバーリスト</h2>
 DEBUG(UserId):{$UserId};
 {if !empty($Result)}
 {/if}

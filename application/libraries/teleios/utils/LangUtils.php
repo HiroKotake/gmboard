@@ -23,8 +23,8 @@ class LangUtils
     const MODE_REDIS  = 1;
     const LANGAGE_DIR = __DIR__  . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'langages' . DIRECTORY_SEPARATOR;
     const CACHE_EXPIRE_TIME = 60 * 60 * 24;
-    const CACHED_KEY_COMMON_CODE = 'MultiLangCommon';
-    const CACHED_KEY_NAME = 'MultiLangCached';
+    const CACHED_KEY_COMMON_CODE = 'MultiLangCommon_';
+    const CACHED_KEY_NAME = 'MultiLangCached_';
     // class variables
     private $mode = null;
     private $langage = null;

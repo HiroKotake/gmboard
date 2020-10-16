@@ -3,7 +3,7 @@
 <head>
     <title>グループページ</title>
 {include file="../includes/head.tpl"}
-{include file="../js/mypage.js"}
+{include file="../js/mypage.js" obfGroupId=$GroupId}
     <script>{literal}
         var gid = "{/literal}{$GameId}{literal}";
         var grid = "{/literal}{$GroupId}{literal}";
@@ -92,12 +92,25 @@
             </div>
             <!-- Right Main -->
             <div class="mainwork">
-                <h2>{$GroupName}&nbsp;&nbsp;招待者リスト</h2>
+                <!-- メッセージ表示 -->
+                <h2>{$GroupName}&nbsp;&nbsp;告知一覧</h2>
+{if count($Notices) <= 0}
+                告知はありません。
+{else}
+{foreach from=$Notices item=msg name=NoticesList}
+{if $smarty.foreach.NoticesList.first}
+                <hr />
+{/if}
+                <div>
+                    {$msg->Message}<br />
+                </div>
+{/foreach}
+{/if}
             </div>
             <div class="funcarea">
                 {$MsgTotal}
 {if $Authority <= $smarty.const.GROUP_AUTHORITY_SUB_LEADER}
-                <button class="btnBlue_32x180">新規招待者登録</button>
+                <button class="btnBlue_32x180">告知作成</button>
 {/if}
             </div>
         </div>

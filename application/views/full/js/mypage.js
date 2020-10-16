@@ -87,7 +87,11 @@
                         click: function(){
                             var game = $("#G_TargetGame option:selected").val();
                             var gameGroup = $("#TargetGrouName").val();
-                            window.location.href = "./Group/search?gpid=" + game + "&tgn=" + gameGroup + "&pg=1";
+{/literal}{if isset($obfGroupId)}{literal}
+                            window.location.href = "./Group/search?gpid=" + game + "&grid={/literal}{$obfGroupId}{literal}&tgn=" + gameGroup + "&pg=1";
+{/literal}{else}{literal}
+                            window.location.href = "./{/literal}{$PageName}{literal}/searchGroup?gpid=" + game + "&tgn=" + gameGroup + "&pg=1";
+{/literal}{/if}{literal}
                             $("#DialogAddGroup").dialog("close");
                         }
                     }

@@ -66,6 +66,7 @@ class TestData extends MY_Controller
             false,  //'Group',
             false,  //'GroupMember',
             false,  //'RegistBooking',
+            false,  //'GroupNotices',
         );
         $index = count($list) - 1;
         foreach (str_split($flags) as $flg) {
@@ -116,6 +117,11 @@ class TestData extends MY_Controller
             $ctrRecode->makeRegistBooking();
             $message .= "グループ予約メンバー登録\r\n";
         }
+        // ゲーム告知登録 (GNotices)
+        if ($list[6]) {
+            $ctrRecode->makeGNotices();
+            $msg[6] = "グループ告知登録\r\n";
+        }
         $data = array(
             "message" => 'テストデータを生成しました:' . $message
         );
@@ -133,6 +139,11 @@ class TestData extends MY_Controller
         $ctrRecode = new CtrlRecords();
         $message = "\r\n";
         $msg = array();
+        // ゲーム告知登録 (GNotices)
+        if ($list[6]) {
+            $ctrRecode->removeGNotices();
+            $msg[6] = "グループ告知削除\r\n";
+        }
         // グループ予約メンバー (RegistBooking_xxxxxxxx)
         if ($list[5]) {
             $msg[5] = "グループ予約メンバー削除\r\n";
@@ -184,6 +195,7 @@ class TestData extends MY_Controller
         $ctrRecode->makeGroups();
         $ctrRecode->makeGroupMember();
         $ctrRecode->makeRegistBooking();
+        $ctrRecode->makeGNotices();
         $daoCiSessions = new CiSessions();
         $daoCiSessions->flushAll();
         $data = array(

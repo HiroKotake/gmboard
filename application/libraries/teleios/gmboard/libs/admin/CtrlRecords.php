@@ -368,4 +368,37 @@ class CtrlRecords
     {
 
     }
+
+    /**
+     * ゲーム告知登録 (GNotices)を登録
+     */
+    public function makeGNotices() : void
+    {
+        $daoGroupNotices = new GroupNotices();
+        $records = $this->makeData("GNotices");
+        foreach ($records as $notice) {
+            $data = array(
+                'GamePlayerId' =>  $notice['GamePlayerId'],
+                'Priority' =>  $notice['Priority'],
+                'Message' =>  $notice['Message'],
+                'ShowStartDateTime' =>  $notice['ShowStartDateTime'],
+                'ShowEndDateTime' =>  $notice['ShowEndDateTime']
+            );
+            $daoGroupNotices->add($notice['GameId'], $notice['GroupId'], $data);
+        }
+    }
+
+    /**
+     * ゲーム告知登録 (GNotices)を削除
+     */
+    public function removeGNotices() : void
+    {
+        $daoTableCtl = new TableCtl();
+        $daoGroupNotices = new GroupNotices();
+        // GNoticesをprefixとするテーブルを抜き出し truncate とする
+        $groupNoticeTables = $daoTableCtl->showSubTables(TABLE_PREFIX_GROUP_NOTICE);
+        foreach ($groupNoticeTables as $table) {
+            $daoGroupNotices->truncateTable($table);
+        }
+    }
 }
