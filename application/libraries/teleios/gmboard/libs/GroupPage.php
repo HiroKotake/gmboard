@@ -88,21 +88,30 @@ class GroupPage extends Group
      * @param  int    $userId     ユーザID
      * @param  string $obfGameId  難読化ゲームID
      * @param  string $obfGroupId 難読化グループID
-     * @return array              表示用データ
+     * @param  string $groupName  検索対象グループ名
+     * @param  int    $page       ページ番号
+     * @param  int    $pageNumber ページ内表示行数
+     * @return array              検索結果
      */
-    public function getGroupSearchPage(int $userId, string $obfGameId, string $obfGroupId, string $groupName, int $pageNumber) : array
-    {
+    public function getGroupSearchPage(
+        int $userId,
+        string $obfGameId,
+        string $obfGroupId,
+        string $groupName,
+        int $page,
+        int $pageNumber = LINE_NUMBER_SEARCH
+    ) : array {
         $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
         // グループ検索結果
-        $searchResult = $this->searchByGroupName($obfGameId, $groupName, $userId, $pageNumber, LINE_NUMBER_SEARCH);
+        $searchResult = $this->searchByGroupName($obfGameId, $groupName, $userId, $page, $pageNumber);
         $data['Type'] = 'GroupSearch';
         $data['Title'] = 'グループ検索結果';
         $data['List'] = $searchResult['GroupList'];
-        $data['MaxLineNumber'] = LINE_NUMBER_SEARCH;
+        $data['MaxLineNumber'] = $pageNumber;
         $data['TotalNumber'] = $searchResult['TotalNumber'];
         $data['CurrentPage'] = $pageNumber + 1;
-        $totalPageSub = $searchResult['TotalNumber'] % LINE_NUMBER_SEARCH;
-        $totalPage = ($searchResult['TotalNumber'] - $totalPageSub) / LINE_NUMBER_SEARCH;
+        $totalPageSub = $searchResult['TotalNumber'] % $pageNumber;
+        $totalPage = ($searchResult['TotalNumber'] - $totalPageSub) / $pageNumber;
         if ($totalPageSub > 0) {
             $totalPage += 1;
         }

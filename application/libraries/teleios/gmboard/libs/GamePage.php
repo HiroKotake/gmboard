@@ -84,17 +84,28 @@ class GamePage extends Game
      * @param  string  $name      グループ名
      * @param  integer $page      ページ番号
      * @param  integer $number    表示グループ数
-     * @return array              [description]
+     * @return array              検索結果
      */
     public function searchGroupByName(
         int $userId,
         string $obfGameId,
         string $name,
         int $page = 0,
-        int $number = 20) : array
-    {
+        int $number = LINE_NUMBER_SEARCH
+    ) : array {
         $data = $this->getGamePageDataCommon($userId, $obfGameId);
         // グループ検索
+        $searchResult = $this->searchByGroupName($this->gameId, $name, $userId, $page, $number);
+        $data['List'] = $searchResult['GroupList'];
+        $data['MaxLineNumber'] = $number;
+        $data['TotalNumber'] = $searchResult['TotalNumber'];
+        $data['CurrentPage'] = $page + 1;
+        $totalPageSub = $searchResult['TotalNumber'] % $number;
+        $totalPage = ($searchResult['TotalNumber'] - $totalPageSub) / $number;
+        if ($totalPageSub > 0) {
+            $totalPage += 1;
+        }
+        $data['TotalPage'] = $totalPage;
         return $data;
     }
 }

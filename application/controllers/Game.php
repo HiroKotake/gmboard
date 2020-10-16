@@ -36,10 +36,14 @@ class Game extends MY_Controller
         $this->smarty->view('game/group', $data);
     }
 
-    public function groupSearch()
+    public function searchGroup()
     {
-        $obfGameId = $this->input->get("gmid");
-        $groupName = $this->input->get("name");
+        $obfGameId = $this->input->get("gpid");
+        $groupName = $this->input->get("tgn");
+        $currentPageNumber = $this->input->get("pg");
+        $page = $currentPageNumber - 1;
         $libGamePage = new GamePage();
+        $data = $libGamePage->searchGroupByName($this->userId, $obfGameId, $groupName, $page);
+        $this->smarty->view('game/group', $data);
     }
 }
