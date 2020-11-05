@@ -91,13 +91,13 @@
             <!-- Right Main -->
             <div class="mainwork">
                 <!-- メッセージ表示 -->
-                <h2>{$gameName}&nbsp;&nbsp;グループリスト</h2>
+                <h2>{$GameName}&nbsp;&nbsp;グループリスト</h2>
 {foreach from=$GroupList item=group}
 {$group->GroupName}&nbsp;[{$group->LeaderName}]<br />
 {/foreach}
             </div>
             <div class="funcarea">
-                <form action="../mypage/searchGroup" method="get">
+                <form action="./search" method="get">
                     グループ名検索：<input type="text" name="tgn"/>
                     <input type="hidden" name="gpid" value="{$GameId}" />
                     <input type="hidden" name="pg" value="" />

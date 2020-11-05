@@ -1,0 +1,68 @@
+@startuml
+[*] --> toppage
+state "トップページ" as toppage {
+    ニュース: Link(最新ニュースタイトル) x5
+    ニュース: Link(一覧)
+    ニュース -> news
+    ログインフォーム: Form(email)
+    ログインフォーム: Form(password)
+    ログインフォーム: Form(submit)
+    ログインフォーム --> ログインフォーム: Login Failer
+    ログインフォーム --> マイページ: Login Ok
+    新規登録: Button(新規登録)
+    新規登録フォーム: Form(email)
+    新規登録フォーム: Form(password)
+    新規登録フォーム: Form(re-password)
+    新規登録フォーム: Form(submit)
+    新規登録 --> 新規登録フォーム
+}
+state "マイページ" as mypage {
+    state "メニュー" as mymenu {
+        プロフィール: Button(プロフィール) as myprof
+        ログアウト: Button(ログアウト) as mylogout
+        ログアウト -left-> トップページ
+    }
+    state "ゲーム" as mygame {
+        登録ゲーム一覧: Link(登録ゲーム)
+        ゲーム追加: Button(ゲーム追加)
+    }
+    state "グループ" as mygroup {
+        登録グループ一覧: Link(登録グループ)
+    }
+    告知一覧: Link(告知)
+}
+state "ニュースページ" as news {
+    ニュース一覧: "Link(一覧)"
+    ニュース詳細: Text
+    ニュース一覧 --> ニュース詳細: 選択
+}
+state ゲームページ {
+    state GMメニュー {
+        GMプロフィール: Button(プロフィール)
+        GMログアウト: Button(ログアウト)
+        GMログアウト -left-> トップページ
+    }
+    state GMゲーム {
+        GM登録ゲーム一覧: Link(登録ゲーム)
+        GMゲーム追加: Button(ゲーム追加)
+    }
+    state GMグループ {
+        GM登録グループ一覧: Link(登録グループ)
+    }
+}
+state グループページ {
+    state GPメニュー {
+        GPプロフィール: Button(プロフィール)
+        GPログアウト: Button(ログアウト)
+        GPログアウト -left-> トップページ
+    }
+    state GPゲーム {
+        GP登録ゲーム一覧: Link(登録ゲーム)
+        GPゲーム追加: Button(ゲーム追加)
+    }
+    state GPグループ {
+        GP登録グループ一覧: Link(登録グループ)
+    }
+
+}
+@enduml

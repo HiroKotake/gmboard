@@ -32,7 +32,7 @@ class Game extends MY_Controller
         $obfGameId = $this->input->get("gmid");
         $page = $this->input->get("page");
         $libGamePage = new GamePage();
-        $data = $libGamePage->getGroupData($this->userId, $obfGameId);
+        $data = $libGamePage->getGroupData($this->userId, $obfGameId, $page);
         $this->smarty->view('game/group', $data);
     }
 
