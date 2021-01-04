@@ -171,4 +171,29 @@ class GroupPage extends Group
         $data['Invites'] = $daoRegistBooking->getInvitesByGroupId($this->gameId, $this->groupId, $line, $line * $page);
         return $data;
     }
+
+    /**
+     * 招待者検索ページで表示するデータを取得
+     * @param  int    $userid        ユーザID
+     * @param  string $obfGameId     難読化ゲームID
+     * @param  string $obfGroupId    難読化グループID
+     * @param  string $gamesNickname ゲーム側ユーザニックネーム
+     * @param  string $gamesId       ゲーム側ユーザゲームID
+     * @return array                 表示用データ
+     */
+    public function getResultSearchInvite(
+        int $userId,
+        string $obfGameId,
+        string $obfGroupId,
+        string $gamesNickname,
+        string $gamesId
+    ) : array {
+        $data = $this->getGroupPageDataCommon($userId, $obfGameId, $obfGroupId);
+        // 招待者検索
+        // gamesIdが指定されている場合は、gamesIdを優先して検索し、
+        // gamesNickNameのみでgamesIdが存在しない場合は、gamesNickNameにて検索を実施する(検索結果が複数存在すると想定)
+        //
+
+        return $data;
+    }
 }

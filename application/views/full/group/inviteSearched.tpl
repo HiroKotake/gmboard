@@ -36,10 +36,7 @@
                         click: function(){
                             var inn = $("#InviteNickName").val();
                             var irid = $("#InviteGamerID").val();
-                            if (inn.length > 0 || irid.length > 0) {
-                                window.location.href = "./searchInvideMember?gmid=" + gid + "&grid=" + grid + "&inn=" + inn + "&irid=" + irid;
-                            }
-                            window.alert("検索対象が入力されていません");
+                            window.location.href = "./searchInvideMember?gmid=" + gid + "&grid=" + grid + "&inn=" + inn + "&irid=" + irid;
                         }
                     }
                 ]
@@ -88,7 +85,6 @@
         <form action="" method="post">
             <!-- ニックネーム -->
             <ul style="list-style-type: none">
-            <li id="MsgInDialog"></li>
             <li>ニックネーム：<input type="text" id="InviteNickName" name="inn"></li>
             <!-- ゲームID -->
             <li>ゲームID：<input type="text"  id="InviteGamerID" name="irid"/></li>

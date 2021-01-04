@@ -115,12 +115,41 @@ class Group extends MY_Controller
         $this->smarty->view('group/invite', $data);
     }
 
+    /**
+     * 招待者検索
+     * @return [type] [description]
+     */
+    public function searchInvideMember()
+    {
+        $obfGameId = $this->input->get("gmid");
+        $obfGroupId = $this->input->get("grid");
+        $gamesNickName = $this->input->get("inn");
+        $gamesId = $this->input->get("irid");
+        $libGroup = new libGroup();
+        // グループ招待者検索
+        $data = $libGroup->getResultSearchInvite($this->userId, $obfGameId, $obfGroupId, $gamesNickName, $gamesId);
+        // 表示
+        /*
+        echo "ObfGameId:$obfGameId<br />";
+        echo "ObfGroupId:$obfGroupId<br />";
+        echo "GamesNickName:$gamesNickName<br />";
+        echo "GamesId:$gamesId<br />";
+        */
+        $this->smarty->view('group/inviteSearched', $data);
+    }
+
+    /**
+     * 招待者登録
+     * @return [type] [description]
+     */
     public function newInvite()
     {
         $obfGameId = $this->input->get("gmid");
         $obfGroupId = $this->input->get("grid");
         $newPlayer = $this->input->get("gpid");  // ゲーム側のプレイヤーID
         $libGroup = new libGroup();
+        // 招待者登録 & 表示データ取得
+        // 表示
     }
 
     // ToDo グループ名検索機能については各コントローラー上で実装するように変更すること。view関連で問題が発生しているので、その対応。また、js側も改修が必要！

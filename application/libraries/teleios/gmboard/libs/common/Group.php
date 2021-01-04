@@ -150,7 +150,7 @@ class Group extends GmbCommon
      * メッセージの総数を取得する
      * @return int メッセージ総数
      */
-    public function count() : int
+    public function count() : int   // ToDo: ファンクション名を変更 count -> countMessage
     {
         return $this->daoGroupBoard->count($this->gameId, $this->groupId);
     }
