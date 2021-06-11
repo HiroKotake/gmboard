@@ -16,6 +16,6 @@ CREATE TABLE Notices
     `UpdateDate` DATETIME COMMENT 'レコード更新日',
     `DeleteDate` DATETIME COMMENT 'レコード無効日',
     `DeleteFlag` TINYINT(1) UNSIGNED DEFAULT 0 COMMENT 'レコード無効フラグ(0:有効, 1:無効)',
-    PRIMARY KEY (`NoticeId`),
+    PRIMARY KEY (`NoticesId`),
     INDEX `IdxAliasId` (`AliasId`)
 ) ENGINE=InnoDB COMMENT '全体告知';

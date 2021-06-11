@@ -1,5 +1,5 @@
         <div class="header_l">
-            <a href="/mypage">mypage</a>
+            <a href="{base_url()}mypage">mypage</a>
         </div>
         <div class="header_r">
             <div class="ddmenu">
@@ -8,7 +8,7 @@
                     <div class="smenu">
                         <ul>
                            <li><a href="">プロフィール</a></li>
-                           <li><a href="../MyPage/logout">ログアウト</a></li>
+                           <li><a href="{base_url()}MyPage/logout">ログアウト</a></li>
                         </ul>
                     </div>
                 </div>
